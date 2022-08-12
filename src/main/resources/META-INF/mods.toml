@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = 'LGPL'
+
+[[mods]]
+modId = "thermomix"
+version = "${file.jarVersion}"
+displayName = "Thermomix"
+authors = "possible_triangle"
+description = '''Making automation for Farmers Delight more sensible'''
+
+[[dependencies.thermomix]]
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.thermomix]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.thermomix]]
+modId = "create"
+mandatory = true
+versionRange = "[0.5.0a,)"
+ordering = "NONE"
+side = "BOTH"

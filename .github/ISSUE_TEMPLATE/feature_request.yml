@@ -1,0 +1,21 @@
+name: Feature Request
+description: Suggest a feature
+labels: ["enhancement", "feature", "feature-request"]
+assignees: [PssbleTrngle]
+
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Describe the feature you have in mind.
+      placeholder: So I was think about...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: Does this solve a particular problem?
+      placeholder: Yes, it balances... 
+    validations:
+      required: false
