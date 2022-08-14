@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#farmersdelight:tools/knives"
+    "#farmersdelight:tools/knives",
+    "#forge:tools/axes"
   ]
 }

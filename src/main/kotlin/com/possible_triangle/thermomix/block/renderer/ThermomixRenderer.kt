@@ -33,7 +33,9 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
         ms.translate(0.5, -renderedHeadOffset, 0.5)
         ms.scale(scale, scale, scale)
 
-        val angle = getAngleForTe(tile, tile.blockPos, Direction.Axis.Y)
+        val speed: Float = tile.getRenderedHeadRotationSpeed(partialTicks)
+        val time = AnimationTickHolder.getRenderTime(tile.level)
+        val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         for (i in 0..3) {
             ms.pushPose()
