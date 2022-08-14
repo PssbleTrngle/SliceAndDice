@@ -4,24 +4,43 @@ import com.possible_triangle.thermomix.Content
 import com.possible_triangle.thermomix.config.Configs
 import com.possible_triangle.thermomix.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerTileEntity
+import com.simibubi.create.content.contraptions.components.press.PressingBehaviour
+import com.simibubi.create.content.contraptions.components.press.PressingBehaviour.PressingBehaviourSpecifics
+import com.simibubi.create.content.contraptions.processing.InWorldProcessing
+import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack
+import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour
 import com.simibubi.create.foundation.utility.VecHelper
+import com.simibubi.create.foundation.utility.recipe.RecipeFinder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Container
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.items.ItemHandlerHelper
 
 
 class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    MechanicalMixerTileEntity(type, pos, state) {
+    MechanicalMixerTileEntity(type, pos, state), PressingBehaviourSpecifics {
+
+    companion object {
+        private val inWorldCacheKey = Any()
+    }
 
     var heldItem = ItemStack.EMPTY
+    private lateinit var pressingBehaviour: PressingBehaviour
+
+    override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
+        super.addBehaviours(behaviours)
+        pressingBehaviour = PressingBehaviour(this)
+        behaviours.add(pressingBehaviour)
+    }
 
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
         if (!heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
@@ -89,5 +108,55 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     override fun getRenderedHeadOffset(partialTicks: Float): Float {
         return super.getRenderedHeadOffset(partialTicks) * 0.8F
     }
+
+    private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
+        val recipes = RecipeFinder.get(inWorldCacheKey, level) {
+            if(it !is CuttingProcessingRecipe) false
+            else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
+        }  as List<CuttingProcessingRecipe>
+        return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(heldItem) }
+    }
+
+    override fun tryProcessInBasin(simulate: Boolean): Boolean {
+        return false
+        //matchingRecipes.firstOrNull() ?: return false
+        //applyBasinRecipe()
+        //return true
+    }
+
+    override fun tryProcessOnBelt(
+        input: TransportedItemStack,
+        outputList: MutableList<ItemStack>?,
+        simulate: Boolean,
+    ): Boolean {
+        val recipe = recipeFor(input.stack) ?: return false
+        if (simulate) return true
+
+        val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
+        val outputs = InWorldProcessing.applyRecipeOn(toProcess, recipe)
+        outputList?.addAll(outputs)
+        return true
+    }
+
+    override fun tryProcessInWorld(itemEntity: ItemEntity, simulate: Boolean): Boolean {
+        return false
+    }
+
+    override fun canProcessInBulk() = false
+
+    override fun onPressingCompleted() {
+        cuttingParticles()
+
+        val canContinue = pressingBehaviour.onBasin()
+                && matchBasinRecipe(currentRecipe)
+                && basin.filter { it.canContinueProcessing() }.isPresent
+
+        if (canContinue) startProcessingBasin()
+        else basinChecker.scheduleUpdate()
+    }
+
+    override fun getParticleAmount() = 10
+
+    override fun getKineticSpeed() = getSpeed()
 
 }
