@@ -23,7 +23,7 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
         tile: ThermomixTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
         light: Int, overlay: Int,
     ) {
-        if (tile.givenItem.isEmpty) return
+        if (tile.heldItem.isEmpty) return
         ms.pushPose()
 
         val offset = 0.35
@@ -43,7 +43,7 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
             ms.translate(0.0, 0.0, offset)
 
             val renderer = Minecraft.getInstance().itemRenderer
-            renderer.renderStatic(tile.givenItem, TransformType.FIXED, light, overlay, ms, buffer, 0)
+            renderer.renderStatic(tile.heldItem, TransformType.FIXED, light, overlay, ms, buffer, 0)
             ms.popPose()
         }
 

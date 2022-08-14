@@ -32,11 +32,7 @@ private fun CuttingBoardRecipe.toBasin(): BasinRecipe {
 class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     MechanicalMixerTileEntity(type, pos, state) {
 
-     var heldItem = ItemStack.EMPTY
-
-    override fun getRecipeCacheKey(): Any? {
-        return null
-    }
+    var heldItem = ItemStack.EMPTY
 
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
         val recipes = super.getMatchingRecipes()
