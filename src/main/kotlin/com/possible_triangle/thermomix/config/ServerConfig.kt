@@ -4,4 +4,6 @@ import net.minecraftforge.common.ForgeConfigSpec
 
 class ServerConfig(builder: ForgeConfigSpec.Builder) {
 
+    val CONSUME_DURABILTY = builder.define("thermomix.consume_tool_durability", true)
+
 }
