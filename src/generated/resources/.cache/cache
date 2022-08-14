@@ -1,0 +1,7 @@
+5804f1762d79730a51a2561f09b804989bc2e59e assets/thermomix/blockstates/thermomix.json
+26e1f54603ff83e347d4f2ee2f2b7a78c44d1aa8 assets/thermomix/lang/en_ud.json
+e314a3992f202c3bf21b5323082b6b189224053a assets/thermomix/lang/en_us.json
+4ce2d64bf7d9ed6233f240e6fa07472161d660c3 assets/thermomix/models/item/thermomix.json
+3c794f58dbd4a91a9a7d6351bd0d62e9b3b743ea data/minecraft/tags/blocks/mineable/axe.json
+3c794f58dbd4a91a9a7d6351bd0d62e9b3b743ea data/minecraft/tags/blocks/mineable/pickaxe.json
+ce45ed80e75eb770903e0fe7a9897d60a8401fe1 data/thermomix/loot_tables/blocks/thermomix.json

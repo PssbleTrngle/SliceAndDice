@@ -21,17 +21,19 @@ class ThermomixBlock(properties: Properties) : MechanicalMixerBlock(properties) 
         hit: BlockHitResult,
     ): InteractionResult {
         val held = player.getItemInHand(hand).copy()
+
         if (AllItems.WRENCH.isIn(held)) return InteractionResult.PASS
-        //if (hit.direction != state.getValue(DirectionalKineticBlock.FACING)) return InteractionResult.PASS
-        if (world.isClientSide) return InteractionResult.SUCCESS
-        withTileEntityDo(world, pos) {
-            if(it !is ThermomixTile) return@withTileEntityDo
+        if (!held.`is`(Content.ALLOWED_TOOLS) && !held.isEmpty) return InteractionResult.PASS
+
+        if (!world.isClientSide) withTileEntityDo(world, pos) {
+            if (it !is ThermomixTile) return@withTileEntityDo
             val heldByDeployer = it.heldItem.copy()
             if (heldByDeployer.isEmpty && held.isEmpty) return@withTileEntityDo
             player.setItemInHand(hand, heldByDeployer)
             it.heldItem = held
             it.sendData()
         }
+
         return InteractionResult.SUCCESS
     }
 

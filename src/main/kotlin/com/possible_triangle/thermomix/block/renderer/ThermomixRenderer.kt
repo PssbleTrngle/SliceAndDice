@@ -2,6 +2,7 @@ package com.possible_triangle.thermomix.block.renderer
 
 import com.jozufozu.flywheel.backend.Backend
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Vector3f
 import com.possible_triangle.thermomix.Content
 import com.possible_triangle.thermomix.block.tile.ThermomixTile
 import com.simibubi.create.AllBlockPartials
@@ -22,14 +23,30 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
         tile: ThermomixTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
         light: Int, overlay: Int,
     ) {
-        if (tile.heldItem.isEmpty) return
+        if (tile.givenItem.isEmpty) return
         ms.pushPose()
 
-        val renderedHeadOffset = tile.getRenderedHeadOffset(partialTicks).toDouble()
-        ms.translate(0.5, renderedHeadOffset, 0.5)
+        val offset = 0.35
+        val scale = 0.7F
 
-        val renderer = Minecraft.getInstance().itemRenderer
-        renderer.renderStatic(tile.heldItem, TransformType.FIXED, light, overlay, ms, buffer, 0)
+        val renderedHeadOffset = tile.getRenderedHeadOffset(partialTicks).toDouble()
+        ms.translate(0.5, -renderedHeadOffset, 0.5)
+        ms.scale(scale, scale, scale)
+
+        val angle = getAngleForTe(tile, tile.blockPos, Direction.Axis.Y)
+
+        for (i in 0..3) {
+            ms.pushPose()
+            ms.mulPose(Vector3f.YP.rotationDegrees(90F * i))
+            ms.mulPose(Vector3f.YP.rotation(angle))
+            ms.mulPose(Vector3f.ZN.rotationDegrees(200F))
+            ms.translate(0.0, 0.0, offset)
+
+            val renderer = Minecraft.getInstance().itemRenderer
+            renderer.renderStatic(tile.givenItem, TransformType.FIXED, light, overlay, ms, buffer, 0)
+            ms.popPose()
+        }
+
         ms.popPose()
     }
 
