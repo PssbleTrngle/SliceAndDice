@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "thermomix:thermomix"
+    "thermomix:thermomix",
+    "thermomix:sprinkler"
   ]
 }

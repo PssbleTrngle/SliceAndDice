@@ -5,6 +5,8 @@
   "minVersion": "0.8",
   "refmap": "thermomix.refmap.json",
   "mixins": [
+    "EntityMixin",
+    "LevelMixin",
     "RecipeManagerMixin"
   ],
   "injectors": {

@@ -2,9 +2,13 @@ package com.possible_triangle.thermomix
 
 import com.jozufozu.flywheel.core.PartialModel
 import com.possible_triangle.thermomix.ThermomixMod.MOD_ID
+import com.possible_triangle.thermomix.block.SprinklerBlock
 import com.possible_triangle.thermomix.block.ThermomixBlock
+import com.possible_triangle.thermomix.block.WetAir
 import com.possible_triangle.thermomix.block.instance.ThermomixInstance
 import com.possible_triangle.thermomix.block.renderer.ThermomixRenderer
+import com.possible_triangle.thermomix.block.tile.SprinkleBehaviour
+import com.possible_triangle.thermomix.block.tile.SprinklerTile
 import com.possible_triangle.thermomix.block.tile.ThermomixTile
 import com.possible_triangle.thermomix.config.Configs
 import com.possible_triangle.thermomix.recipe.CuttingProcessingRecipe
@@ -20,12 +24,19 @@ import com.simibubi.create.foundation.data.ModelGen
 import com.simibubi.create.foundation.data.SharedProperties
 import com.simibubi.create.repack.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.FluidTags
 import net.minecraft.tags.TagKey
+import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.entity.EntityTypeTest
+import net.minecraft.world.phys.AABB
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.registries.DeferredRegister
@@ -86,12 +97,58 @@ object Content {
         )
     }
 
+    val WET_AIR = REGISTRATE
+        .block<WetAir>("wet_air", ::WetAir)
+        .initialProperties { Blocks.CAVE_AIR }
+        .properties { it.randomTicks() }
+        .blockstate { c, p ->
+            p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
+        }
+        .register()
+
+    val SPRINKLER_BLOCK = REGISTRATE
+        .block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
+        .initialProperties { SharedProperties.copperMetal() }
+        .transform(AllTags.pickaxeOnly())
+        .addLayer { Supplier { RenderType.cutoutMipped() } }
+        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
+        .item()
+        .transform(ModelGen.customItemModel("_"))
+        .register()
+
+    val SPRINKLER_TILE = REGISTRATE
+        .tileEntity("sprinkler", ::SprinklerTile)
+        .validBlock(SPRINKLER_BLOCK)
+        .register()
+
     fun register(modBus: IEventBus) {
         LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
 
         RECIPE_SERIALIZERS.register(modBus)
         RECIPE_TYPES.register(modBus)
+
+        SprinkleBehaviour.register(FluidTags.WATER) { pos, world, _, random ->
+            val start = pos.offset(-2, -7, -2)
+            val end = pos.offset(2, -1, 2)
+            val state = WET_AIR.defaultState
+            for (it in BlockPos.betweenClosed(start, end)) {
+                if (world.getBlockState(it).isAir) {
+                    world.setBlockAndUpdate(it, state)
+                    world.scheduleTick(it, WET_AIR.get(), random.nextInt(60, 120))
+                }
+            }
+        }
+
+        SprinkleBehaviour.register(FluidTags.LAVA) { pos, world, _, _ ->
+            val start = pos.offset(-2, -7, -2)
+            val end = pos.offset(2, -1, 2)
+            world.getEntities(EntityTypeTest.forClass(LivingEntity::class.java), AABB(start, end)) {
+                !it.fireImmune()
+            }.forEach {
+                it.hurt(DamageSource.IN_FIRE, 0.5F)
+            }
+        }
     }
 
 }

@@ -93,7 +93,7 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
     private fun cuttingParticles() {
         val world = level ?: return
-        val center: Vec3 = VecHelper.getCenterOf(worldPosition.below(2))
+        val center: Vec3 = VecHelper.getCenterOf(worldPosition.below(1))
         world.addParticle(
             ParticleTypes.SWEEP_ATTACK,
             center.x,
@@ -106,19 +106,22 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     }
 
     override fun getRenderedHeadOffset(partialTicks: Float): Float {
-        return super.getRenderedHeadOffset(partialTicks) * 0.8F
+        //if(pressingBehaviour.mode == PressingBehaviour.Mode.BASIN) {
+        //    return super.getRenderedHeadOffset(partialTicks)
+        //}
+        return pressingBehaviour.getRenderedHeadOffset(partialTicks) * 0.6F + 0.4F * pressingBehaviour.mode.headOffset
     }
 
     private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
-            if(it !is CuttingProcessingRecipe) false
+            if (it !is CuttingProcessingRecipe) false
             else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
-        }  as List<CuttingProcessingRecipe>
+        } as List<CuttingProcessingRecipe>
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(heldItem) }
     }
 
     override fun tryProcessInBasin(simulate: Boolean): Boolean {
-        return false
+        return true
         //matchingRecipes.firstOrNull() ?: return false
         //applyBasinRecipe()
         //return true
@@ -143,6 +146,10 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     }
 
     override fun canProcessInBulk() = false
+
+    override fun startProcessingBasin() {
+        pressingBehaviour.start(PressingBehaviour.Mode.BASIN)
+    }
 
     override fun onPressingCompleted() {
         cuttingParticles()

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "thermomix:block/wet_air"
+    }
+  }
+}
