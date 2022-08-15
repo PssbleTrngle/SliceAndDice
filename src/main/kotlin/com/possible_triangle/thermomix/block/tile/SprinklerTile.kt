@@ -1,5 +1,6 @@
 package com.possible_triangle.thermomix.block.tile
 
+import com.possible_triangle.thermomix.config.Configs
 import com.simibubi.create.content.contraptions.fluids.FluidFX
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity
@@ -22,16 +23,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler
 class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : SmartTileEntity(type, pos, state),
     IHaveGoggleInformation {
 
-    companion object {
-        const val PER_SPRINKLE = 100
-    }
-
     private lateinit var tank: SmartFluidTankBehaviour
     private var processingTicks = -1
 
     override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
         behaviours.add(
-            SmartFluidTankBehaviour.single(this, PER_SPRINKLE * 3)
+            SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get())
                 .allowInsertion()
                 .also { tank = it }
         )
@@ -46,9 +43,10 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
         if (processingTicks >= 0) {
             processingTicks--
         } else tank.capability.ifPresent {
-            val fluid = it.drain(PER_SPRINKLE, IFluidHandler.FluidAction.SIMULATE)
-            if (fluid.amount >= PER_SPRINKLE) {
-                it.drain(PER_SPRINKLE, IFluidHandler.FluidAction.EXECUTE)
+            val used = Configs.SERVER.SPRINKLER_USAGE.get()
+            val fluid = it.drain(used, IFluidHandler.FluidAction.SIMULATE)
+            if (fluid.amount >= used) {
+                it.drain(used, IFluidHandler.FluidAction.EXECUTE)
                 processingTicks = 20 * 10
                 notifyUpdate()
             }

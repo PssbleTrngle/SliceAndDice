@@ -42,6 +42,7 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
     var heldItem = ItemStack.EMPTY
     private lateinit var behaviour: PressingBehaviour
+    val cuttingBehaviour get() = behaviour
 
     override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
         super.addBehaviours(behaviours)
@@ -70,7 +71,7 @@ class ThermomixTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
     override fun <C : Container> matchStaticFilters(recipe: Recipe<C>): Boolean {
         if (recipe !is CuttingProcessingRecipe) return false
-        return recipe.tool != null && recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
+        return recipe.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
     }
 
     override fun read(compound: CompoundTag, clientPacket: Boolean) {

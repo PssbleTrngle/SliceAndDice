@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "thermomix:thermomix"
+    ]
+  },
+  "criteria": {
+    "has_cutting_board": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "farmersdelight:cutting_board"
+            ]
+          }
+        ]
+      }
+    },
+    "has_mixer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "create:mechanical_mixer"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "thermomix:thermomix"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cutting_board",
+      "has_mixer",
+      "has_the_recipe"
+    ]
+  ]
+}

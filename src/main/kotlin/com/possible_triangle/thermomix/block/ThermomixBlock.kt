@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -87,7 +88,20 @@ class ThermomixBlock(properties: Properties) : KineticBlock(properties), ITE<The
         state: BlockState,
         reader: BlockGetter,
         pos: BlockPos,
-        type: PathComputationType
+        type: PathComputationType,
     ) = false
+
+    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+        if (state.hasBlockEntity() && state.block !== newState.block) {
+            withTileEntityDo(world, pos) { te ->
+                if (isMoving) return@withTileEntityDo
+                val item = ItemEntity(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), te.heldItem)
+                item.setDefaultPickUpDelay()
+                world.addFreshEntity(item)
+            }
+        }
+
+        super.onRemove(state, world, pos, newState, isMoving)
+    }
 
 }

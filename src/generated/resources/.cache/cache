@@ -8,6 +8,10 @@
 4ce2d64bf7d9ed6233f240e6fa07472161d660c3 assets/thermomix/models/item/thermomix.json
 3c794f58dbd4a91a9a7d6351bd0d62e9b3b743ea data/minecraft/tags/blocks/mineable/axe.json
 e43100930be4ca0e17df30825d3fe464951b3250 data/minecraft/tags/blocks/mineable/pickaxe.json
+08c7a97d89fcdbb9ded6506ca7cc4f61c54dbbae data/thermomix/advancements/recipes/tools/sprinkler.json
+d7010ee509f26d35525248c843347f210fa8035b data/thermomix/advancements/recipes/tools/thermomix.json
 6a068184635f74fb9d3f164b5ed4e00f49ee67a1 data/thermomix/loot_tables/blocks/sprinkler.json
 ce45ed80e75eb770903e0fe7a9897d60a8401fe1 data/thermomix/loot_tables/blocks/thermomix.json
 5c1df8443043b3fe3b665dba348e2ff188bcbe31 data/thermomix/loot_tables/blocks/wet_air.json
+a6bef218b9ada29ec426c4f6831ebe6a879aac36 data/thermomix/recipes/sprinkler.json
+eb2b2a70474cd88259c24c0612e28997b510b16a data/thermomix/recipes/thermomix.json

@@ -12,6 +12,7 @@ import com.possible_triangle.thermomix.block.tile.SprinklerTile
 import com.possible_triangle.thermomix.block.tile.ThermomixTile
 import com.possible_triangle.thermomix.config.Configs
 import com.possible_triangle.thermomix.recipe.CuttingProcessingRecipe
+import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllTags
 import com.simibubi.create.content.AllSections
 import com.simibubi.create.content.CreateItemGroup
@@ -22,10 +23,12 @@ import com.simibubi.create.foundation.data.AssetLookup
 import com.simibubi.create.foundation.data.CreateRegistrate
 import com.simibubi.create.foundation.data.ModelGen
 import com.simibubi.create.foundation.data.SharedProperties
+import com.simibubi.create.repack.registrate.providers.RegistrateRecipeProvider.has
 import com.simibubi.create.repack.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
+import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.FluidTags
 import net.minecraft.tags.TagKey
@@ -39,11 +42,14 @@ import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.phys.AABB
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.config.ModConfig
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
 import thedarkcolour.kotlinforforge.forge.registerObject
+import vectorwing.farmersdelight.common.registry.ModBlocks
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
@@ -70,6 +76,18 @@ object Content {
         .transform(BlockStressDefaults.setImpact(4.0))
         .item(::AssemblyOperatorBlockItem)
         .transform(ModelGen.customItemModel())
+        .recipe { c, p ->
+            ShapedRecipeBuilder.shaped(c.entry)
+                .pattern("A")
+                .pattern("B")
+                .pattern("C")
+                .define('A', AllBlocks.COGWHEEL.get())
+                .define('B', AllBlocks.ANDESITE_CASING.get())
+                .define('C', AllBlocks.TURNTABLE.get())
+                .unlockedBy("has_cutting_board", has(ModBlocks.CUTTING_BOARD.get()))
+                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
+                .save(p)
+        }
         .register()
 
     val THERMOMIX_TILE = REGISTRATE
@@ -80,7 +98,6 @@ object Content {
         .register()
 
     val THERMOMIX_HEAD = PartialModel(ResourceLocation(MOD_ID, "block/thermomix/head"))
-
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
         val type = object : RecipeType<T> {
@@ -114,6 +131,16 @@ object Content {
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
         .item()
         .transform(ModelGen.customItemModel("_"))
+        .recipe { c, p ->
+            ShapedRecipeBuilder.shaped(c.entry, 3)
+                .pattern("SPS")
+                .pattern("SBS")
+                .define('S', AllTags.forgeItemTag("plates/copper"))
+                .define('B', Blocks.IRON_BARS)
+                .define('P', AllBlocks.FLUID_PIPE.get())
+                .unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get()))
+                .save(p)
+        }
         .register()
 
     val SPRINKLER_TILE = REGISTRATE
@@ -127,6 +154,9 @@ object Content {
 
         RECIPE_SERIALIZERS.register(modBus)
         RECIPE_TYPES.register(modBus)
+
+        modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
+        modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
 
         SprinkleBehaviour.register(FluidTags.WATER) { pos, world, _, random ->
             val start = pos.offset(-2, -7, -2)

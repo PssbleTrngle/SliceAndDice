@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "thermomix:sprinkler"
+    ]
+  },
+  "criteria": {
+    "has_pipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "create:fluid_pipe"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "thermomix:sprinkler"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pipe",
+      "has_the_recipe"
+    ]
+  ]
+}

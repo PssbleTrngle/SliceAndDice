@@ -28,7 +28,7 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context) : KineticT
         if (tile.heldItem.isEmpty) return
         ms.pushPose()
 
-        val offset = 0.35
+        val offset = 0.4
         val scale = 0.7F
 
         val renderedHeadOffset = tile.getRenderedHeadOffset(partialTicks).toDouble()
