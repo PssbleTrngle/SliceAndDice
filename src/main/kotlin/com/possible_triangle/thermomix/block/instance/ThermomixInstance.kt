@@ -42,7 +42,7 @@ class ThermomixInstance(modelManager: MaterialManager, private val mixer: Thermo
     }
 
     private fun transformHead(renderedHeadOffset: Float) {
-        val speed: Float = mixer.getRenderedHeadRotationSpeed(AnimationTickHolder.getPartialTicks())
+        val speed: Float = mixer.getRenderedHeadRotationSpeed()
         mixerHead.setPosition(instancePosition)
             .nudge(0f, -renderedHeadOffset, 0f)
             .setRotationalSpeed(speed * 2)

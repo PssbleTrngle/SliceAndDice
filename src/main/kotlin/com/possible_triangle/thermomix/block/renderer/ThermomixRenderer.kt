@@ -7,7 +7,7 @@ import com.possible_triangle.thermomix.Content
 import com.possible_triangle.thermomix.block.tile.ThermomixTile
 import com.simibubi.create.AllBlockPartials
 import com.simibubi.create.content.contraptions.base.KineticTileEntity
-import com.simibubi.create.content.contraptions.components.mixer.MechanicalMixerRenderer
+import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer
 import com.simibubi.create.foundation.render.CachedBufferer
 import com.simibubi.create.foundation.utility.AnimationTickHolder
 import net.minecraft.client.Minecraft
@@ -17,7 +17,9 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 
-class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : MechanicalMixerRenderer(context) {
+class ThermomixRenderer(context: BlockEntityRendererProvider.Context) : KineticTileEntityRenderer(context) {
+
+    override fun shouldRenderOffScreen(te: KineticTileEntity) = true
 
     private fun renderTool(
         tile: ThermomixTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
@@ -33,7 +35,7 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
         ms.translate(0.5, -renderedHeadOffset, 0.5)
         ms.scale(scale, scale, scale)
 
-        val speed: Float = tile.getRenderedHeadRotationSpeed(partialTicks)
+        val speed: Float = tile.getRenderedHeadRotationSpeed()
         val time = AnimationTickHolder.getRenderTime(tile.level)
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
@@ -73,7 +75,7 @@ class ThermomixRenderer(context: BlockEntityRendererProvider.Context?) : Mechani
         standardKineticRotationTransform(superBuffer, te, light).renderInto(ms, vb)
 
         val renderedHeadOffset = te.getRenderedHeadOffset(partialTicks)
-        val speed = te.getRenderedHeadRotationSpeed(partialTicks)
+        val speed = te.getRenderedHeadRotationSpeed()
         val time = AnimationTickHolder.getRenderTime(te.getLevel())
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
