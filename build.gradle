@@ -208,7 +208,8 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
         relations {
             requiredDependency 'create'
             requiredDependency 'kotlin-for-forge'
-            requiredDependency 'farmers-delight'
+            optionalDependency 'farmers-delight'
+            optionalDependency 'overweight-farming'
         }
     }
 }
@@ -227,7 +228,7 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     dependencies {
         required.project "ordsPcFz"
         required.project "LNytGWDc"
-        required.project "R2OftAxM"
+        optional.project "R2OftAxM"
     }
 }
 
