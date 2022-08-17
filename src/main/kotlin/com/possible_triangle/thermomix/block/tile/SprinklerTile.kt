@@ -79,8 +79,8 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
         world.addParticle(particle, vec.x, vec.y, vec.z, x * 0.2, -0.1, z * 0.2)
     }
 
-    override fun writeSafe(tag: CompoundTag, clientPacket: Boolean) {
-        super.writeSafe(tag, clientPacket)
+    override fun writeSafe(tag: CompoundTag) {
+        super.writeSafe(tag)
         tag.putInt("ProcessingTicks", processingTicks)
     }
 

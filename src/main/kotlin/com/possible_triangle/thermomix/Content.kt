@@ -23,8 +23,8 @@ import com.simibubi.create.foundation.data.AssetLookup
 import com.simibubi.create.foundation.data.CreateRegistrate
 import com.simibubi.create.foundation.data.ModelGen
 import com.simibubi.create.foundation.data.SharedProperties
-import com.simibubi.create.repack.registrate.providers.RegistrateRecipeProvider.has
-import com.simibubi.create.repack.registrate.util.nullness.NonNullFunction
+import com.tterrag.registrate.util.nullness.NonNullFunction
+import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry

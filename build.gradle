@@ -138,6 +138,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}")
 
+    compileOnly fg.deobf("com.tterrag.registrate:Registrate:${project.registrate_version}")
     implementation fg.deobf("curse.maven:create-328085:${project.create_version}")
     implementation fg.deobf("curse.maven:flywheel-486392:${project.flywheel_version}")
 
@@ -206,6 +207,7 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
         relations {
             requiredDependency 'create'
             requiredDependency 'kotlin-for-forge'
+            requiredDependency 'farmers-delight'
         }
     }
 }
@@ -224,6 +226,7 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     dependencies {
         required.project "ordsPcFz"
         required.project "LNytGWDc"
+        required.project "R2OftAxM"
     }
 }
 
