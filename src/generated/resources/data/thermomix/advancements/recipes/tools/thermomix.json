@@ -6,14 +6,12 @@
     ]
   },
   "criteria": {
-    "has_cutting_board": {
+    "has_tool": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": [
-              "farmersdelight:cutting_board"
-            ]
+            "tag": "thermomix:allowed_tools"
           }
         ]
       }
@@ -39,7 +37,7 @@
   },
   "requirements": [
     [
-      "has_cutting_board",
+      "has_tool",
       "has_mixer",
       "has_the_recipe"
     ]

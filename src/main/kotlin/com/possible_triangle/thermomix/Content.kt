@@ -23,8 +23,8 @@ import com.simibubi.create.foundation.data.AssetLookup
 import com.simibubi.create.foundation.data.CreateRegistrate
 import com.simibubi.create.foundation.data.ModelGen
 import com.simibubi.create.foundation.data.SharedProperties
-import com.tterrag.registrate.util.nullness.NonNullFunction
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
+import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
@@ -49,7 +49,6 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
 import thedarkcolour.kotlinforforge.forge.registerObject
-import vectorwing.farmersdelight.common.registry.ModBlocks
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
@@ -84,7 +83,7 @@ object Content {
                 .define('A', AllBlocks.COGWHEEL.get())
                 .define('B', AllBlocks.ANDESITE_CASING.get())
                 .define('C', AllBlocks.TURNTABLE.get())
-                .unlockedBy("has_cutting_board", has(ModBlocks.CUTTING_BOARD.get()))
+                .unlockedBy("has_tool", has(ALLOWED_TOOLS))
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
                 .save(p)
         }

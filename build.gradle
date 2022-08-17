@@ -143,6 +143,7 @@ dependencies {
     implementation fg.deobf("curse.maven:flywheel-486392:${project.flywheel_version}")
 
     implementation fg.deobf("curse.maven:farmers-delight-398521:${project.farmers_delight_version}")
+    implementation fg.deobf("curse.maven:overweight-farming-591666:${project.overweight_farming_version}")
     runtimeOnly fg.deobf("curse.maven:neapolitan-382016:${project.neapolitan_version}")
     runtimeOnly fg.deobf("com.teamabnormals:blueprint:${project.mc_version}-${project.blueprint_version}")
 

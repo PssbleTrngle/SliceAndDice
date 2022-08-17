@@ -2,6 +2,7 @@ package com.possible_triangle.thermomix
 
 import com.possible_triangle.thermomix.ThermomixMod.MOD_ID
 import com.possible_triangle.thermomix.block.tile.ThermomixTile
+import com.possible_triangle.thermomix.compat.ModCompat
 import com.simibubi.create.content.contraptions.components.press.PressingBehaviour
 import com.simibubi.create.foundation.ponder.PonderRegistrationHelper
 import com.simibubi.create.foundation.ponder.element.InputWindowElement
@@ -9,9 +10,7 @@ import com.simibubi.create.foundation.utility.Pointing
 import com.simibubi.create.foundation.utility.VecHelper
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
-import vectorwing.farmersdelight.common.registry.ModItems
 
 object PonderScenes {
 
@@ -52,7 +51,7 @@ object PonderScenes {
             scene.world.showSection(belt, Direction.SOUTH)
             scene.idle(20)
 
-            val knife = ItemStack(ModItems.IRON_KNIFE.get())
+            val knife = ItemStack(ModCompat.exampleTool)
             scene.overlay.showControls(
                 InputWindowElement(
                     VecHelper.getCenterOf(beltThermomix.above()),
@@ -72,11 +71,11 @@ object PonderScenes {
 
             val beltOutputPos = beltThermomix.below(2)
             val beltInputPos = beltOutputPos.west()
-            scene.world.createItemOnBeltLike(beltInputPos, Direction.UP, ItemStack(Items.CAKE))
+            scene.world.createItemOnBeltLike(beltInputPos, Direction.UP, ItemStack(ModCompat.exampleInput))
 
             scene.idleSeconds(4)
 
-            val slices = ItemStack(ModItems.CAKE_SLICE.get(), 7)
+            val slices = ItemStack(ModCompat.exampleOutput, 7)
             scene.world.removeItemsFromBelt(beltOutputPos)
             val slicesInWorld = scene.world.createItemOnBelt(beltOutputPos, Direction.UP, slices)
 

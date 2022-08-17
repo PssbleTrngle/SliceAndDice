@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "#farmersdelight:tools/knives",
+    {
+      "id": "#farmersdelight:tools/knives",
+      "required": false
+    },
     "#forge:tools/axes"
   ]
 }
