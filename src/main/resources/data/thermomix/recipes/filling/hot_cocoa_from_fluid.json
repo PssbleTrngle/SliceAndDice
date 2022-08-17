@@ -1,27 +1,18 @@
 {
-  "type": "create:mixing",
+  "type": "create:filling",
   "ingredients": [
     {
-      "item": "minecraft:bowl"
+      "item": "minecraft:glass_bottle"
     },
     {
-      "item": "farmersdelight:pumpkin_slice"
-    },
-    {
-      "tag": "forge:salad_ingredients/cabbage"
-    },
-    {
-      "tag": "forge:raw_pork"
-    },
-    {
-      "fluid": "create:milk",
+      "fluid": "create:chocolate",
       "nbt": {},
       "amount": 250
     }
   ],
   "results": [
     {
-      "item": "create:dough"
+      "item": "farmersdelight:hot_cocoa"
     }
   ]
 }
