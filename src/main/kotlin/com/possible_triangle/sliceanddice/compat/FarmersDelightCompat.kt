@@ -57,6 +57,8 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             .filterValues { it is CuttingBoardRecipe }
             .mapValues { it.value as CuttingBoardRecipe }
 
+        SliceAndDice.LOGGER.debug("Found {} cutting recipes", cuttingRecipes.size)
+
         cuttingRecipes.forEach { (originalID, recipe) ->
             val id = ResourceLocation(SliceAndDice.MOD_ID, "cutting/${originalID.namespace}/${originalID.path}")
             add.accept(id, recipe.toBasin())
@@ -73,6 +75,8 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         val cookingRecipes = recipes
             .filterValues { it is CookingPotRecipe }
             .mapValues { it.value as CookingPotRecipe }
+
+        SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
 
         fun fluidOf(ingredient: Ingredient): FluidStack? {
             if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return null

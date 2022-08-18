@@ -7,6 +7,8 @@
   "mixins": [
     "EntityMixin",
     "LevelMixin",
+    "RecipeEventJSMixin",
+    "RecipeManagerAccessor",
     "RecipeManagerMixin"
   ],
   "injectors": {

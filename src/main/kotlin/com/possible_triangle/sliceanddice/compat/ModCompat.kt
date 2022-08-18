@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice.compat
 
+import com.possible_triangle.sliceanddice.SliceAndDice
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
@@ -27,6 +28,7 @@ object ModCompat : IRecipeInjector {
         existing: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
+        SliceAndDice.LOGGER.info("Injecting recipes")
         FarmersDelightCompat.ifLoaded { injectRecipes(existing, add) }
         OverweightFarmingCompat.ifLoaded { injectRecipes(existing, add) }
     }
