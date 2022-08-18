@@ -8,7 +8,7 @@
 [ISSUES]: https://github.com/PssbleTrngle/SliceAndDice/issues
 
 <!-- modrinth_exclude.start -->
-# Brazier
+# Create Slice &  Dice
 [![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
 [![Downloads](http://cf.way2muchnoise.eu/full_slice-and-dice_downloads.svg)][CURSEFORGE]
 [![Version](http://cf.way2muchnoise.eu/versions/slice-and-dice.svg)][DOWNLOAD]
