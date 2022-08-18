@@ -5,7 +5,7 @@ license = 'LGPL'
 [[mods]]
 modId = "sliceanddice"
 version = "${file.jarVersion}"
-displayName = "sliceanddice"
+displayName = "Create Slice & Dice"
 authors = "possible_triangle"
 description = '''Making automation for Farmers Delight more sensible'''
 
