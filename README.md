@@ -2,6 +2,19 @@
 [CREATE]: https://www.curseforge.com/minecraft/mc-mods/create
 [OVERWEIGHT_FARMING]: https://www.curseforge.com/minecraft/mc-mods/overweight-farming
 [NEAPOLITAN]: https://www.curseforge.com/minecraft/mc-mods/neapolitan
+[DOWNLOAD]: https://www.curseforge.com/minecraft/mc-mods/slice-and-dice/files
+[CURSEFORGE]: https://www.curseforge.com/minecraft/mc-mods/slice-and-dice
+[MODRINTH]: https://modrinth.com/mod/slice-and-dice
+[ISSUES]: https://github.com/PssbleTrngle/SliceAndDice/issues
+
+<!-- modrinth_exclude.start -->
+# Brazier
+[![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
+[![Downloads](http://cf.way2muchnoise.eu/full_slice-and-dice_downloads.svg)][CURSEFORGE]
+[![Version](http://cf.way2muchnoise.eu/versions/slice-and-dice.svg)][DOWNLOAD]
+[![Issues](https://img.shields.io/github/issues/PssbleTrngle/SliceAndDice?label=Issues)][ISSUES]
+[![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=GmjmRQ0A&logo=true)][MODRINTH]
+<!-- modrinth_exclude.end -->
 
 # Slicer
 
