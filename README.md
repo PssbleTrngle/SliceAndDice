@@ -16,7 +16,7 @@
 [![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=GmjmRQ0A&logo=true)][MODRINTH]
 <!-- modrinth_exclude.end -->
 
-# Slicer
+### Slicer
 
 This mod enables a variety of features to create better compatibility between mostly [Farmer's Delight][FARMERS_DELIGHT] and [Create][CREATE].
 While it is designed to work with Farmer's Delight, it does work without it and also adds some compatibility features for other mods.
