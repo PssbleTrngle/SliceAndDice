@@ -4,13 +4,10 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "farmersdelight:pumpkin_slice"
+      "tag": "forge:crops/corn"
     },
     {
-      "tag": "forge:salad_ingredients/cabbage"
-    },
-    {
-      "tag": "forge:raw_pork"
+      "tag": "forge:crops/corn"
     },
     {
       "fluidTag": "forge:milk",
@@ -22,13 +19,13 @@
   ],
   "results": [
     {
-      "item": "farmersdelight:pumpkin_soup"
+      "item": "culturaldelights:creamed_corn"
     }
   ],
   "conditions": [
     {
       "type": "forge:mod_loaded",
-      "modid": "farmersdelight"
+      "modid": "culturaldelights"
     }
   ]
 }

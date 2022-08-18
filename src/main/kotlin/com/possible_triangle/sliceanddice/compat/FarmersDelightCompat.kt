@@ -41,7 +41,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
     }
 
     fun addCatalysts(registration: IRecipeCatalystRegistration) {
-        registration.addRecipeCatalyst(ItemStack(Content.SLICER_BLOCK.get()), FDRecipeTypes.COOKING)
+        registration.addRecipeCatalyst(ItemStack(Content.SLICER_BLOCK.get()), FDRecipeTypes.CUTTING)
     }
 
     override fun injectRecipes(existing: Map<ResourceLocation, Recipe<*>>, add: BiConsumer<ResourceLocation, Recipe<*>>) {

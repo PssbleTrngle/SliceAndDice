@@ -61,6 +61,9 @@ object PonderScenes {
             scene.world.modifyTileEntity(beltSlicer, SlicerTile::class.java) {
                 it.heldItem = knife
             }
+            scene.world.modifyTileEntity(basinSlicer, SlicerTile::class.java) {
+                it.heldItem = knife
+            }
 
             scene.overlay.showText(60)
                 .text("Right-click it with a valid tool")
