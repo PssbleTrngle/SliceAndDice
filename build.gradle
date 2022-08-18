@@ -58,7 +58,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
-                thermomix {
+                sliceanddice {
                     source sourceSets.main
                 }
             }
@@ -76,7 +76,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
-                thermomix {
+                sliceanddice {
                     source sourceSets.main
                 }
             }
@@ -96,7 +96,7 @@ minecraft {
             args '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
 
             mods {
-                thermomix {
+                sliceanddice {
                     source sourceSets.main
                 }
             }

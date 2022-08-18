@@ -3,25 +3,25 @@
 [OVERWEIGHT_FARMING]: https://www.curseforge.com/minecraft/mc-mods/overweight-farming
 [NEAPOLITAN]: https://www.curseforge.com/minecraft/mc-mods/neapolitan
 
-# Thermomix
+# Slicer
 
 This mod enables a variety of features to create better compatibility between mostly [Farmer's Delight][FARMERS_DELIGHT] and [Create][CREATE].
 While it is designed to work with Farmer's Delight, it does work without it and also adds some compatibility features for other mods.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/Thermomix/1.18.x/screenshots/thermomix.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.18.x/screenshots/slicer.png)
 
 ### Automatic Cutting
 
-The Main feature of the mod is the _Thermomix_, a machine similar to the _Mechanical Mixer_ or _Mechanical Press_ from Create.
+The Main feature of the mod is the _Slicer_, a machine similar to the _Mechanical Mixer_ or _Mechanical Press_ from Create.
 It automatically registers all cutting recipes from Farmer's Delight. In that sense, it is an automatic _Cutting Board_.  
 In order to use it, the correct tool has to be placed into the machine, using `Right-Click`. 
-By default, only knives and axes are allowed, but this behaviour can be overwritten by modifying the `thermomix:allowed_tools` item tag.
+By default, only knives and axes are allowed, but this behaviour can be overwritten by modifying the `sliceanddice:allowed_tools` item tag.
 
 ### Automatic Cooking
 
 All recipes from Farmer's delight requiring the Cooking Pot are added as heated mixing recipes.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/Thermomix/1.18.x/screenshots/cooking.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.18.x/screenshots/cooking.png)
 
 ### Sprinkler
 
@@ -33,7 +33,7 @@ Different fluids can have different effects. For now, only lava & water do somet
 
 The latter is meant to enable growing of _Banana Fonds_ from [Neapolitan][NEAPOLITAN] without being dependent on the weather, but it could possibly have other effects on other mods too.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/Thermomix/1.18.x/screenshots/sprinkler.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.18.x/screenshots/sprinkler.png)
 
 ### Overweight Farming
 
@@ -41,5 +41,5 @@ If present, some compatibility features for [Overweight Farming][OVERWEIGHT_FARM
 This includes waxing recipes using the deployer, 
 as well as showing the axe-stripping of overweight crops in JEI.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/Thermomix/1.18.x/screenshots/strip.png)
-![](https://raw.githubusercontent.com/PssbleTrngle/Thermomix/1.18.x/screenshots/wax.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.18.x/screenshots/strip.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.18.x/screenshots/wax.png)

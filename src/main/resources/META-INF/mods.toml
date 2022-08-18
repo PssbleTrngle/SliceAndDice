@@ -3,27 +3,27 @@ loaderVersion = "[40,)"
 license = 'LGPL'
 
 [[mods]]
-modId = "thermomix"
+modId = "sliceanddice"
 version = "${file.jarVersion}"
-displayName = "Thermomix"
+displayName = "sliceanddice"
 authors = "possible_triangle"
 description = '''Making automation for Farmers Delight more sensible'''
 
-[[dependencies.thermomix]]
+[[dependencies.sliceanddice]]
 modId = "forge"
 mandatory = true
 versionRange = "[36,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.thermomix]]
+[[dependencies.sliceanddice]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.16.5,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.thermomix]]
+[[dependencies.sliceanddice]]
 modId = "create"
 mandatory = true
 versionRange = "[0.5.0a,)"
