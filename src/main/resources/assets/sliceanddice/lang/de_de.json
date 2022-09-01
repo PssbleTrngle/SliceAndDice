@@ -4,5 +4,7 @@
   "block.sliceanddice.wet_air": "Feuchte Luft",
   "sliceanddice.ponder.slicer.header": "Automatisches Schneiden mit dem Thermomix",
   "sliceanddice.ponder.slicer.text_1": "Recht-Klick mit einem erlaubten Werkzeug",
-  "sliceanddice.ponder.slicer.text_2": "Der Thermomix kann auch mit einem Behälter genutzt werden"
+  "sliceanddice.ponder.slicer.text_2": "Der Thermomix kann auch mit einem Behälter genutzt werden",
+  "sliceanddice.tooltip.rotationDirection": "Rotationsrichtung",
+  "sliceanddice.gui.contraptions.wrong_direction": "Es scheint, dass sich dieser %s in die _falsche Richtung_ dreht."
 }

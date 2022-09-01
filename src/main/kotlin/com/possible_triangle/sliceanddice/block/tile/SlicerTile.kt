@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.block.tile
 
 import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.contraptions.components.press.PressingBehaviour
@@ -9,16 +10,18 @@ import com.simibubi.create.content.contraptions.components.press.PressingBehavio
 import com.simibubi.create.content.contraptions.processing.BasinOperatingTileEntity
 import com.simibubi.create.content.contraptions.processing.InWorldProcessing
 import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack
+import com.simibubi.create.foundation.item.TooltipHelper
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour
+import com.simibubi.create.foundation.utility.Lang
 import com.simibubi.create.foundation.utility.VecHelper
 import com.simibubi.create.foundation.utility.recipe.RecipeFinder
+import net.minecraft.ChatFormatting
+import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.core.particles.ItemParticleOption
-import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
@@ -39,6 +42,32 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     }
 
     override fun getRecipeCacheKey() = basinCacheKey
+
+    val correctDirection get() = Configs.SERVER.IGNORE_ROTATION.get() || getSpeed() < 0
+    val canProcess get()  = correctDirection && isSpeedRequirementFulfilled
+
+    override fun updateBasin(): Boolean {
+        return !correctDirection || super.updateBasin()
+    }
+
+    override fun addToTooltip(tooltip: MutableList<Component>?, isPlayerSneaking: Boolean): Boolean {
+        if (super.addToTooltip(tooltip, isPlayerSneaking)) return true
+        if (!correctDirection && speed != 0F) {
+            Lang.builder(SliceAndDice.MOD_ID)
+                .translate("tooltip.rotationDirection")
+                .style(ChatFormatting.GOLD)
+                .forGoggles(tooltip)
+            val hint = Lang.builder(SliceAndDice.MOD_ID)
+                .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
+                .component()
+            val cutString = TooltipHelper.cutTextComponent(hint, ChatFormatting.GRAY, ChatFormatting.WHITE)
+            for (i in cutString.indices) {
+                Lang.builder().add(cutString[i].copy()).forGoggles(tooltip)
+            }
+            return true
+        }
+        return false
+    }
 
     var heldItem = ItemStack.EMPTY
     private lateinit var behaviour: PressingBehaviour
@@ -129,6 +158,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     }
 
     override fun tryProcessInBasin(simulate: Boolean): Boolean {
+        if(!canProcess) return false
         applyBasinRecipe()
 
         basin.ifPresent {
@@ -148,6 +178,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         outputList: MutableList<ItemStack>?,
         simulate: Boolean,
     ): Boolean {
+        if(!canProcess) return false
         val recipe = recipeFor(input.stack) ?: return false
         if (simulate) return true
 
@@ -171,32 +202,6 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     private fun hasRequiredTool(recipe: Recipe<*>): Boolean {
         return recipe !is CuttingProcessingRecipe || recipe.tool?.test(heldItem) == true
-    }
-
-    override fun tick() {
-        super.tick()
-        if (isRunning) {
-
-        }
-    }
-
-    private fun renderParticles() {
-        if (level == null) return
-        behaviour.particleItems.filterNot { it.isEmpty }.forEach { stack ->
-            val data = ItemParticleOption(ParticleTypes.ITEM, stack)
-            spillParticle(data)
-        }
-    }
-
-    private fun spillParticle(data: ParticleOptions?) {
-        val angle = level!!.random.nextFloat() * 360
-        var offset = Vec3(0.0, 0.0, 0.25)
-        offset = VecHelper.rotate(offset, angle.toDouble(), Direction.Axis.Y)
-        var target = VecHelper.rotate(offset, (if (getSpeed() > 0) 25 else -25).toDouble(), Direction.Axis.Y)
-            .add(0.0, .25, 0.0)
-        val center = offset.add(VecHelper.getCenterOf(worldPosition))
-        target = VecHelper.offsetRandomly(target.subtract(offset), level!!.random, 1 / 128f)
-        level!!.addParticle(data, center.x, center.y - 1.75f, center.z, target.x, target.y, target.z)
     }
 
     override fun onPressingCompleted() {

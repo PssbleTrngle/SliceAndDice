@@ -54,9 +54,14 @@ import java.util.function.Supplier
 
 object Content {
 
-    private val REGISTRATE = CreateRegistrate.lazy(MOD_ID).get()
-        .creativeModeTab { CreateItemGroup.TAB_TOOLS }
-        .startSection(AllSections.LOGISTICS)
+    private object REGISTRATE : CreateRegistrate(MOD_ID) {
+        fun register(bus: IEventBus) = registerEventListeners(bus)
+
+        init {
+            creativeModeTab { CreateItemGroup.TAB_TOOLS }
+            startSection(AllSections.LOGISTICS)
+        }
+    }
 
     val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
     val RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, MOD_ID)
@@ -148,6 +153,8 @@ object Content {
         .register()
 
     fun register(modBus: IEventBus) {
+        REGISTRATE.register(modBus)
+
         LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
 
