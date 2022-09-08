@@ -51,6 +51,10 @@ import java.util.function.Supplier
 
 object Content {
 
+    private fun modLoc(path: String): ResourceLocation {
+        return ResourceLocation(MOD_ID, path)
+    }
+
     private object REGISTRATE : CreateRegistrate(MOD_ID) {
         fun register(bus: IEventBus) = registerEventListeners(bus)
 
@@ -63,7 +67,7 @@ object Content {
     val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
     val RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, MOD_ID)
 
-    val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, ResourceLocation(MOD_ID, "allowed_tools"))
+    val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
 
     val SLICER_BLOCK = REGISTRATE
         .block<SlicerBlock>("slicer", ::SlicerBlock)
@@ -98,7 +102,7 @@ object Content {
         .validBlock(SLICER_BLOCK)
         .register()
 
-    val SLICER_HEAD = PartialModel(ResourceLocation(MOD_ID, "block/slicer/head"))
+    val SLICER_HEAD = PartialModel(modLoc("block/slicer/head"))
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
         val type = object : RecipeType<T> {
@@ -149,14 +153,15 @@ object Content {
         .validBlock(SPRINKLER_BLOCK)
         .register()
 
-    private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "moisturizing"))
-    private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "burning"))
-    private val FERTILIZERS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "fertilizer"))
+    private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
+    private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))
+    private val FERTILIZERS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("fertilizer"))
 
     val FERTILIZER = REGISTRATE
-        .fluid("fertilizer")
+        .fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
         .tag(FERTILIZERS)
         .properties { it.explosionResistance(100F) }
+        .defaultBucket()
         .register()
 
     fun register(modBus: IEventBus) {
