@@ -156,6 +156,11 @@ dependencies {
 
     compileOnly "dev.latvian.mods:kubejs-forge:${project.kubejs_version}"
 
+    runtimeOnly fg.deobf("curse.maven:cofh-core-69162:${project.cofh_core_version}")
+    runtimeOnly fg.deobf("curse.maven:thermal-foundation-222880:${project.thermal_foundation_version}")
+    runtimeOnly fg.deobf("curse.maven:thermal-expansion-69163:${project.thermal_expansion_version}")
+    runtimeOnly fg.deobf("curse.maven:thermal-cultivation-271835:${project.thermal_cultivation_version}")
+
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 

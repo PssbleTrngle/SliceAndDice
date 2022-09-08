@@ -1,4 +1,4 @@
-package com.possible_triangle.sliceanddice.block.tile
+package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.contraptions.fluids.FluidFX
@@ -27,11 +27,8 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     private var processingTicks = -1
 
     override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
-        behaviours.add(
-            SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get())
-                .allowInsertion()
-                .also { tank = it }
-        )
+        behaviours.add(SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get()).allowInsertion()
+            .also { tank = it })
     }
 
     override fun tick() {
@@ -54,15 +51,15 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
         if (processingTicks >= 8) {
             if (world.isClientSide && !isVirtual) spawnProcessingParticles(tank.primaryTank.renderedFluid)
-            if (world is ServerLevel) SprinkleBehaviour.act(blockPos, world, tank.primaryHandler.fluid, world.random)
+            if (world is ServerLevel) SprinkleBehaviour.actAt(
+                blockPos, world, tank.primaryHandler.fluid, world.random,
+            )
         }
     }
 
     override fun <T> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
-        return if (cap === CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && side === Direction.UP)
-            tank.capability.cast()
-        else
-            super.getCapability(cap, side)
+        return if (cap === CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && side === Direction.UP) tank.capability.cast()
+        else super.getCapability(cap, side)
     }
 
     private fun spawnProcessingParticles(fluid: FluidStack) {
@@ -72,9 +69,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
         val x = world.random.nextDouble() * 2 - 1
         val z = world.random.nextDouble() * 2 - 1
 
-        val vec = VecHelper.getCenterOf(blockPos)
-            .add(0.0, 2.0 / 16, 0.0)
-            .add(x * 0.3, 0.0, z * 0.3)
+        val vec = VecHelper.getCenterOf(blockPos).add(0.0, 2.0 / 16, 0.0).add(x * 0.3, 0.0, z * 0.3)
 
         world.addParticle(particle, vec.x, vec.y, vec.z, x * 0.2, -0.1, z * 0.2)
     }
@@ -96,9 +91,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
     override fun addToGoggleTooltip(tooltip: MutableList<Component>, sneaking: Boolean): Boolean {
         return containedFluidTooltip(
-            tooltip,
-            sneaking,
-            getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP)
+            tooltip, sneaking, getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP)
         )
     }
 

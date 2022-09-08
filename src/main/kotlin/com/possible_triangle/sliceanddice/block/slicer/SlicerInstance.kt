@@ -1,10 +1,10 @@
-package com.possible_triangle.sliceanddice.block.instance
+package com.possible_triangle.sliceanddice.block.slicer
 
 import com.jozufozu.flywheel.api.Instancer
 import com.jozufozu.flywheel.api.MaterialManager
 import com.jozufozu.flywheel.api.instance.DynamicInstance
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.tile.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
 import com.simibubi.create.AllBlockPartials
 import com.simibubi.create.content.contraptions.base.flwdata.RotatingData
 import com.simibubi.create.content.contraptions.relays.encased.EncasedCogInstance

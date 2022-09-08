@@ -1,7 +1,6 @@
-package com.possible_triangle.sliceanddice.block
+package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.tile.SprinklerTile
 import com.simibubi.create.content.contraptions.wrench.IWrenchable
 import com.simibubi.create.foundation.block.ITE
 import com.simibubi.create.foundation.tileEntity.ComparatorUtil

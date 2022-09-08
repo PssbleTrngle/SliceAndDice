@@ -1,10 +1,10 @@
-package com.possible_triangle.sliceanddice.block.renderer
+package com.possible_triangle.sliceanddice.block.slicer
 
 import com.jozufozu.flywheel.backend.Backend
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Vector3f
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.tile.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
 import com.simibubi.create.AllBlockPartials
 import com.simibubi.create.content.contraptions.base.KineticTileEntity
 import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer

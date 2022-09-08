@@ -1,4 +1,4 @@
-package com.possible_triangle.sliceanddice.block
+package com.possible_triangle.sliceanddice.block.sprinkler
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel

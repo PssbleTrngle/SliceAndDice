@@ -2,14 +2,17 @@ package com.possible_triangle.sliceanddice
 
 import com.jozufozu.flywheel.core.PartialModel
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
-import com.possible_triangle.sliceanddice.block.SlicerBlock
-import com.possible_triangle.sliceanddice.block.SprinklerBlock
-import com.possible_triangle.sliceanddice.block.WetAir
-import com.possible_triangle.sliceanddice.block.instance.SlicerInstance
-import com.possible_triangle.sliceanddice.block.renderer.SlicerRenderer
-import com.possible_triangle.sliceanddice.block.tile.SlicerTile
-import com.possible_triangle.sliceanddice.block.tile.SprinkleBehaviour
-import com.possible_triangle.sliceanddice.block.tile.SprinklerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
+import com.possible_triangle.sliceanddice.block.slicer.SlicerInstance
+import com.possible_triangle.sliceanddice.block.slicer.SlicerRenderer
+import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerTile
+import com.possible_triangle.sliceanddice.block.sprinkler.WetAir
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
@@ -26,20 +29,14 @@ import com.simibubi.create.foundation.data.SharedProperties
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.FluidTags
 import net.minecraft.tags.TagKey
-import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.entity.EntityTypeTest
-import net.minecraft.world.phys.AABB
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -152,6 +149,16 @@ object Content {
         .validBlock(SPRINKLER_BLOCK)
         .register()
 
+    private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "moisturizing"))
+    private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "burning"))
+    private val FERTILIZERS = TagKey.create(Registry.FLUID_REGISTRY, ResourceLocation(MOD_ID, "fertilizer"))
+
+    val FERTILIZER = REGISTRATE
+        .fluid("fertilizer")
+        .tag(FERTILIZERS)
+        .properties { it.explosionResistance(100F) }
+        .register()
+
     fun register(modBus: IEventBus) {
         REGISTRATE.register(modBus)
 
@@ -164,27 +171,9 @@ object Content {
         modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
         modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
 
-        SprinkleBehaviour.register(FluidTags.WATER) { pos, world, _, random ->
-            val start = pos.offset(-2, -7, -2)
-            val end = pos.offset(2, -1, 2)
-            val state = WET_AIR.defaultState
-            for (it in BlockPos.betweenClosed(start, end)) {
-                if (world.getBlockState(it).isAir) {
-                    world.setBlockAndUpdate(it, state)
-                    world.scheduleTick(it, WET_AIR.get(), random.nextInt(60, 120))
-                }
-            }
-        }
-
-        SprinkleBehaviour.register(FluidTags.LAVA) { pos, world, _, _ ->
-            val start = pos.offset(-2, -7, -2)
-            val end = pos.offset(2, -1, 2)
-            world.getEntities(EntityTypeTest.forClass(LivingEntity::class.java), AABB(start, end)) {
-                !it.fireImmune()
-            }.forEach {
-                it.hurt(DamageSource.IN_FIRE, 0.5F)
-            }
-        }
+        SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
+        SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
+        SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
     }
 
 }

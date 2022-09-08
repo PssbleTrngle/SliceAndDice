@@ -1,7 +1,6 @@
-package com.possible_triangle.sliceanddice.block
+package com.possible_triangle.sliceanddice.block.slicer
 
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.tile.SlicerTile
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllItems
 import com.simibubi.create.AllShapes

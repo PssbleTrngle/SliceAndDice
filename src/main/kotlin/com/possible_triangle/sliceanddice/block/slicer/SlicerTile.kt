@@ -1,4 +1,4 @@
-package com.possible_triangle.sliceanddice.block.tile
+package com.possible_triangle.sliceanddice.block.slicer
 
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice

@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
-import com.possible_triangle.sliceanddice.block.tile.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.simibubi.create.content.contraptions.components.press.PressingBehaviour
 import com.simibubi.create.foundation.ponder.PonderRegistrationHelper
