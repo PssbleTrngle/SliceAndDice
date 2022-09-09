@@ -11,8 +11,8 @@
 <!-- modrinth_exclude.start -->
 # Create Slice &  Dice
 [![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
-[![Downloads](http://cf.way2muchnoise.eu/full_slice-and-dice_downloads.svg)][CURSEFORGE]
-[![Version](http://cf.way2muchnoise.eu/versions/slice-and-dice.svg)][DOWNLOAD]
+[![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
+[![Version](http://cf.way2muchnoise.eu/versions/659674.svg)][DOWNLOAD]
 [![Issues](https://img.shields.io/github/issues/PssbleTrngle/SliceAndDice?label=Issues)][ISSUES]
 [![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=GmjmRQ0A&logo=true)][MODRINTH]
 <!-- modrinth_exclude.end -->
