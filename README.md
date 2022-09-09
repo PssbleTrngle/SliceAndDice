@@ -42,11 +42,13 @@ All recipes from Farmer's delight requiring the Cooking Pot are added as heated 
 
 ### Sprinkler
 
-The Sprinkler is a block which, when provided with a fluid using a pipe, will distribute it in a small are below.  
-Different fluids can have different effects. For now, only lava & water do something.
+The Sprinkler is a block which, when provided with a fluid using a pipe, will distribute it in a small area below.  
+Different fluids can have different effects.
 
 - Lava applies a small amount of fire damage to entities below 
 - Water makes the area below wet, making the world think it's raining there.
+- Potions apply their affect for a short duration to entities below
+- Liquid Fertilizer, a new fluid, applies a bonemeal affect to blocks.
 
 The latter is meant to enable growing of _Banana Fonds_ from [Neapolitan][NEAPOLITAN] without being dependent on the weather, but it could possibly have other effects on other mods too.
 
