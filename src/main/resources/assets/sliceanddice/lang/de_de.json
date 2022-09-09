@@ -2,6 +2,8 @@
   "block.sliceanddice.slicer": "Thermomix",
   "block.sliceanddice.sprinkler": "Sprinkler",
   "block.sliceanddice.wet_air": "Feuchte Luft",
+  "block.sliceanddice.fertilizer": "Flüssiger Dünger",
+  "item.sliceanddice.fertilizer_bucket": "Eimer voll flüssigem Dünger",
   "sliceanddice.ponder.slicer.header": "Automatisches Schneiden mit dem Thermomix",
   "sliceanddice.ponder.slicer.text_1": "Recht-Klick mit einem erlaubten Werkzeug",
   "sliceanddice.ponder.slicer.text_2": "Der Thermomix kann auch mit einem Behälter genutzt werden",

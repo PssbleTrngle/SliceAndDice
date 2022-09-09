@@ -13,9 +13,11 @@ import com.possible_triangle.sliceanddice.block.sprinkler.WetAir
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
+import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
 import com.simibubi.create.content.AllSections
 import com.simibubi.create.content.CreateItemGroup
@@ -38,6 +40,7 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.fluids.ForgeFlowingFluid
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
@@ -69,38 +72,20 @@ object Content {
 
     val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
 
-    val SLICER_BLOCK = REGISTRATE
-        .block<SlicerBlock>("slicer", ::SlicerBlock)
-        .initialProperties(SharedProperties::stone)
-        .properties(BlockBehaviour.Properties::noOcclusion)
-        .transform(AllTags.axeOrPickaxe())
-        .blockstate { c, p ->
+    val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
+        .properties(BlockBehaviour.Properties::noOcclusion).transform(AllTags.axeOrPickaxe()).blockstate { c, p ->
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
-        }
-        .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .transform(BlockStressDefaults.setImpact(4.0))
-        .item(::AssemblyOperatorBlockItem)
-        .transform(ModelGen.customItemModel())
-        .recipe { c, p ->
-            ShapedRecipeBuilder.shaped(c.entry)
-                .pattern("A")
-                .pattern("B")
-                .pattern("C")
-                .define('A', AllBlocks.COGWHEEL.get())
-                .define('B', AllBlocks.ANDESITE_CASING.get())
-                .define('C', AllBlocks.TURNTABLE.get())
-                .unlockedBy("has_tool", has(ALLOWED_TOOLS))
-                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
-                .save(p)
-        }
-        .register()
+        }.addLayer { Supplier { RenderType.cutoutMipped() } }.transform(BlockStressDefaults.setImpact(4.0))
+        .item(::AssemblyOperatorBlockItem).transform(ModelGen.customItemModel()).recipe { c, p ->
+            ShapedRecipeBuilder.shaped(c.entry).pattern("A").pattern("B").pattern("C")
+                .define('A', AllBlocks.COGWHEEL.get()).define('B', AllBlocks.ANDESITE_CASING.get())
+                .define('C', AllBlocks.TURNTABLE.get()).unlockedBy("has_tool", has(ALLOWED_TOOLS))
+                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
+        }.register()
 
-    val SLICER_TILE = REGISTRATE
-        .tileEntity("slicer", ::SlicerTile)
+    val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
-        .renderer { NonNullFunction { SlicerRenderer(it) } }
-        .validBlock(SLICER_BLOCK)
-        .register()
+        .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
     val SLICER_HEAD = PartialModel(modLoc("block/slicer/head"))
 
@@ -119,50 +104,33 @@ object Content {
         )
     }
 
-    val WET_AIR = REGISTRATE
-        .block<WetAir>("wet_air", ::WetAir)
-        .initialProperties { Blocks.CAVE_AIR }
-        .properties { it.randomTicks() }
-        .blockstate { c, p ->
+    val WET_AIR = REGISTRATE.block<WetAir>("wet_air", ::WetAir).initialProperties { Blocks.CAVE_AIR }
+        .properties { it.randomTicks() }.blockstate { c, p ->
             p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
-        }
-        .register()
+        }.register()
 
-    val SPRINKLER_BLOCK = REGISTRATE
-        .block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
-        .initialProperties { SharedProperties.copperMetal() }
-        .transform(AllTags.pickaxeOnly())
+    val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
+        .initialProperties { SharedProperties.copperMetal() }.transform(AllTags.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
-        .item()
-        .transform(ModelGen.customItemModel("_"))
-        .recipe { c, p ->
-            ShapedRecipeBuilder.shaped(c.entry, 3)
-                .pattern("SPS")
-                .pattern("SBS")
-                .define('S', AllTags.forgeItemTag("plates/copper"))
-                .define('B', Blocks.IRON_BARS)
-                .define('P', AllBlocks.FLUID_PIPE.get())
-                .unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get()))
-                .save(p)
-        }
-        .register()
+        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
+        .transform(ModelGen.customItemModel("_")).recipe { c, p ->
+            ShapedRecipeBuilder.shaped(c.entry, 3).pattern("SPS").pattern("SBS")
+                .define('S', AllTags.forgeItemTag("plates/copper")).define('B', Blocks.IRON_BARS)
+                .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
+        }.register()
 
-    val SPRINKLER_TILE = REGISTRATE
-        .tileEntity("sprinkler", ::SprinklerTile)
-        .validBlock(SPRINKLER_BLOCK)
-        .register()
+    val SPRINKLER_TILE = REGISTRATE.tileEntity("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))
     private val FERTILIZERS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("fertilizer"))
 
-    val FERTILIZER = REGISTRATE
-        .fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
-        .tag(FERTILIZERS)
-        .properties { it.explosionResistance(100F) }
-        .defaultBucket()
-        .register()
+    val FERTILIZER_BLACKLIST = TagKey.create(Registry.BLOCK_REGISTRY, modLoc("fertilizer_blacklist"))
+
+    val FERTILIZER =
+        REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
+            .properties { it.explosionResistance(100F) }.tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
+            .bucket().model(AssetLookup.existingItemModel()).build().register()
 
     fun register(modBus: IEventBus) {
         REGISTRATE.register(modBus)
@@ -176,9 +144,10 @@ object Content {
         modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
         modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
 
-        SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
-        SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
-        SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour, SprinkleBehaviour.DEFAULT_RANGE)
+        SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
+        SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
+        SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
+        SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
     }
 
 }

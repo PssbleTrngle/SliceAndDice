@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import net.minecraftforge.fluids.FluidStack
@@ -17,44 +19,55 @@ private data class RegisteredBehaviour(
     val range: Vec3i,
 )
 
-private fun Vec3i.toSprinklerBox(origin: BlockPos): AABB {
-    return AABB(
-        origin.x - x / 2.0,
-        origin.y - y.toDouble(),
-        origin.z - z / 2.0,
-        origin.x + x / 2.0,
-        origin.y - 1.0,
-        origin.z + z / 2.0
-    )
-}
 
 fun interface SprinkleBehaviour {
 
-    fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: Random)
+    class Range(size: Vec3i, origin: BlockPos, private val world: ServerLevel) {
 
-    fun act(range: AABB, world: ServerLevel, fluid: FluidStack, random: Random) {
-        for (block in BlockPos.betweenClosed(
-            ceil(range.minX).toInt(), ceil(range.minY).toInt(), ceil(range.minZ).toInt(),
-            floor(range.maxX).toInt(), floor(range.maxY).toInt(), floor(range.maxZ).toInt(),
-        )) {
-            actAt(block, world, fluid, random)
+        val aabb = AABB(
+            origin.x - size.x / 2.0,
+            origin.y - size.y.toDouble(),
+            origin.z - size.z / 2.0,
+            origin.x + size.x / 2.0,
+            origin.y - 1.0,
+            origin.z + size.z / 2.0
+        )
+
+        fun <T : Entity> getEntities(clazz: Class<T>, predicate: (T) -> Boolean = { true }): List<T> {
+            return world.getEntities(EntityTypeTest.forClass(clazz), aabb, predicate)
         }
+
+        fun forEachBlock(consumer: (BlockPos) -> Unit) {
+            for (block in BlockPos.betweenClosed(
+                ceil(aabb.minX).toInt(), ceil(aabb.minY).toInt(), ceil(aabb.minZ).toInt(),
+                floor(aabb.maxX).toInt(), floor(aabb.maxY).toInt(), floor(aabb.maxZ).toInt(),
+            )) {
+                consumer(block)
+            }
+        }
+
     }
 
-    companion object : SprinkleBehaviour {
+    fun act(range: Range, world: ServerLevel, fluidStack: FluidStack, random: Random)
+
+    companion object {
         private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
 
-        val DEFAULT_RANGE = Vec3i(5, 7, 5)
+        private val DEFAULT_RANGE = Vec3i(5, 7, 5)
 
-        fun register(tag: TagKey<Fluid>, behaviour: SprinkleBehaviour, range: Vec3i) {
-            BEHAVIOURS.add(RegisteredBehaviour({ it.fluid.`is`(tag) }, behaviour, range))
+        fun register(tag: TagKey<Fluid>, behaviour: SprinkleBehaviour, range: Vec3i = DEFAULT_RANGE) {
+            register({ it.fluid.`is`(tag) }, behaviour, range)
         }
 
-        override fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: Random) {
-            BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
-                it.behaviour.act(it.range.toSprinklerBox(pos), world, fluid, random)
-            }
+        fun register(predicate: (FluidStack) -> Boolean, behaviour: SprinkleBehaviour, range: Vec3i = DEFAULT_RANGE) {
+            BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, range))
+        }
 
+        fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: Random) {
+            BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
+                val range = Range(it.range, pos, world)
+                it.behaviour.act(range, world, fluid, random)
+            }
         }
 
     }
