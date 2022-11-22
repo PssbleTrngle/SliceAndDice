@@ -3,6 +3,7 @@
   "block.sliceanddice.slicer": "Slicer",
   "block.sliceanddice.wet_air": "Wet Air",
   "block.sliceanddice.fertilizer": "Liquid Fertilizer",
+  "fluid.sliceanddice.fertilizer": "Liquid Fertilizer",
   "item.sliceanddice.fertilizer_bucket": "Bucket of Liquid Fertilizer",
   "sliceanddice.ponder.slicer.header": "Cutting with the slicer",
   "sliceanddice.ponder.slicer.text_1": "Right-click it with a valid tool",

@@ -4,12 +4,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import net.minecraftforge.fluids.FluidStack
-import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -48,7 +48,7 @@ fun interface SprinkleBehaviour {
 
     }
 
-    fun act(range: Range, world: ServerLevel, fluidStack: FluidStack, random: Random)
+    fun act(range: Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource)
 
     companion object {
         private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
@@ -63,7 +63,7 @@ fun interface SprinkleBehaviour {
             BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, range))
         }
 
-        fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: Random) {
+        fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: RandomSource) {
             BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
                 val range = Range(it.range, pos, world)
                 it.behaviour.act(range, world, fluid, random)

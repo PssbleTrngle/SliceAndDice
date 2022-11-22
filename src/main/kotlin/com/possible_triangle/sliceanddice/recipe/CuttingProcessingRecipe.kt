@@ -18,7 +18,7 @@ data class CuttingProcessingRecipe(val params: ProcessingRecipeParams, val tool:
     companion object : IRecipeTypeInfo {
         override fun getId() = ResourceLocation(SliceAndDice.MOD_ID, "cutting")
 
-        override fun <T : RecipeSerializer<*>?> getSerializer() = Content.CUTTING_SERIALIZER as T
+        override fun <T : RecipeSerializer<*>?> getSerializer() = Content.CUTTING_SERIALIZER.get() as T
 
         override fun <T : RecipeType<*>?> getType() = Content.CUTTING_RECIPE_TYPE.get() as T
     }

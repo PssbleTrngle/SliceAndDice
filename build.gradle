@@ -142,12 +142,13 @@ dependencies {
     // Use the latest version of Minecraft Forge
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}")
+    compileOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-common-api:${project.jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge-api:${project.jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge:${project.jei_version}"))
 
     compileOnly fg.deobf("com.tterrag.registrate:Registrate:${project.registrate_version}")
     implementation fg.deobf("curse.maven:create-328085:${project.create_version}")
-    implementation fg.deobf("curse.maven:flywheel-486392:${project.flywheel_version}")
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${project.mc_version}:${project.flywheel_version}")
 
     implementation fg.deobf("curse.maven:farmers-delight-398521:${project.farmers_delight_version}")
     implementation fg.deobf("curse.maven:overweight-farming-591666:${project.overweight_farming_version}")
@@ -156,10 +157,10 @@ dependencies {
 
     compileOnly "dev.latvian.mods:kubejs-forge:${project.kubejs_version}"
 
-    runtimeOnly fg.deobf("curse.maven:cofh-core-69162:${project.cofh_core_version}")
-    runtimeOnly fg.deobf("curse.maven:thermal-foundation-222880:${project.thermal_foundation_version}")
-    runtimeOnly fg.deobf("curse.maven:thermal-expansion-69163:${project.thermal_expansion_version}")
-    runtimeOnly fg.deobf("curse.maven:thermal-cultivation-271835:${project.thermal_cultivation_version}")
+    //runtimeOnly fg.deobf("curse.maven:cofh-core-69162:${project.cofh_core_version}")
+    //runtimeOnly fg.deobf("curse.maven:thermal-foundation-222880:${project.thermal_foundation_version}")
+    //runtimeOnly fg.deobf("curse.maven:thermal-expansion-69163:${project.thermal_expansion_version}")
+    //runtimeOnly fg.deobf("curse.maven:thermal-cultivation-271835:${project.thermal_cultivation_version}")
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }

@@ -39,16 +39,15 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fluids.ForgeFlowingFluid
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
-import thedarkcolour.kotlinforforge.forge.registerObject
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
@@ -98,7 +97,7 @@ object Content {
 
     val CUTTING_RECIPE_TYPE = createRecipeType<CuttingProcessingRecipe>(CuttingProcessingRecipe.id)
 
-    val CUTTING_SERIALIZER by RECIPE_SERIALIZERS.registerObject(CuttingProcessingRecipe.id.path) {
+    val CUTTING_SERIALIZER = RECIPE_SERIALIZERS.register(CuttingProcessingRecipe.id.path) {
         ProcessingRecipeSerializer(
             ::CuttingProcessingRecipe
         )
@@ -129,7 +128,7 @@ object Content {
 
     val FERTILIZER =
         REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
-            .properties { it.explosionResistance(100F) }.tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
+            .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
             .bucket().model(AssetLookup.existingItemModel()).build().register()
 
     fun register(modBus: IEventBus) {

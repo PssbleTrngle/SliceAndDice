@@ -2,7 +2,7 @@ package com.possible_triangle.sliceanddice.mixins;
 
 import com.google.gson.JsonObject;
 import com.possible_triangle.sliceanddice.RecipeInjection;
-import dev.latvian.mods.kubejs.recipe.RecipeEventJS;
+import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
-@Mixin(value = RecipeEventJS.class, remap = false)
+@Mixin(value = RecipesEventJS.class, remap = false)
 public class RecipeEventJSMixin {
 
     @Inject(at = @At("RETURN"), require = 0, method = "post")

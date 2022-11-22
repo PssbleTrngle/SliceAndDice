@@ -2,11 +2,10 @@ package com.possible_triangle.sliceanddice.compat
 
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.ModCompat.OVERWEIGHT_FARMING
-import com.simibubi.create.Create
 import com.simibubi.create.content.contraptions.components.deployer.DeployerApplicationRecipe
 import com.simibubi.create.content.contraptions.components.deployer.ManualApplicationRecipe
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder
-import mezz.jei.api.registration.IRecipeRegistration
+import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
@@ -27,12 +26,14 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         }
     }
 
-    fun registerRecipes(registration: IRecipeRegistration) {
+    fun registerRecipes(register: (List<ManualApplicationRecipe>) -> Unit) {
         val axe = Ingredient.of(Items.IRON_AXE)
         val recipes = MiscEvents.PEELABLES.get().map { (from, to) ->
+            val fromId = Registry.BLOCK.getKey(from)
+            val toId = Registry.BLOCK.getKey(to)
             val id = ResourceLocation(
                 SliceAndDice.MOD_ID,
-                "$OVERWEIGHT_FARMING/peeling/from_${from.registryName!!.path}_to_${to.registryName!!.path}"
+                "$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}"
             )
             ProcessingRecipeBuilder(::ManualApplicationRecipe, id).let {
                 it.output(to)
@@ -42,7 +43,8 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
                 it.build()
             }
         }
-        registration.addRecipes(recipes, Create.asResource("item_application"))
+
+        register(recipes)
     }
 
     override fun injectRecipes(
@@ -50,9 +52,11 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
         MiscEvents.WAXABLES.get().forEach { (from, to) ->
+            val fromId = Registry.BLOCK.getKey(from)
+            val toId = Registry.BLOCK.getKey(to)
             val id = ResourceLocation(
                 SliceAndDice.MOD_ID,
-                "$OVERWEIGHT_FARMING/waxing/from_${from.registryName!!.path}_to_${to.registryName!!.path}"
+                "$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}"
             )
             val recipe = ProcessingRecipeBuilder(::DeployerApplicationRecipe, id).let {
                 it.output(to)

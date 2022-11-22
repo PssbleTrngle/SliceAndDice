@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40,)"
+loaderVersion = "[43,)"
 license = 'LGPL'
 
 [[mods]]
@@ -12,14 +12,14 @@ description = '''Making automation for Farmers Delight more sensible'''
 [[dependencies.sliceanddice]]
 modId = "forge"
 mandatory = true
-versionRange = "[36,)"
+versionRange = "[43.1.0,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.sliceanddice]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.5,)"
+versionRange = "[1.19.2,)"
 ordering = "NONE"
 side = "BOTH"
 
