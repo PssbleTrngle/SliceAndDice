@@ -1,0 +1,12 @@
+{
+  "block.sliceanddice.sprinkler": "喷淋花洒",
+  "block.sliceanddice.slicer": "动力切割器",
+  "block.sliceanddice.wet_air": "湿润的空气",
+  "block.sliceanddice.fertilizer": "液态肥料",
+  "item.sliceanddice.fertilizer_bucket": "液态肥料桶",
+  "sliceanddice.ponder.slicer.header": "使用动力切割器处理物品",
+  "sliceanddice.ponder.slicer.text_1": "右击放入有效的工具",
+  "sliceanddice.ponder.slicer.text_2": "切割器也可以与工作盘配合使用",
+  "sliceanddice.tooltip.rotationDirection": "旋转方向",
+  "sliceanddice.gui.contraptions.wrong_direction": "显然%s的旋转方向是_错误_的"
+}
