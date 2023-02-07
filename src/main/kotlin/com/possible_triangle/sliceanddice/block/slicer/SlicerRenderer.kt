@@ -3,8 +3,7 @@ package com.possible_triangle.sliceanddice.block.slicer
 import com.jozufozu.flywheel.backend.Backend
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Vector3f
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.SlicerPartials
 import com.simibubi.create.AllBlockPartials
 import com.simibubi.create.content.contraptions.base.KineticTileEntity
 import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer
@@ -84,7 +83,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTile
             .light(light)
             .renderInto(ms, vb)
 
-        val headRender = CachedBufferer.partial(Content.SLICER_HEAD, blockState)
+        val headRender = CachedBufferer.partial(SlicerPartials.SLICER_HEAD, blockState)
         headRender.rotateCentered(Direction.UP, angle)
             .translate(0.0, -renderedHeadOffset.toDouble(), 0.0)
             .light(light)

@@ -3,8 +3,7 @@ package com.possible_triangle.sliceanddice.block.slicer
 import com.jozufozu.flywheel.api.Instancer
 import com.jozufozu.flywheel.api.MaterialManager
 import com.jozufozu.flywheel.api.instance.DynamicInstance
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.SlicerPartials
 import com.simibubi.create.AllBlockPartials
 import com.simibubi.create.content.contraptions.base.flwdata.RotatingData
 import com.simibubi.create.content.contraptions.relays.encased.EncasedCogInstance
@@ -19,7 +18,7 @@ class SlicerInstance(modelManager: MaterialManager, private val mixer: SlicerTil
         .getModel(AllBlockPartials.MECHANICAL_MIXER_POLE, blockState)
         .createInstance()
 
-    private val mixerHead = rotatingMaterial.getModel(Content.SLICER_HEAD, blockState)
+    private val mixerHead = rotatingMaterial.getModel(SlicerPartials.SLICER_HEAD, blockState)
         .createInstance()
         .setRotationAxis(Direction.Axis.Y)
 
