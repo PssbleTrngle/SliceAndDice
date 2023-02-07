@@ -1,6 +1,5 @@
 package com.possible_triangle.sliceanddice
 
-import com.jozufozu.flywheel.core.PartialModel
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
 import com.possible_triangle.sliceanddice.block.slicer.SlicerInstance
@@ -24,10 +23,7 @@ import com.simibubi.create.content.CreateItemGroup
 import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeSerializer
 import com.simibubi.create.foundation.block.BlockStressDefaults
-import com.simibubi.create.foundation.data.AssetLookup
-import com.simibubi.create.foundation.data.CreateRegistrate
-import com.simibubi.create.foundation.data.ModelGen
-import com.simibubi.create.foundation.data.SharedProperties
+import com.simibubi.create.foundation.data.*
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
@@ -53,7 +49,7 @@ import java.util.function.Supplier
 
 object Content {
 
-    private fun modLoc(path: String): ResourceLocation {
+    fun modLoc(path: String): ResourceLocation {
         return ResourceLocation(MOD_ID, path)
     }
 
@@ -72,7 +68,7 @@ object Content {
     val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
 
     val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
-        .properties(BlockBehaviour.Properties::noOcclusion).transform(AllTags.axeOrPickaxe()).blockstate { c, p ->
+        .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
         }.addLayer { Supplier { RenderType.cutoutMipped() } }.transform(BlockStressDefaults.setImpact(4.0))
         .item(::AssemblyOperatorBlockItem).transform(ModelGen.customItemModel()).recipe { c, p ->
@@ -85,8 +81,6 @@ object Content {
     val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
-
-    val SLICER_HEAD = PartialModel(modLoc("block/slicer/head"))
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
         val type = object : RecipeType<T> {
