@@ -1,6 +1,5 @@
 package com.possible_triangle.sliceanddice
 
-import com.jozufozu.flywheel.core.PartialModel
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
 import com.possible_triangle.sliceanddice.block.slicer.SlicerInstance
@@ -54,7 +53,7 @@ import java.util.function.Supplier
 
 object Content {
 
-    private fun modLoc(path: String): ResourceLocation {
+    fun modLoc(path: String): ResourceLocation {
         return ResourceLocation(MOD_ID, path)
     }
 
@@ -86,8 +85,6 @@ object Content {
     val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
-
-    val SLICER_HEAD = PartialModel(modLoc("block/slicer/head"))
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
         val type = object : RecipeType<T> {
