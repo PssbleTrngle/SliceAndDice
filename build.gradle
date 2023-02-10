@@ -109,17 +109,18 @@ sourceSets.main.resources { srcDirs 'src/generated/resources/' }
 
 repositories {
     maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        url "https://dvs1.progwml6.com/files/maven/"
+        content {
+            includeGroup "mezz.jei"
+        }
     }
     maven {
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-        // Location of the maven for mixed mappings, Registrate, and Flywheel
-        name 'tterrag maven'
-        url 'https://maven.tterrag.com'
+        url "https://maven.tterrag.com/"
+        content {
+            includeGroup "com.simibubi.create"
+            includeGroup "com.jozufozu.flywheel"
+            includeGroup "com.tterrag.registrate"
+        }
     }
     maven {
         url 'https://www.cursemaven.com'
@@ -127,9 +128,14 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    maven { url = "https://maven.theillusivec4.top/" }
-    maven { url = "https://maven.jaackson.me" }
-    maven { url "https://maven.architectury.dev/" }
+    maven {
+        url "https://maven.jaackson.me"
+        content {
+            includeGroup "com.teamabnormals"
+        }
+    }
+    //maven { url = "https://maven.theillusivec4.top/" }
+    //maven { url "https://maven.architectury.dev/" }
     maven {
         url "https://maven.saps.dev/minecraft"
         content {
