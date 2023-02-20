@@ -1,0 +1,12 @@
+{
+  "block.sliceanddice.sprinkler": "スプリンクラー",
+  "block.sliceanddice.slicer": "スライサー",
+  "block.sliceanddice.wet_air": "湿った空気",
+  "block.sliceanddice.fertilizer": "液肥",
+  "item.sliceanddice.fertilizer_bucket": "液肥バケツ",
+  "sliceanddice.ponder.slicer.header": "スライサーでのスライス",
+  "sliceanddice.ponder.slicer.text_1": "特定のツールで右クリックします。",
+  "sliceanddice.ponder.slicer.text_2": "スライサーは鉢でも稼働できます。",
+  "sliceanddice.tooltip.rotationDirection": "回転方向",
+  "sliceanddice.gui.contraptions.wrong_direction": "この%sは間違った方向に回転しているようです。"
+}
