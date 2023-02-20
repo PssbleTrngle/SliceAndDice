@@ -135,7 +135,12 @@ repositories {
         }
     }
     //maven { url = "https://maven.theillusivec4.top/" }
-    //maven { url "https://maven.architectury.dev/" }
+    maven {
+        url "https://maven.architectury.dev/"
+        content {
+            includeGroup "dev.architectury"
+        }
+    }
     maven {
         url "https://maven.saps.dev/minecraft"
         content {

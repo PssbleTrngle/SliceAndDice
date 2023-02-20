@@ -29,3 +29,10 @@ mandatory = true
 versionRange = "[0.5.0d,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.sliceanddice]]
+modId = "sereneseasons"
+mandatory = false
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
