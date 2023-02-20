@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v3
 
@@ -14,23 +15,25 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle
-
-      - run: chmod +x ./gradlew
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Update mod version
         uses: christian-draeger/write-properties@1.0.1
         with:
-          path: "gradle.properties"
-          property: "mod_version"
+          path: 'gradle.properties'
+          property: 'mod_version'
           value: ${{ github.event.release.tag_name }}
 
-      - name: build
-        run: ./gradlew build
+      - name: Build and upload
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build curseforge modrinth publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CHANGELOG: ${{ github.event.release.body }}
 
       - name: Upload to github releases
         if: ${{ github.event_name == 'release' }}
@@ -42,22 +45,3 @@ jobs:
           asset_path: build/libs/sliceanddice-${{ github.event.release.tag_name }}.jar
           asset_name: sliceanddice-${{ github.event.release.tag_name }}.jar
           asset_content_type: application/java-archive
-
-      - name: publish to github packages
-        run: ./gradlew publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: upload to curseforge
-        continue-on-error: true
-        run: ./gradlew curseforge
-        env:
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          CHANGELOG: ${{ github.event.release.body }}
-
-      - name: upload to modrinth
-        continue-on-error: true
-        run: ./gradlew modrinth
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          CHANGELOG: ${{ github.event.release.body }}
