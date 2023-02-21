@@ -7,7 +7,7 @@ jobs:
   build:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v2
