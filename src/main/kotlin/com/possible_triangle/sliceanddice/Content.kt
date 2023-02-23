@@ -134,8 +134,11 @@ object Content {
         RECIPE_SERIALIZERS.register(modBus)
         RECIPE_TYPES.register(modBus)
 
-        modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
         modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
+        modBus.addListener { _: FMLClientSetupEvent ->
+            PonderScenes.register()
+            SlicerPartials.load()
+        }
 
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
