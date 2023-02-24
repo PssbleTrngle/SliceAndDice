@@ -35,9 +35,15 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
+<<<<<<< Updated upstream
 import net.minecraftforge.data.event.GatherDataEvent
+=======
+import net.minecraftforge.api.distmarker.Dist
+>>>>>>> Stashed changes
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fluids.ForgeFlowingFluid
+import net.minecraftforge.fml.DistExecutor
+import net.minecraftforge.fml.DistExecutor.SafeCallable
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.registries.DeferredRegister
@@ -135,10 +141,8 @@ object Content {
         RECIPE_TYPES.register(modBus)
 
         modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
-        modBus.addListener { _: FMLClientSetupEvent ->
-            PonderScenes.register()
-            SlicerPartials.load()
-        }
+        modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
+        DistExecutor.safeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
 
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
