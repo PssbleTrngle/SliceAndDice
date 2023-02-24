@@ -35,17 +35,14 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
-<<<<<<< Updated upstream
-import net.minecraftforge.data.event.GatherDataEvent
-=======
 import net.minecraftforge.api.distmarker.Dist
->>>>>>> Stashed changes
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fluids.ForgeFlowingFluid
 import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.DistExecutor.SafeCallable
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
