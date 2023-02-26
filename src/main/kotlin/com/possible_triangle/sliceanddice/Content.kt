@@ -43,7 +43,6 @@ import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.DistExecutor.SafeCallable
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
