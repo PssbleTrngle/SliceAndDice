@@ -1,10 +1,7 @@
 package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
-import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
-import com.possible_triangle.sliceanddice.block.slicer.SlicerInstance
-import com.possible_triangle.sliceanddice.block.slicer.SlicerRenderer
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerTile
@@ -22,6 +19,7 @@ import com.simibubi.create.content.AllSections
 import com.simibubi.create.content.CreateItemGroup
 import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeSerializer
+import com.simibubi.create.content.logistics.block.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.foundation.block.BlockStressDefaults
 import com.simibubi.create.foundation.data.*
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
@@ -145,6 +143,8 @@ object Content {
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
         SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
+
+        ArmInteractionPointType.register(SlicerArmInteractionType)
     }
 
 }
