@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.utility.recipe.RecipeFinder
 import net.minecraft.ChatFormatting
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
@@ -30,6 +31,8 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemHandlerHelper
 
 
@@ -44,7 +47,31 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     override fun getRecipeCacheKey() = basinCacheKey
 
     val correctDirection get() = Configs.SERVER.IGNORE_ROTATION.get() || getSpeed() < 0
-    val canProcess get()  = correctDirection && isSpeedRequirementFulfilled
+    val canProcess get() = correctDirection && isSpeedRequirementFulfilled
+
+    private lateinit var behaviour: PressingBehaviour
+    val cuttingBehaviour get() = behaviour
+
+    private var _heldItem = ItemStack.EMPTY
+    var heldItem: ItemStack
+        get() = _heldItem
+        set(value) {
+            _heldItem = value
+            sendData()
+        }
+
+    private var invHandler: LazyOptional<SlicerItemHandler>? = null
+
+    override fun initialize() {
+        super.initialize()
+        initHandler()
+    }
+
+    private fun initHandler() {
+        if (invHandler == null) {
+            invHandler = LazyOptional.of { SlicerItemHandler(this) }
+        }
+    }
 
     override fun updateBasin(): Boolean {
         return !correctDirection || super.updateBasin()
@@ -69,10 +96,6 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return false
     }
 
-    var heldItem = ItemStack.EMPTY
-    private lateinit var behaviour: PressingBehaviour
-    val cuttingBehaviour get() = behaviour
-
     override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
         super.addBehaviours(behaviours)
         behaviour = PressingBehaviour(this)
@@ -80,7 +103,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     }
 
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
-        if (!heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
+        if (!_heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
         val recipes = super.getMatchingRecipes()
         return recipes.mapNotNull {
             it.takeIf { hasRequiredTool(it) }
@@ -91,8 +114,8 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         super.applyBasinRecipe()
         val world = level ?: return
         if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
-            if (heldItem.hurt(1, level!!.random, null)) {
-                heldItem = ItemStack.EMPTY
+            if (_heldItem.hurt(1, level!!.random, null)) {
+                _heldItem = ItemStack.EMPTY
                 sendData()
             }
         }
@@ -105,7 +128,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     override fun read(compound: CompoundTag, clientPacket: Boolean) {
         super.read(compound, clientPacket)
-        heldItem = compound.get("HeldItem").let {
+        _heldItem = compound.get("HeldItem").let {
             val decoded = ItemStack.CODEC.parse(NbtOps.INSTANCE, it).result()
             decoded.orElse(ItemStack.EMPTY)
         }
@@ -118,8 +141,8 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     override fun write(compound: CompoundTag, clientPacket: Boolean) {
         super.write(compound, clientPacket)
-        if (!heldItem.isEmpty) {
-            val encoded = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, heldItem).result()
+        if (!_heldItem.isEmpty) {
+            val encoded = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, _heldItem).result()
             encoded.ifPresent { compound.put("HeldItem", it) }
         }
     }
@@ -154,11 +177,11 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             if (it !is CuttingProcessingRecipe) false
             else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
         } as List<CuttingProcessingRecipe>
-        return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(heldItem) }
+        return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(_heldItem) }
     }
 
     override fun tryProcessInBasin(simulate: Boolean): Boolean {
-        if(!canProcess) return false
+        if (!canProcess) return false
         applyBasinRecipe()
 
         basin.ifPresent {
@@ -178,7 +201,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         outputList: MutableList<ItemStack>?,
         simulate: Boolean,
     ): Boolean {
-        if(!canProcess) return false
+        if (!canProcess) return false
         val recipe = recipeFor(input.stack) ?: return false
         if (simulate) return true
 
@@ -201,7 +224,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     }
 
     private fun hasRequiredTool(recipe: Recipe<*>): Boolean {
-        return recipe !is CuttingProcessingRecipe || recipe.tool?.test(heldItem) == true
+        return recipe !is CuttingProcessingRecipe || recipe.tool?.test(_heldItem) == true
     }
 
     override fun onPressingCompleted() {
@@ -237,6 +260,15 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             } else speed
         } else {
             speed / 2
+        }
+    }
+
+    override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
+        return if (isItemHandlerCap(cap)) {
+            if (this.invHandler == null) this.initHandler()
+            this.invHandler!!.cast()
+        } else {
+            super.getCapability(cap, side)
         }
     }
 
