@@ -14,7 +14,7 @@
 [![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
 [![Version](http://cf.way2muchnoise.eu/versions/659674.svg)][DOWNLOAD]
 [![Issues](https://img.shields.io/github/issues/PssbleTrngle/SliceAndDice?label=Issues)][ISSUES]
-[![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=GmjmRQ0A&logo=true)][MODRINTH]
+[![Modrinth](https://img.shields.io/modrinth/dt/GmjmRQ0A?color=green&logo=modrinth&logoColor=green)][MODRINTH]
 <!-- modrinth_exclude.end -->
 
 [![](https://img.shields.io/badge/REQUIRES%20KOTLIN%20FOR%20FORGE-blue?logo=curseforge&labelColor=gray&style=for-the-badge)][KOTLIN_FORGE_FORGE]
