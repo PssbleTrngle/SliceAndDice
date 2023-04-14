@@ -45,7 +45,6 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<Slicer
             if (heldByDeployer.isEmpty && held.isEmpty) return@withTileEntityDo
             player.setItemInHand(hand, heldByDeployer)
             it.heldItem = held
-            it.sendData()
         }
 
         return InteractionResult.SUCCESS
