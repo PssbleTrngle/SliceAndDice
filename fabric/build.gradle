@@ -1,0 +1,57 @@
+plugins {
+    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+archivesBaseName = "${project.mod_name}-fabric-${project.mc_version}"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.mc_version}"
+    mappings(loom.layered {
+        it.mappings("org.quiltmc:quilt-mappings:${project.mc_version}+build.${project.qm_version}:intermediary-v2")
+        it.parchment("org.parchmentmc.data:parchment-${project.mc_version}:${project.parchment_version}@zip")
+        it.officialMojangMappings { nameSyntheticMembers = false }
+    })
+
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.9.1+kotlin.1.8.10"
+
+    modCompileOnly "mezz.jei:jei-${project.mc_version}-fabric-api:${project.jei_version}"
+    modRuntimeOnly "mezz.jei:jei-${project.mc_version}-fabric:${project.jei_version}"
+    
+    modApi "curse.maven:farmers-delight-482834:${project.farmers_delight_fabric_version}"
+    modApi "com.simibubi.create:create-fabric-${project.mc_version}:${project.create_fabric_version}"
+
+    modCompileOnly "dev.latvian.mods:kubejs-fabric:${project.kubejs_version}"
+
+    implementation project(":common")
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}

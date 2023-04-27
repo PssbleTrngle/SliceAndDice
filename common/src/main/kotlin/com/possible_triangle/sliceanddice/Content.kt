@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice
 
-import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
+import com.possible_triangle.sliceanddice.Constants.MOD_ID
 import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
@@ -10,7 +10,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBeha
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
-import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.platform.Services
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllFluids
@@ -29,22 +29,8 @@ import net.minecraft.core.Registry
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.data.event.GatherDataEvent
-import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.fluids.ForgeFlowingFluid
-import net.minecraftforge.fml.DistExecutor
-import net.minecraftforge.fml.DistExecutor.SafeCallable
-import net.minecraftforge.fml.config.ModConfig
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.registries.DeferredRegister
-import net.minecraftforge.registries.ForgeRegistries
-import net.minecraftforge.registries.RegistryObject
-import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
 import java.util.function.BiFunction
 import java.util.function.Supplier
 
@@ -54,17 +40,10 @@ object Content {
         return ResourceLocation(MOD_ID, path)
     }
 
-    private object REGISTRATE : CreateRegistrate(MOD_ID) {
-        fun register(bus: IEventBus) = registerEventListeners(bus)
-
-        init {
-            creativeModeTab { CreateItemGroup.TAB_TOOLS }
-            startSection(AllSections.LOGISTICS)
-        }
+    private val REGISTRATE = Services.REGISTRIES.createRegistrate().apply {
+        creativeModeTab { CreateItemGroup.TAB_TOOLS }
+        startSection(AllSections.LOGISTICS)
     }
-
-    val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
-    val RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, MOD_ID)
 
     val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
 
@@ -83,16 +62,9 @@ object Content {
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
-    private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
-        val type = object : RecipeType<T> {
-            override fun toString() = id.toString()
-        }
-        return RECIPE_TYPES.register(id.path) { type }
-    }
+    val CUTTING_RECIPE_TYPE = Services.REGISTRIES.registerRecipeType<CuttingProcessingRecipe>(CuttingProcessingRecipe.id)
 
-    val CUTTING_RECIPE_TYPE = createRecipeType<CuttingProcessingRecipe>(CuttingProcessingRecipe.id)
-
-    val CUTTING_SERIALIZER = RECIPE_SERIALIZERS.register(CuttingProcessingRecipe.id.path) {
+    val CUTTING_SERIALIZER = Services.REGISTRIES.registerRecipeSerializer(CuttingProcessingRecipe.id) {
         ProcessingRecipeSerializer(
             ::CuttingProcessingRecipe
         )
@@ -104,7 +76,7 @@ object Content {
         }.register()
 
     val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
-        .initialProperties { SharedProperties.copperMetal() }.transform(AllTags.pickaxeOnly())
+        .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
         .transform(ModelGen.customItemModel("_")).recipe { c, p ->
@@ -123,22 +95,11 @@ object Content {
 
     val FERTILIZER =
         REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
-            .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
+            .tag(FERTILIZERS)
+            // TODO .source { ForgeFlowingFluid.Source(it) }
             .bucket().model(AssetLookup.existingItemModel()).build().register()
 
-    fun register(modBus: IEventBus) {
-        REGISTRATE.register(modBus)
-
-        LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
-        LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
-
-        RECIPE_SERIALIZERS.register(modBus)
-        RECIPE_TYPES.register(modBus)
-
-        modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
-        modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
-        DistExecutor.safeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
-
+    fun init() {
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)

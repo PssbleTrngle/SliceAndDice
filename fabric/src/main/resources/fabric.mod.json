@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "sliceanddice",
+  "version": "${version}",
+
+  "name": "Create Slice & Dice",
+  "description": "Making automation for Farmers Delight more sensible",
+  "authors": ["possible_triangle"],
+  "contact": {
+    "sources": "https://github.com/PssbleTrngle/SliceAndDice"
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "com.possible_triangle.sliceanddice.FabricEntrypoint"
+      }
+    ]
+  },
+
+  "mixins": ["sliceanddice.mixins.json"],
+
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17",
+    "fabric-language-kotlin": ">=1.9.1+kotlin.1.8.10"
+  }
+}

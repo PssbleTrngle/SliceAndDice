@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.recipe
 
+import com.possible_triangle.sliceanddice.Constants
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
 import com.simibubi.create.content.contraptions.processing.BasinRecipe
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams
 import com.simibubi.create.foundation.item.SmartInventory
@@ -16,7 +16,7 @@ data class CuttingProcessingRecipe(val params: ProcessingRecipeParams, val tool:
     BasinRecipe(CuttingProcessingRecipe, params) {
 
     companion object : IRecipeTypeInfo {
-        override fun getId() = ResourceLocation(SliceAndDice.MOD_ID, "cutting")
+        override fun getId() = ResourceLocation(Constants.MOD_ID, "cutting")
 
         override fun <T : RecipeSerializer<*>?> getSerializer() = Content.CUTTING_SERIALIZER.get() as T
 

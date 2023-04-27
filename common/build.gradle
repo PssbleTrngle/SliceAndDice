@@ -1,0 +1,42 @@
+plugins {
+    id "fabric-loom" version "1.0.+"
+//    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.serialization'
+}
+
+archivesBaseName = "${mod_name}-common-${mc_version}"
+
+//minecraft {
+//    version(mc_version)
+//}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.mc_version}"
+    mappings(loom.layered {
+        it.mappings("org.quiltmc:quilt-mappings:${project.mc_version}+build.${project.qm_version}:intermediary-v2")
+        it.parchment("org.parchmentmc.data:parchment-${project.mc_version}:${project.parchment_version}@zip")
+        it.officialMojangMappings { nameSyntheticMembers = false }
+    })
+
+    modCompileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+
+    modCompileOnly "mezz.jei:jei-${project.mc_version}-common-api:${project.jei_version}"
+
+    modCompileOnly "curse.maven:farmers-delight-482834:${project.farmers_delight_fabric_version}"
+    modCompileOnly("com.tterrag.registrate_fabric:Registrate:${project.registrate_fabric_version}")
+    modCompileOnly("com.simibubi.create:create-fabric-${project.mc_version}:${project.create_fabric_version}") {
+        transitive false
+    }
+
+    modCompileOnly "dev.latvian.mods:kubejs:${project.kubejs_version}"
+}
+
+processResources {
+    def buildProps = project.properties.clone()
+
+    filesMatching(['pack.mcmeta']) {
+        expand buildProps
+    }
+}

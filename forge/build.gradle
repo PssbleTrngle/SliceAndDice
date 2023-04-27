@@ -1,0 +1,91 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+archivesBaseName = "${mod_name}-forge-${mc_version}"
+
+minecraft {
+    mappings channel: 'official', version: mc_version
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            taskName 'Data'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods {
+                modDataRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
+    compileOnly project(":common")
+
+    compileOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge-api:${project.jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge:${project.jei_version}"))
+
+    compileOnly fg.deobf("com.tterrag.registrate:Registrate:${project.registrate_forge_version}")
+    implementation fg.deobf("com.simibubi.create:create-${project.mc_version}:${project.create_forge_version}:slim")
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${project.mc_version}:${project.flywheel_version}")
+
+    implementation fg.deobf("curse.maven:farmers-delight-398521:${project.farmers_delight_forge_version}")
+    implementation fg.deobf("curse.maven:overweight-farming-591666:${project.overweight_farming_version}")
+    runtimeOnly fg.deobf("curse.maven:neapolitan-382016:${project.neapolitan_version}")
+    runtimeOnly fg.deobf("com.teamabnormals:blueprint:${project.mc_version}-${project.blueprint_version}")
+
+    compileOnly "dev.latvian.mods:kubejs-forge:${project.kubejs_version}"
+    
+    implementation 'thedarkcolour:kotlinforforge:3.9.1'
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}
+
+
+jar.finalizedBy('reobfJar')
