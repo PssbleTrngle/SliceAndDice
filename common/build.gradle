@@ -26,9 +26,7 @@ dependencies {
 
     modCompileOnly "curse.maven:farmers-delight-482834:${project.farmers_delight_fabric_version}"
     modCompileOnly("com.tterrag.registrate_fabric:Registrate:${project.registrate_fabric_version}")
-    modCompileOnly("com.simibubi.create:create-fabric-${project.mc_version}:${project.create_fabric_version}") {
-        transitive false
-    }
+    modCompileOnly("com.simibubi.create:create-fabric-${project.mc_version}:${project.create_fabric_version}")
 
     modCompileOnly "dev.latvian.mods:kubejs:${project.kubejs_version}"
 }

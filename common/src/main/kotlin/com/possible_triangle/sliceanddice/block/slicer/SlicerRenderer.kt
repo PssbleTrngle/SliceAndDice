@@ -16,12 +16,12 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 
-class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTileEntityRenderer(context) {
+class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTileEntityRenderer(context)  {
 
     override fun shouldRenderOffScreen(te: KineticTileEntity) = true
 
     private fun renderTool(
-        tile: SlicerTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
+        tile: AbstractSlicerTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
         light: Int, overlay: Int,
     ) {
         if (tile.heldItem.isEmpty) return
@@ -35,7 +35,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTile
         ms.scale(scale, scale, scale)
 
         val speed: Float = tile.getRenderedHeadRotationSpeed()
-        val time = AnimationTickHolder.getRenderTime(tile.level)
+        val time = AnimationTickHolder.getRenderTime(tile.getLevel())
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         for (i in 0..3) {
@@ -61,7 +61,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTile
         light: Int,
         overlay: Int,
     ) {
-        if (te !is SlicerTile) return
+        if (te !is AbstractSlicerTile) return
         renderTool(te, partialTicks, ms, buffer, light, overlay)
 
         if (Backend.canUseInstancing(te.level)) return

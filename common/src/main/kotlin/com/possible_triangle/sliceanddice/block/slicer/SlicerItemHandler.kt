@@ -4,7 +4,7 @@ import com.possible_triangle.sliceanddice.Content
 import net.minecraft.world.item.ItemStack
 import net.minecraftforge.items.IItemHandlerModifiable
 
-class SlicerItemHandler(private val tile: SlicerTile) : IItemHandlerModifiable {
+class SlicerItemHandler(private val tile: AbstractSlicerTile) : IItemHandlerModifiable {
 
     override fun getSlots() = 1
 

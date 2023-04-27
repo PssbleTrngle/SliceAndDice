@@ -24,9 +24,9 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<SlicerTile>, ICogWheel {
+class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<AbstractSlicerTile>, ICogWheel {
 
-    override fun getTileEntityClass() = SlicerTile::class.java
+    override fun getTileEntityClass() = AbstractSlicerTile::class.java
 
     override fun getTileEntityType() = Content.SLICER_TILE.get()
 
@@ -40,7 +40,7 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<Slicer
         if (!held.`is`(Content.ALLOWED_TOOLS) && !held.isEmpty) return InteractionResult.PASS
 
         if (!world.isClientSide) withTileEntityDo(world, pos) {
-            if (it !is SlicerTile) return@withTileEntityDo
+            if (it !is AbstractSlicerTile) return@withTileEntityDo
             val heldByDeployer = it.heldItem.copy()
             if (heldByDeployer.isEmpty && held.isEmpty) return@withTileEntityDo
             player.setItemInHand(hand, heldByDeployer)

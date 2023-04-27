@@ -5,14 +5,17 @@ import com.jozufozu.flywheel.api.MaterialManager
 import com.jozufozu.flywheel.api.instance.DynamicInstance
 import com.possible_triangle.sliceanddice.SlicerPartials
 import com.simibubi.create.AllBlockPartials
+import com.simibubi.create.content.contraptions.base.KineticTileEntity
 import com.simibubi.create.content.contraptions.base.flwdata.RotatingData
 import com.simibubi.create.content.contraptions.relays.encased.EncasedCogInstance
 import com.simibubi.create.foundation.render.AllMaterialSpecs
 import com.simibubi.create.foundation.utility.AnimationTickHolder
 import net.minecraft.core.Direction
 
-class SlicerInstance(modelManager: MaterialManager, private val mixer: SlicerTile) :
-    EncasedCogInstance(modelManager, mixer, false), DynamicInstance {
+class SlicerInstance(modelManager: MaterialManager, tile: KineticTileEntity) :
+    EncasedCogInstance(modelManager, tile, false), DynamicInstance {
+
+    private val mixer get() = blockEntity as AbstractSlicerTile
 
     private val mixerPole = orientedMaterial
         .getModel(AllBlockPartials.MECHANICAL_MIXER_POLE, blockState)

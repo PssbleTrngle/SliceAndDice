@@ -1,12 +1,11 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.Constants
+import com.possible_triangle.sliceanddice.platform.Services
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.ItemLike
-import net.minecraftforge.fml.ModList
-import vectorwing.farmersdelight.common.registry.ModItems
 import java.util.function.BiConsumer
 
 interface IRecipeInjector {
@@ -19,7 +18,7 @@ object ModCompat : IRecipeInjector {
     const val OVERWEIGHT_FARMING = "overweight_farming"
 
     fun <T> ifLoaded(mod: String, runnable: () -> T): T? {
-        return if (ModList.get().isLoaded(mod)) {
+        return if (Services.PLATFORM.isLoaded(mod)) {
             runnable()
         } else null
     }
@@ -28,14 +27,13 @@ object ModCompat : IRecipeInjector {
         existing: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
-        SliceAndDice.LOGGER.info("Injecting recipes")
-        FarmersDelightCompat.ifLoaded { injectRecipes(existing, add) }
-        OverweightFarmingCompat.ifLoaded { injectRecipes(existing, add) }
+        Constants.LOGGER.info("Injecting recipes")
+        Services.MODS.injectRecipes(existing, add)
     }
 
     val exampleTool
         get(): ItemLike {
-            return ifLoaded(FARMERS_DELIGHT) { ModItems.IRON_KNIFE.get() } ?: Items.IRON_AXE
+            return ifLoaded(FARMERS_DELIGHT) { Services.MODS.knife } ?: Items.IRON_AXE
         }
 
     val exampleInput
@@ -45,7 +43,7 @@ object ModCompat : IRecipeInjector {
 
     val exampleOutput
         get(): ItemLike {
-            return ifLoaded(FARMERS_DELIGHT) { ModItems.CAKE_SLICE.get() } ?: Items.STRIPPED_BIRCH_LOG
+            return ifLoaded(FARMERS_DELIGHT) { Services.MODS.cakeSlice } ?: Items.STRIPPED_BIRCH_LOG
         }
 
 }

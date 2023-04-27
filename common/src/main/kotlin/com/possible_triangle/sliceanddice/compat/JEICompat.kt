@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.Constants
+import com.possible_triangle.sliceanddice.platform.Services
 import com.simibubi.create.AllRecipeTypes
 import com.simibubi.create.content.contraptions.processing.ItemApplicationRecipe
 import mezz.jei.api.IModPlugin
@@ -14,12 +15,10 @@ import net.minecraft.resources.ResourceLocation
 @Suppress("unused")
 class JEICompat : IModPlugin {
 
-    override fun getPluginUid() = ResourceLocation(SliceAndDice.MOD_ID, "jei")
+    override fun getPluginUid() = ResourceLocation(Constants.MOD_ID, "jei")
 
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
-        FarmersDelightCompat.ifLoaded {
-            addCatalysts(registration)
-        }
+        Services.MODS.addCatalysts(registration)
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {

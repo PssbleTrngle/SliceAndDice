@@ -58,7 +58,7 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
+    val SLICER_TILE = REGISTRATE.tileEntity("slicer", Services.REGISTRIES.slicerTileFactory())
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 

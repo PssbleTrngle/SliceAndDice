@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.platform
 
 import com.possible_triangle.sliceanddice.Constants
 import com.possible_triangle.sliceanddice.platform.services.IConfig
+import com.possible_triangle.sliceanddice.platform.services.IMods
 import com.possible_triangle.sliceanddice.platform.services.IPlatformHelper
 import com.possible_triangle.sliceanddice.platform.services.IRegistries
 import java.util.*
@@ -9,6 +10,7 @@ import java.util.*
 object Services {
 
     val PLATFORM = load(IPlatformHelper::class.java)
+    val MODS = load(IMods::class.java)
     val CONFIG = load(IConfig::class.java)
     val REGISTRIES = load(IRegistries::class.java)
 

@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.platform.Services
 import com.simibubi.create.content.contraptions.fluids.FluidFX
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity
@@ -27,7 +28,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     private var processingTicks = -1
 
     override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
-        behaviours.add(SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get()).allowInsertion()
+        behaviours.add(SmartFluidTankBehaviour.single(this, Services.CONFIG.SPRINKLER_CAPACITY).allowInsertion()
             .also { tank = it })
     }
 
@@ -40,7 +41,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
         if (processingTicks >= 0) {
             processingTicks--
         } else tank.capability.ifPresent {
-            val used = Configs.SERVER.SPRINKLER_USAGE.get()
+            val used = Services.CONFIG.SPRINKLER_USAGE
             val fluid = it.drain(used, IFluidHandler.FluidAction.SIMULATE)
             if (fluid.amount >= used) {
                 it.drain(used, IFluidHandler.FluidAction.EXECUTE)

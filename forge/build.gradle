@@ -62,6 +62,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
     compileOnly project(":common")
 
+    compileOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-common-api:${project.jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge-api:${project.jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${project.mc_version}-forge:${project.jei_version}"))
 

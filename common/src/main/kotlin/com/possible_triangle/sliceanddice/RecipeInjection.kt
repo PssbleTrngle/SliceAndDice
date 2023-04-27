@@ -17,7 +17,7 @@ object RecipeInjection {
         val recipesBuilder: MutableMap<RecipeType<*>, ImmutableMap.Builder<ResourceLocation, Recipe<*>>> =
             Maps.newHashMap()
 
-        SliceAndDice.LOGGER.debug("Recipes before: {}", manager.byName.size)
+        Constants.LOGGER.debug("Recipes before: {}", manager.byName.size)
 
         injectRecipes(manager.byName, byNameBuilder::put)
 
@@ -27,7 +27,7 @@ object RecipeInjection {
             recipesBuilder.computeIfAbsent(type) { ImmutableMap.builder() }.put(id, recipe)
         }
 
-        SliceAndDice.LOGGER.debug("Recipes after: {}", newByName.size)
+        Constants.LOGGER.debug("Recipes after: {}", newByName.size)
 
         manager.byName = newByName
         manager.setRecipes(recipesBuilder.mapValues { it.value.build() })

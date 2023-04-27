@@ -19,6 +19,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc:fabric-language-kotlin:1.9.1+kotlin.1.8.10"
 
+    modCompileOnly "mezz.jei:jei-${project.mc_version}-common-api:${project.jei_version}"
     modCompileOnly "mezz.jei:jei-${project.mc_version}-fabric-api:${project.jei_version}"
     modRuntimeOnly "mezz.jei:jei-${project.mc_version}-fabric:${project.jei_version}"
     

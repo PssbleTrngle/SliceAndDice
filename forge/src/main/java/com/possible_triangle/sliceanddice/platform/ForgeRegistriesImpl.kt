@@ -1,8 +1,11 @@
 package com.possible_triangle.sliceanddice.platform
 
 import com.possible_triangle.sliceanddice.Constants
+import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
 import com.possible_triangle.sliceanddice.platform.services.IRegistries
+import com.simibubi.create.content.contraptions.base.KineticTileEntity
 import com.simibubi.create.foundation.data.CreateRegistrate
+import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Recipe
@@ -16,7 +19,7 @@ import java.util.function.Supplier
 class ForgeRegistriesImpl : IRegistries {
 
     companion object {
-        private val REGISTRATE = CreateRegistrate.create(Constants.MOD_ID)
+        private val REGISTRATE: CreateRegistrate = CreateRegistrate.create(Constants.MOD_ID)
 
         private val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MOD_ID)
         private val RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, Constants.MOD_ID)
@@ -38,7 +41,15 @@ class ForgeRegistriesImpl : IRegistries {
         return RECIPE_TYPES.register(id.path) { type }
     }
 
-    override fun <T : Recipe<*>> registerRecipeSerializer(id: ResourceLocation, supplier: () -> RecipeSerializer<T>): Supplier<RecipeSerializer<T>> {
+    override fun <T : Recipe<*>> registerRecipeSerializer(
+        id: ResourceLocation,
+        supplier: () -> RecipeSerializer<T>
+    ): Supplier<RecipeSerializer<T>> {
         return RECIPE_SERIALIZERS.register(id.path, supplier)
     }
+
+    override fun slicerTileFactory() = BlockEntityFactory<KineticTileEntity> { type, pos, state ->
+        SlicerTile(type, pos, state)
+    }
+
 }

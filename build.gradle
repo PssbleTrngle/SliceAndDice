@@ -107,7 +107,6 @@ subprojects {
             }
         }
 
-        // Forge
         maven {
             url = "https://maven.tterrag.com/"
             content {
@@ -117,6 +116,8 @@ subprojects {
                 includeGroup "com.tterrag.registrate_fabric"
             }
         }
+        
+        // Forge
         maven {
             url = "https://maven.jaackson.me"
             content {
