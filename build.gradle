@@ -235,7 +235,7 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
         changelogType = 'markdown'
         releaseType = project.release_type
         mainArtifact(jar) {
-            displayName = "Version ${project.mod_version}"
+            displayName = "Forge ${project.mod_version}"
         }
         relations {
             requiredDependency 'create'
@@ -250,7 +250,7 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     token = ENV.MODRINTH_TOKEN
     projectId = project.modrinth_project_id
     versionNumber = "${project.mod_version}-forge"
-    versionName = "Version ${project.mod_version}"
+    versionName = "Forge ${project.mod_version}"
     changelog = ENV.CHANGELOG
     gameVersions = [project.mc_version]
     loaders = ["forge"]
