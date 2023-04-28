@@ -21,6 +21,8 @@ body:
       options:
         - forge
         - fabric
+    validations:
+      required: true
 
   - type: input
     id: version-version
@@ -37,6 +39,8 @@ body:
       options:
         - 1.19
         - 1.18
+    validations:
+      required: true
 
   - type: textarea
     id: logs
