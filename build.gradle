@@ -35,7 +35,7 @@ mixin {
 
 version = project.mod_version
 group = 'com.possible_triangle'
-archivesBaseName = project.mod_id
+archivesBaseName = "${project.mod_id}-forge"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -228,6 +228,7 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
     apiKey = ENV.CURSEFORGE_TOKEN
     project {
         id = project.curseforge_project_id
+        version = "${project.mod_version}-forge"
         addGameVersion project.mc_version
         addGameVersion 'Forge'
         changelog = ENV.CHANGELOG
@@ -248,7 +249,7 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
 if (ENV.MODRINTH_TOKEN) modrinth {
     token = ENV.MODRINTH_TOKEN
     projectId = project.modrinth_project_id
-    versionNumber = version
+    versionNumber = "${project.mod_version}-forge"
     versionName = "Version ${project.mod_version}"
     changelog = ENV.CHANGELOG
     gameVersions = [project.mc_version]
