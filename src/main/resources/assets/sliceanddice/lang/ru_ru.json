@@ -1,0 +1,13 @@
+{
+    "block.sliceanddice.sprinkler": "Разбрызгиватель",
+    "block.sliceanddice.slicer": "Слайсер",
+    "block.sliceanddice.wet_air": "Влажный воздух",
+    "block.sliceanddice.fertilizer": "Жидкие удобрения",
+    "fluid.sliceanddice.fertilizer": "Жидкие удобрения",
+    "item.sliceanddice.fertilizer_bucket": "Ведро жидких удобрений",
+    "sliceanddice.ponder.slicer.header": "Резка с помощью слайсера",
+    "sliceanddice.ponder.slicer.text_1": "Щелкните по нему правой кнопкой мыши с помощью подходящего инструмента",
+    "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на тазу",
+    "sliceanddice.tooltip.rotationDirection": "Направление вращения",
+    "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в неправильном направлении."
+  }
