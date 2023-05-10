@@ -1,11 +1,11 @@
 {
-    "block.sliceanddice.sprinkler": "Разбрызгиватель ароматизаторов",
+    "block.sliceanddice.sprinkler": "Опрыскиватель",
     "block.sliceanddice.slicer": "Слайсер",
     "block.sliceanddice.wet_air": "Влажный воздух",
     "block.sliceanddice.fertilizer": "Удобрение",
     "fluid.sliceanddice.fertilizer": "Удобрение",
     "item.sliceanddice.fertilizer_bucket": "Ведро с  удобрениями",
-    "sliceanddice.ponder.slicer.header": "Резка с помощью слайсера",
+    "sliceanddice.ponder.slicer.header": "Резка при помощи слайсера",
     "sliceanddice.ponder.slicer.text_1": "Щелкните по нему правой кнопкой мыши с помощью подходящего инструмента",
     "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на тазу",
     "sliceanddice.tooltip.rotationDirection": "Направление вращения",
