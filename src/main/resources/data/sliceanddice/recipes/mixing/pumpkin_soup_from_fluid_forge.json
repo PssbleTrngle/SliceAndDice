@@ -1,0 +1,42 @@
+{
+  "heatRequirement": "heated",
+  "processingTime": 200,
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "farmersdelight:pumpkin_slice"
+    },
+    {
+      "tag": "forge:salad_ingredients/cabbage"
+    },
+    {
+      "tag": "forge:raw_pork"
+    },
+    {
+      "fluidTag": "forge:milk",
+      "amount": 250
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "results": [
+    {
+      "item": "farmersdelight:pumpkin_soup"
+    }
+  ],
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "never_loaded"
+      ]
+    }
+  ]
+}

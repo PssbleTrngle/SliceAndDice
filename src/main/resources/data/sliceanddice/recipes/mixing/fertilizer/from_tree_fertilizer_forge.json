@@ -14,5 +14,13 @@
       "fluid": "sliceanddice:fertilizer",
       "amount": 500
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "never_loaded"
+      ]
+    }
   ]
 }

@@ -1,38 +1,31 @@
 {
-  "heatRequirement": "heated",
-  "processingTime": 200,
   "type": "create:mixing",
   "ingredients": [
     {
-      "tag": "forge:crops/corn"
+      "item": "farmersdelight:organic_compost"
     },
     {
-      "tag": "forge:crops/corn"
-    },
-    {
-      "fluidTag": "forge:milk",
+      "fluid": "minecraft:water",
       "amount": 250
-    },
-    {
-      "item": "minecraft:bowl"
     }
   ],
   "results": [
     {
-      "item": "culturaldelights:creamed_corn"
+      "fluid": "sliceanddice:fertilizer",
+      "amount": 250
     }
   ],
   "forge:conditions": [
     {
       "type": "forge:mod_loaded",
-      "modid": "culturaldelights"
+      "modid": "farmersdelight"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "culturaldelights"
+        "never_loaded"
       ]
     }
   ]

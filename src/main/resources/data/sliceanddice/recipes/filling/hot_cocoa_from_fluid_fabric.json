@@ -1,0 +1,32 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "fluidTag": "c:chocolate",
+      "nbt": {},
+      "amount": 20250
+    }
+  ],
+  "results": [
+    {
+      "item": "farmersdelight:hot_cocoa"
+    }
+  ],
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "never_loaded"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
+  ]
+}

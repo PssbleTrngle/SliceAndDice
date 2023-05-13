@@ -2,30 +2,30 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "farmersdelight:organic_compost"
+      "item": "thermal:phytogro"
     },
     {
       "fluid": "minecraft:water",
-      "amount": 250
+      "amount": 1000
     }
   ],
   "results": [
     {
       "fluid": "sliceanddice:fertilizer",
-      "amount": 250
+      "amount": 1000
     }
   ],
   "forge:conditions": [
     {
       "type": "forge:mod_loaded",
-      "modid": "farmersdelight"
+      "modid": "thermal"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "farmersdelight"
+        "never_loaded"
       ]
     }
   ]

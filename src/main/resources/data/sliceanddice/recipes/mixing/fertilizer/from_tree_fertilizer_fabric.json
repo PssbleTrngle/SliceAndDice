@@ -1,0 +1,24 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create:tree_fertilizer"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 20500
+    }
+  ],
+  "results": [
+    {
+      "fluid": "sliceanddice:fertilizer",
+      "amount": 20500
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "never_loaded"
+    }
+  ]
+}
