@@ -18,7 +18,15 @@
   "conditions": [
     {
       "type": "forge:mod_loaded",
-      "modid": "thermal_foundation"
+      "modid": "thermal"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "thermal"
+      ]
     }
   ]
 }
