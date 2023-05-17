@@ -1,0 +1,13 @@
+{
+  "block.sliceanddice.sprinkler": "灑水器",
+  "block.sliceanddice.slicer": "切割器",
+  "block.sliceanddice.wet_air": "濕潤空氣",
+  "block.sliceanddice.fertilizer": "液體肥料",
+  "fluid.sliceanddice.fertilizer": "液體肥料",
+  "item.sliceanddice.fertilizer_bucket": "液體肥料桶",
+  "sliceanddice.ponder.slicer.header": "使用切割器進行切割",
+  "sliceanddice.ponder.slicer.text_1": "用有效的工具右鍵點擊",
+  "sliceanddice.ponder.slicer.text_2": "切割器也可以用於盆中操作",
+  "sliceanddice.tooltip.rotationDirection": "旋轉方向",
+  "sliceanddice.gui.contraptions.wrong_direction": "看起來這個%s正在以_錯誤的方向_旋轉。"
+}
