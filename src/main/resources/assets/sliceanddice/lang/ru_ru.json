@@ -9,5 +9,5 @@
   "sliceanddice.ponder.slicer.text_1": "Щелкните правой кнопкой мыши с помощью допустимого инструмента",
   "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на Чаше",
   "sliceanddice.tooltip.rotationDirection": "Направление вращения",
-  "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в _неправильном направлении_."
+  "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в неправильном направлении"
 }
