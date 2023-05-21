@@ -1,13 +1,13 @@
 {
-    "block.sliceanddice.sprinkler": "Опрыскиватель",
-    "block.sliceanddice.slicer": "Слайсер",
-    "block.sliceanddice.wet_air": "Влажный воздух",
-    "block.sliceanddice.fertilizer": "Удобрение",
-    "fluid.sliceanddice.fertilizer": "Удобрение",
-    "item.sliceanddice.fertilizer_bucket": "Ведро с  удобрениями",
-    "sliceanddice.ponder.slicer.header": "Резка при помощи слайсера",
-    "sliceanddice.ponder.slicer.text_1": "Щелкните по нему правой кнопкой мыши с помощью подходящего инструмента",
-    "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на торцевой позиции",
-    "sliceanddice.tooltip.rotationDirection": "Направление вращения",
-    "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в неправильном направлении."
-  }
+  "block.sliceanddice.sprinkler": "Разбрызгиватель",
+  "block.sliceanddice.slicer": "Слайсер",
+  "block.sliceanddice.wet_air": "Влажный воздух",
+  "block.sliceanddice.fertilizer": "Жидкое удобрение",
+  "fluid.sliceanddice.fertilizer": "Жидкое удобрение",
+  "item.sliceanddice.fertilizer_bucket": "Ведро жидкого удобрения",
+  "sliceanddice.ponder.slicer.header": "Доска со слайсером",
+  "sliceanddice.ponder.slicer.text_1": "Щелкните правой кнопкой мыши с помощью допустимого инструмента",
+  "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на Чаше",
+  "sliceanddice.tooltip.rotationDirection": "Направление вращения",
+  "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в _неправильном направлении_."
+}
