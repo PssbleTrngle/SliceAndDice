@@ -1,9 +1,9 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.Content
-import com.simibubi.create.content.contraptions.wrench.IWrenchable
-import com.simibubi.create.foundation.block.ITE
-import com.simibubi.create.foundation.tileEntity.ComparatorUtil
+import com.simibubi.create.content.equipment.wrench.IWrenchable
+import com.simibubi.create.foundation.block.IBE
+import com.simibubi.create.foundation.blockEntity.ComparatorUtil
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, ITE<SprinklerTile> {
+class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, IBE<SprinklerTile> {
 
-    override fun getTileEntityClass() = SprinklerTile::class.java
+    override fun getBlockEntityClass() = SprinklerTile::class.java
 
-    override fun getTileEntityType() = Content.SPRINKLER_TILE.get()
+    override fun getBlockEntityType() = Content.SPRINKLER_TILE.get()
 
     companion object {
         val SHAPE: VoxelShape = box(2.0, 10.0, 2.0, 14.0, 16.0, 14.0)

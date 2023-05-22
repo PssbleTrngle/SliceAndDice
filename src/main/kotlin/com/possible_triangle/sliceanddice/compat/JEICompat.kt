@@ -2,7 +2,7 @@ package com.possible_triangle.sliceanddice.compat
 
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.simibubi.create.AllRecipeTypes
-import com.simibubi.create.content.contraptions.processing.ItemApplicationRecipe
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
 import mezz.jei.api.recipe.RecipeType

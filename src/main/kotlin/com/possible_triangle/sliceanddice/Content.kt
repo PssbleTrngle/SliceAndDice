@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice
 
+import com.jozufozu.flywheel.api.MaterialManager
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
 import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
@@ -15,13 +16,16 @@ import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
-import com.simibubi.create.content.AllSections
-import com.simibubi.create.content.CreateItemGroup
-import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeSerializer
-import com.simibubi.create.content.logistics.block.mechanicalArm.ArmInteractionPointType
-import com.simibubi.create.foundation.block.BlockStressDefaults
-import com.simibubi.create.foundation.data.*
+import com.simibubi.create.content.kinetics.BlockStressDefaults
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
+import com.simibubi.create.foundation.data.AssetLookup
+import com.simibubi.create.foundation.data.CreateRegistrate
+import com.simibubi.create.foundation.data.SharedProperties
+import com.simibubi.create.foundation.data.TagGen
+import com.simibubi.create.foundation.data.ModelGen
+import com.simibubi.create.infrastructure.item.BaseCreativeModeTab
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
@@ -58,8 +62,8 @@ object Content {
         fun register(bus: IEventBus) = registerEventListeners(bus)
 
         init {
-            creativeModeTab { CreateItemGroup.TAB_TOOLS }
-            startSection(AllSections.LOGISTICS)
+            creativeModeTab { BaseCreativeModeTab.TAB_TOOLS }
+//            startSection(AllSections.LOGISTICS) TODO - https://github.com/Creators-of-Create/Create/commit/c4ffe8dabd6bde6deb20ebdfc027a7af5f6048cd
         }
     }
 
@@ -79,8 +83,8 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
-        .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
+    val SLICER_TILE = REGISTRATE.blockEntity("slicer", ::SlicerTile)
+        .instance { BiFunction { manager : MaterialManager, tile : SlicerTile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
@@ -104,7 +108,7 @@ object Content {
         }.register()
 
     val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
-        .initialProperties { SharedProperties.copperMetal() }.transform(AllTags.pickaxeOnly())
+        .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
         .transform(ModelGen.customItemModel("_")).recipe { c, p ->
@@ -113,7 +117,7 @@ object Content {
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }.register()
 
-    val SPRINKLER_TILE = REGISTRATE.tileEntity("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
+    val SPRINKLER_TILE = REGISTRATE.blockEntity("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))

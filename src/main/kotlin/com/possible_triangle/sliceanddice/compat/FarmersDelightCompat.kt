@@ -4,10 +4,10 @@ import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
-import com.simibubi.create.content.contraptions.components.mixer.MixingRecipe
-import com.simibubi.create.content.contraptions.processing.EmptyingRecipe
-import com.simibubi.create.content.contraptions.processing.HeatCondition
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder
+import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe
+import com.simibubi.create.content.processing.recipe.HeatCondition
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import com.simibubi.create.foundation.fluid.FluidIngredient
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
