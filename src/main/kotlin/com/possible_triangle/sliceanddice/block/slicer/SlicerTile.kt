@@ -37,7 +37,7 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemHandlerHelper
 
 
-class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
+class SlicerTile(type: BlockEntityType<SlicerTile>, pos: BlockPos, state: BlockState) :
     BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
 
     companion object {

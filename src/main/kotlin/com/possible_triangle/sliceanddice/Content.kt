@@ -20,12 +20,9 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
-import com.simibubi.create.foundation.data.AssetLookup
-import com.simibubi.create.foundation.data.CreateRegistrate
-import com.simibubi.create.foundation.data.SharedProperties
-import com.simibubi.create.foundation.data.TagGen
-import com.simibubi.create.foundation.data.ModelGen
+import com.simibubi.create.foundation.data.*
 import com.simibubi.create.infrastructure.item.BaseCreativeModeTab
+import com.tterrag.registrate.builders.BlockEntityBuilder
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
@@ -36,6 +33,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.data.event.GatherDataEvent
@@ -61,6 +59,8 @@ object Content {
     private object REGISTRATE : CreateRegistrate(MOD_ID) {
         fun register(bus: IEventBus) = registerEventListeners(bus)
 
+        fun <T : BlockEntity> add(name: String, factory: BlockEntityBuilder.BlockEntityFactory<T>) : CreateBlockEntityBuilder<T, CreateRegistrate> = blockEntity(name, factory)
+
         init {
             creativeModeTab { BaseCreativeModeTab.TAB_TOOLS }
 //            startSection(AllSections.LOGISTICS) TODO - https://github.com/Creators-of-Create/Create/commit/c4ffe8dabd6bde6deb20ebdfc027a7af5f6048cd
@@ -83,7 +83,7 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.blockEntity("slicer", ::SlicerTile)
+    val SLICER_TILE = REGISTRATE.add("slicer", ::SlicerTile)
         .instance { BiFunction { manager : MaterialManager, tile : SlicerTile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
@@ -117,7 +117,8 @@ object Content {
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }.register()
 
-    val SPRINKLER_TILE = REGISTRATE.blockEntity("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
+
+    val SPRINKLER_TILE = REGISTRATE.add("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))

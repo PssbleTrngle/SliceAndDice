@@ -17,7 +17,7 @@ import net.minecraft.core.Direction
 
 class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerTile>(context) {
 
-    override fun shouldRenderOffScreen(te: SlicerTile) = true
+    override fun shouldRenderOffScreen(be: SlicerTile) = true
 
     private fun renderTool(
         tile: SlicerTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
@@ -60,7 +60,6 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
         light: Int,
         overlay: Int
     ) {
-        if (be !is SlicerTile) return
         renderTool(be, partialTicks, ms, buffer, light, overlay)
 
         if (Backend.canUseInstancing(be.level)) return

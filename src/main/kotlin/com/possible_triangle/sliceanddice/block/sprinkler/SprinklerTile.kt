@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 import net.minecraftforge.fluids.capability.IFluidHandler
 
-class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : SmartBlockEntity(type, pos, state),
+class SprinklerTile(type: BlockEntityType<SprinklerTile>, pos: BlockPos, state: BlockState) : SmartBlockEntity(type, pos, state),
     IHaveGoggleInformation {
 
     private lateinit var tank: SmartFluidTankBehaviour
