@@ -4,10 +4,10 @@ import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
-import com.simibubi.create.content.contraptions.components.mixer.MixingRecipe
-import com.simibubi.create.content.contraptions.processing.EmptyingRecipe
-import com.simibubi.create.content.contraptions.processing.HeatCondition
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder
+import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe
+import com.simibubi.create.content.processing.recipe.HeatCondition
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import com.simibubi.create.foundation.fluid.FluidIngredient
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
@@ -49,11 +49,16 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         processingCutting(existing, add)
     }
 
+    private fun shouldConvert(key: ResourceLocation): Boolean {
+        return !key.path.endsWith("_manual_only")
+    }
+
     private fun processingCutting(
         recipes: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
         val cuttingRecipes = recipes
+            .filterKeys { shouldConvert(it) }
             .filterValues { it is CuttingBoardRecipe }
             .mapValues { it.value as CuttingBoardRecipe }
 
@@ -73,6 +78,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
         val emptyingRecipes = recipes.values.filterIsInstance<EmptyingRecipe>()
         val cookingRecipes = recipes
+            .filterKeys { shouldConvert(it) }
             .filterValues { it is CookingPotRecipe }
             .mapValues { it.value as CookingPotRecipe }
 
@@ -103,6 +109,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
                 else builder.require(ingredient)
             }
 
+            @Suppress("SENSELESS_COMPARISON")
             if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
                 builder.require(Ingredient.of(recipe.outputContainer))
             }
