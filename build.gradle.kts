@@ -64,6 +64,7 @@ base {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
     withSourcesJar()
     withJavadocJar()
@@ -269,7 +270,7 @@ env["CURSEFORGE_TOKEN"]?.let { token ->
 
         apiToken = token
 
-        upload(curseforge_project_id, tasks.jarJar.get().archiveFile).apply {
+        upload(curseforge_project_id, tasks.jar.get().archiveFile).apply {
             changelogType = "html"
             changelog = env["CHANGELOG"]
             releaseType = release_type
@@ -296,7 +297,7 @@ env["MODRINTH_TOKEN"]?.let { modrinthToken ->
         gameVersions.set(listOf(mc_version))
         loaders.set(listOf("forge"))
         versionType.set(release_type)
-        uploadFile.set(tasks.jarJar.get())
+        uploadFile.set(tasks.jar.get())
         syncBodyFrom.set(project.file("README.md").readText())
         dependencies {
             required.project("ordsPcFz")
