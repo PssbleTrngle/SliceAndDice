@@ -280,8 +280,7 @@ env["CURSEFORGE_TOKEN"]?.let { token ->
 
             addRelation("create", "requiredDependency")
             addRelation("kotlin-for-forge", "requiredDependency")
-            addRelation("farmers-delight", "requiredDependency")
-            addRelation("kotlin-for-forge", "optionalDependency")
+            addRelation("farmers-delight", "optionalDependency")
             addRelation("overweight-farming", "optionalDependency")
         }
     }
