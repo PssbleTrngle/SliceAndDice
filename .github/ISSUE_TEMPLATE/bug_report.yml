@@ -13,6 +13,17 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Loader
+      multiple: false
+      options:
+        - forge
+        - fabric
+    validations:
+      required: true
+
   - type: input
     id: version-version
     attributes:
@@ -26,12 +37,8 @@ body:
       label: Minecraft Version
       multiple: false
       options:
+        - 1.19
         - 1.18
-
-  - type: input
-    id: loader-version
-    attributes:
-      label: Forge Version
     validations:
       required: true
 

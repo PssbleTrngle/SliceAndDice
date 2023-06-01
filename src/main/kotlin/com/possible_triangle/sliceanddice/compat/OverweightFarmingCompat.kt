@@ -2,11 +2,9 @@ package com.possible_triangle.sliceanddice.compat
 
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.ModCompat.OVERWEIGHT_FARMING
-import com.simibubi.create.Create
-import com.simibubi.create.content.contraptions.components.deployer.DeployerApplicationRecipe
-import com.simibubi.create.content.contraptions.components.deployer.ManualApplicationRecipe
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder
-import mezz.jei.api.registration.IRecipeRegistration
+import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe
+import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
@@ -27,7 +25,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         }
     }
 
-    fun registerRecipes(registration: IRecipeRegistration) {
+    fun registerRecipes(register: (List<ManualApplicationRecipe>) -> Unit) {
         val axe = Ingredient.of(Items.IRON_AXE)
         val recipes = MiscEvents.PEELABLES.get().map { (from, to) ->
             val id = ResourceLocation(
@@ -42,7 +40,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
                 it.build()
             }
         }
-        registration.addRecipes(recipes, Create.asResource("item_application"))
+        register(recipes)
     }
 
     override fun injectRecipes(

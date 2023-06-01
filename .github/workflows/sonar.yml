@@ -1,13 +1,13 @@
 name: Analyze
 on:
   push:
-    branches: [ 1.18.x ]
+    branches: [1.18.x]
 
 jobs:
   build:
     name: Analyze
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v2

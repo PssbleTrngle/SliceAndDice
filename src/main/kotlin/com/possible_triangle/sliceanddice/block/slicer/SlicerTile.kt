@@ -4,17 +4,17 @@ import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
-import com.simibubi.create.content.contraptions.components.press.PressingBehaviour
-import com.simibubi.create.content.contraptions.components.press.PressingBehaviour.Mode
-import com.simibubi.create.content.contraptions.components.press.PressingBehaviour.PressingBehaviourSpecifics
-import com.simibubi.create.content.contraptions.processing.BasinOperatingTileEntity
-import com.simibubi.create.content.contraptions.processing.InWorldProcessing
-import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack
+import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack
+import com.simibubi.create.content.kinetics.press.PressingBehaviour
+import com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode
+import com.simibubi.create.content.kinetics.press.PressingBehaviour.PressingBehaviourSpecifics
+import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.TooltipHelper
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour
+import com.simibubi.create.foundation.recipe.RecipeApplier
+import com.simibubi.create.foundation.recipe.RecipeFinder
 import com.simibubi.create.foundation.utility.Lang
 import com.simibubi.create.foundation.utility.VecHelper
-import com.simibubi.create.foundation.utility.recipe.RecipeFinder
 import net.minecraft.ChatFormatting
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
@@ -30,11 +30,12 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemHandlerHelper
 
 
 class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    BasinOperatingTileEntity(type, pos, state), PressingBehaviourSpecifics {
+    BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
 
     companion object {
         private val inWorldCacheKey = Any()
@@ -45,6 +46,27 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     val correctDirection get() = Configs.SERVER.IGNORE_ROTATION.get() || getSpeed() < 0
     val canProcess get()  = correctDirection && isSpeedRequirementFulfilled
+
+    private var _heldItem = ItemStack.EMPTY
+    var heldItem: ItemStack
+        get() = _heldItem
+        set(value) {
+            _heldItem = value
+            sendData()
+        }
+
+    private var invHandler: LazyOptional<SlicerItemHandler>? = null
+
+    override fun initialize() {
+        super.initialize()
+        initHandler()
+    }
+
+    private fun initHandler() {
+        if (invHandler == null) {
+            invHandler = LazyOptional.of { SlicerItemHandler(this) }
+        }
+    }
 
     override fun updateBasin(): Boolean {
         return !correctDirection || super.updateBasin()
@@ -60,7 +82,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             val hint = Lang.builder(SliceAndDice.MOD_ID)
                 .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
                 .component()
-            val cutString = TooltipHelper.cutTextComponent(hint, ChatFormatting.GRAY, ChatFormatting.WHITE)
+            val cutString = TooltipHelper.cutTextComponent(hint, TooltipHelper.Palette.GRAY)
             for (i in cutString.indices) {
                 Lang.builder().add(cutString[i].copy()).forGoggles(tooltip)
             }
@@ -69,18 +91,17 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return false
     }
 
-    var heldItem = ItemStack.EMPTY
     private lateinit var behaviour: PressingBehaviour
     val cuttingBehaviour get() = behaviour
 
-    override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
+    override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         super.addBehaviours(behaviours)
         behaviour = PressingBehaviour(this)
         behaviours.add(behaviour)
     }
 
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
-        if (!heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
+        if (!_heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
         val recipes = super.getMatchingRecipes()
         return recipes.mapNotNull {
             it.takeIf { hasRequiredTool(it) }
@@ -91,8 +112,8 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         super.applyBasinRecipe()
         val world = level ?: return
         if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
-            if (heldItem.hurt(1, level!!.random, null)) {
-                heldItem = ItemStack.EMPTY
+            if (_heldItem.hurt(1, level!!.random, null)) {
+                _heldItem = ItemStack.EMPTY
                 sendData()
             }
         }
@@ -105,7 +126,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     override fun read(compound: CompoundTag, clientPacket: Boolean) {
         super.read(compound, clientPacket)
-        heldItem = compound.get("HeldItem").let {
+        _heldItem = compound.get("HeldItem").let {
             val decoded = ItemStack.CODEC.parse(NbtOps.INSTANCE, it).result()
             decoded.orElse(ItemStack.EMPTY)
         }
@@ -149,6 +170,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return base * modeOffset + 0.4F
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
             if (it !is CuttingProcessingRecipe) false
@@ -185,7 +207,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         behaviour.particleItems.add(input.stack)
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
-        val outputs = InWorldProcessing.applyRecipeOn(toProcess, recipe)
+        val outputs = RecipeApplier.applyRecipeOn(toProcess, recipe)
         outputList?.addAll(outputs)
         return true
     }

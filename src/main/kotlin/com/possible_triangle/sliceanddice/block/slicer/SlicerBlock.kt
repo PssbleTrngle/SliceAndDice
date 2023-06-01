@@ -4,10 +4,10 @@ import com.possible_triangle.sliceanddice.Content
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllItems
 import com.simibubi.create.AllShapes
-import com.simibubi.create.content.contraptions.base.IRotate.SpeedLevel
-import com.simibubi.create.content.contraptions.base.KineticBlock
-import com.simibubi.create.content.contraptions.relays.elementary.ICogWheel
-import com.simibubi.create.foundation.block.ITE
+import com.simibubi.create.content.kinetics.base.IRotate.SpeedLevel
+import com.simibubi.create.content.kinetics.base.KineticBlock
+import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel
+import com.simibubi.create.foundation.block.IBE
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
@@ -24,11 +24,11 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<SlicerTile>, ICogWheel {
+class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<SlicerTile>, ICogWheel {
 
-    override fun getTileEntityClass() = SlicerTile::class.java
+    override fun getBlockEntityClass() = SlicerTile::class.java
 
-    override fun getTileEntityType() = Content.SLICER_TILE.get()
+    override fun getBlockEntityType() = Content.SLICER_TILE.get()
 
     override fun use(
         state: BlockState, world: Level, pos: BlockPos, player: Player, hand: InteractionHand,
@@ -39,13 +39,12 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<Slicer
         if (AllItems.WRENCH.isIn(held)) return InteractionResult.PASS
         if (!held.`is`(Content.ALLOWED_TOOLS) && !held.isEmpty) return InteractionResult.PASS
 
-        if (!world.isClientSide) withTileEntityDo(world, pos) {
-            if (it !is SlicerTile) return@withTileEntityDo
+        if (!world.isClientSide) withBlockEntityDo(world, pos) {
+            if (it !is SlicerTile) return@withBlockEntityDo
             val heldByDeployer = it.heldItem.copy()
-            if (heldByDeployer.isEmpty && held.isEmpty) return@withTileEntityDo
+            if (heldByDeployer.isEmpty && held.isEmpty) return@withBlockEntityDo
             player.setItemInHand(hand, heldByDeployer)
             it.heldItem = held
-            it.sendData()
         }
 
         return InteractionResult.SUCCESS
@@ -79,7 +78,7 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<Slicer
         return 0.75F
     }
 
-    override fun getMinimumRequiredSpeedLevel(): SpeedLevel? {
+    override fun getMinimumRequiredSpeedLevel(): SpeedLevel {
         return SpeedLevel.MEDIUM
     }
 
@@ -92,8 +91,8 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), ITE<Slicer
 
     override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
         if (state.hasBlockEntity() && state.block !== newState.block) {
-            withTileEntityDo(world, pos) { te ->
-                if (isMoving) return@withTileEntityDo
+            withBlockEntityDo(world, pos) { te ->
+                if (isMoving) return@withBlockEntityDo
                 val item = ItemEntity(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), te.heldItem)
                 item.setDefaultPickUpDelay()
                 world.addFreshEntity(item)

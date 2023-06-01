@@ -3,12 +3,9 @@ package com.possible_triangle.sliceanddice.block.slicer
 import com.jozufozu.flywheel.backend.Backend
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Vector3f
-import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SlicerPartials
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
-import com.simibubi.create.AllBlockPartials
-import com.simibubi.create.content.contraptions.base.KineticTileEntity
-import com.simibubi.create.content.contraptions.base.KineticTileEntityRenderer
+import com.simibubi.create.AllPartialModels
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer
 import com.simibubi.create.foundation.render.CachedBufferer
 import com.simibubi.create.foundation.utility.AnimationTickHolder
 import net.minecraft.client.Minecraft
@@ -18,9 +15,9 @@ import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 
-class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTileEntityRenderer(context) {
+class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerTile>(context) {
 
-    override fun shouldRenderOffScreen(te: KineticTileEntity) = true
+    override fun shouldRenderOffScreen(te: SlicerTile) = true
 
     private fun renderTool(
         tile: SlicerTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
@@ -56,14 +53,13 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTile
     }
 
     override fun renderSafe(
-        te: KineticTileEntity,
+        te: SlicerTile,
         partialTicks: Float,
         ms: PoseStack,
         buffer: MultiBufferSource,
         light: Int,
         overlay: Int,
     ) {
-        if (te !is SlicerTile) return
         renderTool(te, partialTicks, ms, buffer, light, overlay)
 
         if (Backend.canUseInstancing(te.level)) return
@@ -72,15 +68,15 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticTile
 
         val vb = buffer.getBuffer(RenderType.solid())
 
-        val superBuffer = CachedBufferer.partial(AllBlockPartials.SHAFTLESS_COGWHEEL, blockState)
+        val superBuffer = CachedBufferer.partial(AllPartialModels.SHAFTLESS_COGWHEEL, blockState)
         standardKineticRotationTransform(superBuffer, te, light).renderInto(ms, vb)
 
         val renderedHeadOffset = te.getRenderedHeadOffset(partialTicks)
         val speed = te.getRenderedHeadRotationSpeed()
-        val time = AnimationTickHolder.getRenderTime(te.getLevel())
+        val time = AnimationTickHolder.getRenderTime(te.level)
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
-        val poleRender = CachedBufferer.partial(AllBlockPartials.MECHANICAL_MIXER_POLE, blockState)
+        val poleRender = CachedBufferer.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)
         poleRender.translate(0.0, -renderedHeadOffset.toDouble(), 0.0)
             .light(light)
             .renderInto(ms, vb)

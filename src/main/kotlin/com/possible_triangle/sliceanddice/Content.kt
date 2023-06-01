@@ -1,10 +1,7 @@
 package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
-import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
-import com.possible_triangle.sliceanddice.block.slicer.SlicerInstance
-import com.possible_triangle.sliceanddice.block.slicer.SlicerRenderer
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerTile
@@ -16,17 +13,15 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehav
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
+import com.simibubi.create.AllCreativeModeTabs
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
-import com.simibubi.create.content.AllSections
-import com.simibubi.create.content.CreateItemGroup
-import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeSerializer
-import com.simibubi.create.foundation.block.BlockStressDefaults
-import com.simibubi.create.foundation.data.AssetLookup
-import com.simibubi.create.foundation.data.CreateRegistrate
-import com.simibubi.create.foundation.data.ModelGen
-import com.simibubi.create.foundation.data.SharedProperties
+import com.simibubi.create.content.kinetics.BlockStressDefaults
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
+import com.simibubi.create.foundation.data.*
+import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
@@ -60,13 +55,8 @@ object Content {
         return ResourceLocation(MOD_ID, path)
     }
 
-    private object REGISTRATE : CreateRegistrate(MOD_ID) {
-        fun register(bus: IEventBus) = registerEventListeners(bus)
-
-        init {
-            creativeModeTab { CreateItemGroup.TAB_TOOLS }
-            startSection(AllSections.LOGISTICS)
-        }
+    private val REGISTRATE = CreateRegistrate.create(MOD_ID).apply {
+        creativeModeTab { AllCreativeModeTabs.BASE_CREATIVE_TAB }
     }
 
     val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
@@ -75,7 +65,7 @@ object Content {
     val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
 
     val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
-        .properties(BlockBehaviour.Properties::noOcclusion).transform(AllTags.axeOrPickaxe()).blockstate { c, p ->
+        .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
         }.addLayer { Supplier { RenderType.cutoutMipped() } }.transform(BlockStressDefaults.setImpact(4.0))
         .item(::AssemblyOperatorBlockItem).transform(ModelGen.customItemModel()).recipe { c, p ->
@@ -85,7 +75,7 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.tileEntity("slicer", ::SlicerTile)
+    val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerTile))
         .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
@@ -110,7 +100,7 @@ object Content {
         }.register()
 
     val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
-        .initialProperties { SharedProperties.copperMetal() }.transform(AllTags.pickaxeOnly())
+        .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
         .transform(ModelGen.customItemModel("_")).recipe { c, p ->
@@ -119,7 +109,7 @@ object Content {
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }.register()
 
-    val SPRINKLER_TILE = REGISTRATE.tileEntity("sprinkler", ::SprinklerTile).validBlock(SPRINKLER_BLOCK).register()
+    val SPRINKLER_TILE = REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerTile)).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))
@@ -133,7 +123,7 @@ object Content {
             .bucket().model(AssetLookup.existingItemModel()).build().register()
 
     fun register(modBus: IEventBus) {
-        REGISTRATE.register(modBus)
+        REGISTRATE.registerEventListeners(modBus)
 
         LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
@@ -149,6 +139,8 @@ object Content {
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
         SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
+
+        ArmInteractionPointType.register(SlicerArmInteractionType)
     }
 
 }
