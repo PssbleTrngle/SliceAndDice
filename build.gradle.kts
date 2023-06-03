@@ -1,4 +1,4 @@
-import com.modrinth.minotaur.TaskModrinthSyncBody
+
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.spongepowered.asm.gradle.plugins.MixinExtension
 import java.time.LocalDateTime
@@ -67,7 +67,6 @@ base {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
         languageVersion.set(JavaLanguageVersion.of(17))
     }
     withSourcesJar()
@@ -224,7 +223,7 @@ tasks.withType<Jar> {
     }
 }
 
-tasks.jar {
+tasks.withType<Jar> {
     finalizedBy("reobfJar")
 }
 
@@ -300,17 +299,12 @@ env["MODRINTH_TOKEN"]?.let { modrinthToken ->
         loaders.set(listOf("forge"))
         versionType.set(release_type)
         uploadFile.set(tasks.jar.get())
-        syncBodyFrom.set(project.file("README.md").readText())
         dependencies {
             required.project("ordsPcFz")
             required.project("LNytGWDc")
             optional.project("R2OftAxM")
         }
     }
-}
-
-tasks.named("modrinth") {
-    dependsOn(tasks.withType<TaskModrinthSyncBody>())
 }
 
 sonarqube {
