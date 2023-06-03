@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v3
@@ -45,5 +45,3 @@ jobs:
         with:
           file: build/libs/sliceanddice-forge-${{ github.event.release.tag_name }}.jar
           asset_name: sliceanddice-forge-${{ github.event.release.tag_name }}.jar
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_content_type: application/java-archive
