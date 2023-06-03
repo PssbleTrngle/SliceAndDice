@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.utility.VecHelper
 import net.minecraft.ChatFormatting
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
@@ -30,6 +31,7 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemHandlerHelper
 
@@ -259,6 +261,15 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             } else speed
         } else {
             speed / 2
+        }
+    }
+
+    override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
+        return if (isItemHandlerCap(cap)) {
+            if (this.invHandler == null) this.initHandler()
+            this.invHandler!!.cast()
+        } else {
+            super.getCapability(cap, side)
         }
     }
 
