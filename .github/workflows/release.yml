@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v3
@@ -37,14 +37,11 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           CHANGELOG: ${{ github.event.release.body }}
+          CI: true
 
       - name: Upload to github releases
         if: ${{ github.event_name == 'release' }}
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: build/libs/sliceanddice-forge-${{ github.event.release.tag_name }}.jar
+          file: build/libs/sliceanddice-forge-${{ github.event.release.tag_name }}.jar
           asset_name: sliceanddice-forge-${{ github.event.release.tag_name }}.jar
-          asset_content_type: application/java-archive
