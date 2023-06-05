@@ -306,6 +306,7 @@ env["MODRINTH_TOKEN"]?.let { modrinthToken ->
 }
 
 tasks.named("modrinth") {
+    dependsOn(tasks.jar)
     dependsOn(tasks.withType<TaskModrinthSyncBody>())
 }
 
