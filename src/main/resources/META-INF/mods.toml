@@ -4,29 +4,36 @@ license = "https://github.com/${repository}/blob/1.19.x/LICENSE.txt"
 issueTrackerURL = "https://github.com/${repository}/issues"
 
 [[mods]]
-modId = "${mod_id}"
-version = "${mod_version}"
-displayName = "${mod_name}"
-authors = "${mod_author}"
-description = '''Making automation for Farmers Delight more sensible'''
+    modId = "${mod_id}"
+    version = "${mod_version}"
+    displayName = "${mod_name}"
+    authors = "${mod_author}"
+    description = '''Making automation for Farmers Delight more sensible'''
 
 [[dependencies.${mod_id}]]
-modId = "forge"
-mandatory = true
-versionRange = "[43.1.0,)"
-ordering = "NONE"
-side = "BOTH"
+    modId = "forge"
+    mandatory = true
+    versionRange = "[43.1.0,)"
+    ordering = "NONE"
+    side = "BOTH"
 
 [[dependencies.${mod_id}]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.19.2,)"
-ordering = "NONE"
-side = "BOTH"
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.19.2,)"
+    ordering = "NONE"
+    side = "BOTH"
 
 [[dependencies.${mod_id}]]
-modId = "create"
-mandatory = true
-versionRange = "[0.5.1.a,)"
-ordering = "NONE"
-side = "BOTH"
+    modId = "create"
+    mandatory = true
+    versionRange = "[0.5.1.a,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="kotlinforforge"
+    mandatory=true
+    versionRange="[3.9.1,)"
+    ordering="NONE"
+    side="BOTH"

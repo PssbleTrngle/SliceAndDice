@@ -24,5 +24,4 @@ data class CuttingProcessingRecipe(val params: ProcessingRecipeParams, val tool:
     }
 
     override fun matches(inv: SmartInventory, world: Level) = true
-
 }

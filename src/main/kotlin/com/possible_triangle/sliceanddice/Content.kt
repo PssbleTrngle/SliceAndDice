@@ -20,6 +20,7 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem
 import com.simibubi.create.foundation.data.*
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
@@ -29,6 +30,7 @@ import net.minecraft.core.Registry
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
@@ -109,7 +111,8 @@ object Content {
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }.register()
 
-    val SPRINKLER_TILE = REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerTile)).validBlock(SPRINKLER_BLOCK).register()
+    val SPRINKLER_TILE =
+        REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerTile)).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))
@@ -121,6 +124,18 @@ object Content {
         REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
             .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
             .bucket().model(AssetLookup.existingItemModel()).build().register()
+
+    val TRANSITIONAL_1 = REGISTRATE.item("transitional_1", NonNullFunction(::SequencedAssemblyItem))
+        .register()
+
+    val TRANSITIONAL_2 = REGISTRATE.item("transitional_2", NonNullFunction(::SequencedAssemblyItem))
+        .register()
+
+    val COMPLEX_1 = REGISTRATE.item("complex_1", NonNullFunction(::Item))
+        .register()
+
+    val COMPLEX_2 = REGISTRATE.item("complex_2", NonNullFunction(::Item))
+        .register()
 
     fun register(modBus: IEventBus) {
         REGISTRATE.registerEventListeners(modBus)
