@@ -1,4 +1,5 @@
 val mc_version: String by extra
+val parchment_version: String by extra
 val registrate_version: String by extra
 val create_version: String by extra
 val flywheel_version: String by extra
@@ -10,7 +11,7 @@ val blueprint_version: String by extra
 val neapolitan_version: String by extra
 
 plugins {
-    id("com.possible_triangle.gradle") version ("0.0.0-dev")
+    id("com.possible_triangle.gradle") version ("0.0.1")
 }
 
 withKotlin()
@@ -22,7 +23,7 @@ forge {
 
 repositories {
     curseMaven()
-    
+
     maven {
         url = uri("https://maven.saps.dev/minecraft")
         content {
