@@ -1,3 +1,5 @@
+val mod_id: String by extra
+val mod_version: String by extra
 val mc_version: String by extra
 val parchment_version: String by extra
 val registrate_version: String by extra
@@ -19,6 +21,10 @@ withKotlin()
 forge {
     enableMixins()
     dataGen()
+}
+
+configure<BasePluginExtension> {
+    archivesName.set("$mod_id-forge-${mod_version}")
 }
 
 repositories {
