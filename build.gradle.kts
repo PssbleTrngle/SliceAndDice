@@ -69,7 +69,7 @@ dependencies {
     modCompileOnly("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
     modRuntimeOnly("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
-    modCompileOnly("com.tterrag.registrate:Registrate:${registrate_version}")
+    modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     modImplementation("com.simibubi.create:create-${mc_version}:${create_version}:slim") { isTransitive = false }
     modImplementation("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
 

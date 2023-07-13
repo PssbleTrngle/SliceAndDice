@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "A",
-    "B",
-    "C"
-  ],
+  "category": "misc",
   "key": {
     "A": {
       "item": "create:cogwheel"
@@ -16,7 +12,13 @@
       "item": "create:turntable"
     }
   },
+  "pattern": [
+    "A",
+    "B",
+    "C"
+  ],
   "result": {
     "item": "sliceanddice:slicer"
-  }
+  },
+  "show_notification": true
 }

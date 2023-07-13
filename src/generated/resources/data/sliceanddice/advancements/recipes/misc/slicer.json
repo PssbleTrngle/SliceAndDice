@@ -1,23 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "sliceanddice:slicer"
-    ]
-  },
   "criteria": {
-    "has_tool": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "sliceanddice:allowed_tools"
-          }
-        ]
-      }
-    },
     "has_mixer": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -26,13 +10,24 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
       "conditions": {
         "recipe": "sliceanddice:slicer"
-      }
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tool": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "sliceanddice:allowed_tools"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
@@ -41,5 +36,11 @@
       "has_mixer",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sliceanddice:slicer"
+    ]
+  },
+  "sends_telemetry_event": false
 }

@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "SPS",
-    "SBS"
-  ],
+  "category": "misc",
   "key": {
-    "S": {
-      "tag": "forge:plates/copper"
-    },
     "B": {
       "item": "minecraft:iron_bars"
     },
     "P": {
       "item": "create:fluid_pipe"
+    },
+    "S": {
+      "tag": "forge:plates/copper"
     }
   },
+  "pattern": [
+    "SPS",
+    "SBS"
+  ],
   "result": {
-    "item": "sliceanddice:sprinkler",
-    "count": 3
-  }
+    "count": 3,
+    "item": "sliceanddice:sprinkler"
+  },
+  "show_notification": true
 }
