@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-license = "https://github.com/${repository}/blob/1.19.x/LICENSE.txt"
+license = "https://github.com/${repository}/blob/1.20.x/LICENSE.txt"
 issueTrackerURL = "https://github.com/${repository}/issues"
 
 [[mods]]

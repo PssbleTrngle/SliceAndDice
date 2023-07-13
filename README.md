@@ -38,7 +38,7 @@
 This mod enables a variety of features to create better compatibility between mostly [Farmer's Delight][FARMERS_DELIGHT_FORGE] and [Create][CREATE_FORGE].
 While it is designed to work with Farmer's Delight, it does work without it and also adds some compatibility features for other mods.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/screenshots/slicer.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/slicer.png)
 
 ### Automatic Cutting
 
@@ -46,13 +46,13 @@ The Main feature of the mod is the _Slicer_, a machine similar to the _Mechanica
 It automatically registers all cutting recipes from Farmer's Delight. In that sense, it is an automatic _Cutting Board_.  
 In order to use it, the correct tool has to be placed into the machine, using `Right-Click`.
 By default, only knives and axes are allowed, but this behaviour can be overwritten by modifying the `sliceanddice:allowed_tools` item tag.
-An example datapack which adds shears to this tag can be found [here](https://github.com/PssbleTrngle/SliceAndDice/raw/1.19.x/example_datapack.zip)
+An example datapack which adds shears to this tag can be found [here](https://github.com/PssbleTrngle/SliceAndDice/raw/1.20.x/example_datapack.zip)
 
 ### Automatic Cooking
 
 All recipes from Farmer's delight requiring the Cooking Pot are added as heated mixing recipes.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/screenshots/cooking.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/cooking.png)
 
 ### Sprinkler
 
@@ -66,7 +66,7 @@ Different fluids can have different effects.
 
 The latter is meant to enable growing of _Banana Fonds_ from [Neapolitan][NEAPOLITAN] without being dependent on the weather, but it could possibly have other effects on other mods too.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/screenshots/sprinkler.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/sprinkler.png)
 
 ### Overweight Farming
 
@@ -74,5 +74,5 @@ If present, some compatibility features for [Overweight Farming][OVERWEIGHT_FARM
 This includes waxing recipes using the deployer,
 as well as showing the axe-stripping of overweight crops in JEI.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/screenshots/strip.png)
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/screenshots/wax.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/strip.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/wax.png)
