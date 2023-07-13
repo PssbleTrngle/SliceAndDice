@@ -125,18 +125,6 @@ object Content {
             .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
             .bucket().model(AssetLookup.existingItemModel()).build().register()
 
-    val TRANSITIONAL_1 = REGISTRATE.item("transitional_1", NonNullFunction(::SequencedAssemblyItem))
-        .register()
-
-    val TRANSITIONAL_2 = REGISTRATE.item("transitional_2", NonNullFunction(::SequencedAssemblyItem))
-        .register()
-
-    val COMPLEX_1 = REGISTRATE.item("complex_1", NonNullFunction(::Item))
-        .register()
-
-    val COMPLEX_2 = REGISTRATE.item("complex_2", NonNullFunction(::Item))
-        .register()
-
     fun register(modBus: IEventBus) {
         REGISTRATE.registerEventListeners(modBus)
 
