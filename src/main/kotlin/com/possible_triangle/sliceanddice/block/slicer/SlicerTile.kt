@@ -209,7 +209,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         behaviour.particleItems.add(input.stack)
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
-        val outputs = RecipeApplier.applyRecipeOn(toProcess, recipe)
+        val outputs = RecipeApplier.applyRecipeOn(level, toProcess, recipe)
         outputList?.addAll(outputs)
         return true
     }

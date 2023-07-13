@@ -74,13 +74,13 @@ dependencies {
     modImplementation("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
 
     modImplementation("curse.maven:farmers-delight-398521:${farmers_delight_version}")
-    modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
+    //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
 
     compileOnly("dev.latvian.mods:kubejs-forge:${kubejs_version}")
 
     if (!env.isCI) {
-        modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")
-        modRuntimeOnly("com.teamabnormals:blueprint:${mc_version}-${blueprint_version}")
+        //modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")
+        //modRuntimeOnly("com.teamabnormals:blueprint:${mc_version}-${blueprint_version}")
 
         //modRuntimeOnly("curse.maven:cofh-core-69162:${cofh_core_version}")
         //modRuntimeOnly("curse.maven:thermal-foundation-222880:${thermal_foundation_version}")

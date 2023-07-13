@@ -2,7 +2,7 @@ package com.possible_triangle.sliceanddice.block.slicer
 
 import com.jozufozu.flywheel.backend.Backend
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Vector3f
+import com.mojang.math.Axis
 import com.possible_triangle.sliceanddice.SlicerPartials
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer
@@ -11,9 +11,9 @@ import com.simibubi.create.foundation.utility.AnimationTickHolder
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
+import net.minecraft.world.item.ItemDisplayContext
 
 class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerTile>(context) {
 
@@ -39,13 +39,13 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
 
         for (i in 0..3) {
             ms.pushPose()
-            ms.mulPose(Vector3f.YP.rotationDegrees(90F * i))
-            ms.mulPose(Vector3f.YP.rotation(angle))
-            ms.mulPose(Vector3f.ZN.rotationDegrees(200F))
+            ms.mulPose(Axis.YP.rotationDegrees(90F * i))
+            ms.mulPose(Axis.YP.rotation(angle))
+            ms.mulPose(Axis.ZN.rotationDegrees(200F))
             ms.translate(0.0, 0.0, offset)
 
             val renderer = Minecraft.getInstance().itemRenderer
-            renderer.renderStatic(tile.heldItem, TransformType.FIXED, light, overlay, ms, buffer, 0)
+            renderer.renderStatic(tile.heldItem, ItemDisplayContext.FIXED, light, overlay, ms, buffer, tile.level, 0)
             ms.popPose()
         }
 
@@ -73,7 +73,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
 
         val renderedHeadOffset = te.getRenderedHeadOffset(partialTicks)
         val speed = te.getRenderedHeadRotationSpeed()
-        val time = AnimationTickHolder.getRenderTime(te.getLevel())
+        val time = AnimationTickHolder.getRenderTime(te.level)
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         val poleRender = CachedBufferer.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)

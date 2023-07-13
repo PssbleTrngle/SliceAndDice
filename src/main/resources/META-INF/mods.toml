@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[47,)"
 license = "https://github.com/${repository}/blob/1.19.x/LICENSE.txt"
 issueTrackerURL = "https://github.com/${repository}/issues"
 
@@ -13,27 +13,27 @@ issueTrackerURL = "https://github.com/${repository}/issues"
 [[dependencies.${mod_id}]]
     modId = "forge"
     mandatory = true
-    versionRange = "[43.1.0,)"
+    versionRange = "[47,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19.2,)"
+    versionRange = "[1.20.1,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
     modId = "create"
     mandatory = true
-    versionRange = "[0.5.1.a,)"
+    versionRange = "[0.5.1.d,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
     modId="kotlinforforge"
     mandatory=true
-    versionRange="[3.9.1,)"
+    versionRange="[4.3.0,)"
     ordering="NONE"
     side="BOTH"

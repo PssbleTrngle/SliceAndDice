@@ -27,6 +27,8 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
@@ -57,12 +59,11 @@ object Content {
     }
 
     private val REGISTRATE = CreateRegistrate.create(MOD_ID)
-        .creativeModeTab { AllCreativeModeTabs.BASE_CREATIVE_TAB }
 
     val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
-    val RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, MOD_ID)
+    val RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, MOD_ID)
 
-    val ALLOWED_TOOLS = TagKey.create(Registry.ITEM_REGISTRY, modLoc("allowed_tools"))
+    val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
 
     val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
         .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
@@ -70,8 +71,11 @@ object Content {
         }
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .transform(BlockStressDefaults.setImpact(4.0))
-        .item(::AssemblyOperatorBlockItem).transform(ModelGen.customItemModel()).recipe { c, p ->
-            ShapedRecipeBuilder.shaped(c.entry).pattern("A").pattern("B").pattern("C")
+        .item(::AssemblyOperatorBlockItem)
+        .tab(AllCreativeModeTabs.MAIN_TAB.key)
+        .transform(ModelGen.customItemModel())
+        .recipe { c, p ->
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry).pattern("A").pattern("B").pattern("C")
                 .define('A', AllBlocks.COGWHEEL.get()).define('B', AllBlocks.ANDESITE_CASING.get())
                 .define('C', AllBlocks.TURNTABLE.get()).unlockedBy("has_tool", has(ALLOWED_TOOLS))
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
@@ -106,36 +110,30 @@ object Content {
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
         .transform(ModelGen.customItemModel("_")).recipe { c, p ->
-            ShapedRecipeBuilder.shaped(c.entry, 3).pattern("SPS").pattern("SBS")
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry, 3).pattern("SPS").pattern("SBS")
                 .define('S', AllTags.forgeItemTag("plates/copper")).define('B', Blocks.IRON_BARS)
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
-        }.register()
+        }
+        .item()
+        .tab(AllCreativeModeTabs.MAIN_TAB.key)
+        .build()
+        .register()
 
     val SPRINKLER_TILE =
         REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerTile)).validBlock(SPRINKLER_BLOCK).register()
 
-    private val WET_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("moisturizing"))
-    private val HOT_FLUIDS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("burning"))
-    private val FERTILIZERS = TagKey.create(Registry.FLUID_REGISTRY, modLoc("fertilizer"))
+    private val WET_FLUIDS = TagKey.create(Registries.FLUID, modLoc("moisturizing"))
+    private val HOT_FLUIDS = TagKey.create(Registries.FLUID, modLoc("burning"))
+    private val FERTILIZERS = TagKey.create(Registries.FLUID, modLoc("fertilizer"))
 
-    val FERTILIZER_BLACKLIST = TagKey.create(Registry.BLOCK_REGISTRY, modLoc("fertilizer_blacklist"))
+    val FERTILIZER_BLACKLIST = TagKey.create(Registries.BLOCK, modLoc("fertilizer_blacklist"))
 
     val FERTILIZER =
         REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
             .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
-            .bucket().model(AssetLookup.existingItemModel()).build().register()
-
-    val TRANSITIONAL_1 = REGISTRATE.item("transitional_1", NonNullFunction(::SequencedAssemblyItem))
-        .register()
-
-    val TRANSITIONAL_2 = REGISTRATE.item("transitional_2", NonNullFunction(::SequencedAssemblyItem))
-        .register()
-
-    val COMPLEX_1 = REGISTRATE.item("complex_1", NonNullFunction(::Item))
-        .register()
-
-    val COMPLEX_2 = REGISTRATE.item("complex_2", NonNullFunction(::Item))
-        .register()
+            .bucket()
+            .tab(AllCreativeModeTabs.MAIN_TAB.key)
+            .model(AssetLookup.existingItemModel()).build().register()
 
     fun register(modBus: IEventBus) {
         REGISTRATE.registerEventListeners(modBus)

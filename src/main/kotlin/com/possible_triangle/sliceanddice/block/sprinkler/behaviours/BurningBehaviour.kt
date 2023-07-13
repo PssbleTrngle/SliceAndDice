@@ -3,7 +3,6 @@ package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
-import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraftforge.fluids.FluidStack
 
@@ -13,7 +12,7 @@ object BurningBehaviour : SprinkleBehaviour {
         range.getEntities(LivingEntity::class.java) {
             !it.fireImmune()
         }.forEach {
-            it.hurt(DamageSource.IN_FIRE, 0.5F)
+            it.hurt(world.damageSources().inFire(), 0.5F)
         }
     }
 }

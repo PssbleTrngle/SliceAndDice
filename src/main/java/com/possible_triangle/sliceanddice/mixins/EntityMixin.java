@@ -13,7 +13,7 @@ public class EntityMixin {
     @Inject(at = @At("HEAD"), method = "baseTick()V")
     public void baseTick(CallbackInfo callback) {
         Entity entity = (Entity) (Object) this;
-        if (entity.level.getBlockState(entity.blockPosition()).is(Content.INSTANCE.getWET_AIR().get())) {
+        if (entity.level().getBlockState(entity.blockPosition()).is(Content.INSTANCE.getWET_AIR().get())) {
             entity.clearFire();
         }
     }

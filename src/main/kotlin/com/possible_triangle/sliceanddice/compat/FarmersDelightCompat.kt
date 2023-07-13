@@ -114,7 +114,9 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
                 builder.require(Ingredient.of(recipe.outputContainer))
             }
 
-            builder.output(recipe.resultItem)
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            // Cooking recipes do not use the registryAccess
+            builder.output(recipe.getResultItem(null))
             add.accept(id, builder.build())
         }
     }
