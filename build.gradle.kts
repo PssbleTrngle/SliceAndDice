@@ -13,7 +13,7 @@ val blueprint_version: String by extra
 val neapolitan_version: String by extra
 
 plugins {
-    id("net.somethingcatchy.gradle") version ("0.0.1")
+    id("net.somethingcatchy.gradle") version ("0.0.4")
 }
 
 withKotlin()
@@ -105,6 +105,7 @@ enablePublishing {
         githubPackages(project)
     }
 }
+
 uploadToCurseforge {
     dependencies {
         required("create")
