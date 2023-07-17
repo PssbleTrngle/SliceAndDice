@@ -32,7 +32,7 @@ jobs:
       - name: Build and upload
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build sonarqube
+          arguments: build sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
