@@ -13,7 +13,7 @@ val blueprint_version: String by extra
 val neapolitan_version: String by extra
 
 plugins {
-    id("net.somethingcatchy.gradle") version ("0.0.5")
+    id("net.somethingcatchy.gradle") version ("0.0.6")
 }
 
 withKotlin()
