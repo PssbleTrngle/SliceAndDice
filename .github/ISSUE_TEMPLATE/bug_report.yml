@@ -37,7 +37,8 @@ body:
       label: Minecraft Version
       multiple: false
       options:
-        - 1.19
+        - 1.20
+        - 1.18
         - 1.18
     validations:
       required: true
@@ -47,4 +48,4 @@ body:
     attributes:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      render: Shell
