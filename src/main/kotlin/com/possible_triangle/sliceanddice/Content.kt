@@ -129,8 +129,9 @@ object Content {
     val FERTILIZER_BLACKLIST = TagKey.create(Registries.BLOCK, modLoc("fertilizer_blacklist"))
 
     val FERTILIZER =
-        REGISTRATE.fluid("fertilizer", modLoc("fluid/fertilizer_still"), modLoc("fluid/fertilizer_flowing"))
-            .tag(FERTILIZERS).source { ForgeFlowingFluid.Source(it) }
+        REGISTRATE.fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
+            .tag(FERTILIZERS)
+            .source { ForgeFlowingFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.MAIN_TAB.key)
             .model(AssetLookup.existingItemModel()).build().register()
@@ -146,7 +147,7 @@ object Content {
 
         modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
         modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
-        DistExecutor.safeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
+        DistExecutor.unsafeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
 
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
