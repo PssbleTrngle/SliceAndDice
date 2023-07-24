@@ -63,6 +63,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     }
 
     private fun spawnProcessingParticles(fluid: FluidStack) {
+        if(fluid.isEmpty) return
         val world = level ?: return
 
         val particle = FluidFX.getFluidParticle(fluid)
