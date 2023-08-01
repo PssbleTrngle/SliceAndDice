@@ -108,15 +108,15 @@ object Content {
     val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
         .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }.item()
-        .transform(ModelGen.customItemModel("_")).recipe { c, p ->
+        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
+        .item()
+        .tab(AllCreativeModeTabs.MAIN_TAB.key)
+        .transform(ModelGen.customItemModel("_"))
+        .recipe { c, p ->
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry, 3).pattern("SPS").pattern("SBS")
                 .define('S', AllTags.forgeItemTag("plates/copper")).define('B', Blocks.IRON_BARS)
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }
-        .item()
-        .tab(AllCreativeModeTabs.MAIN_TAB.key)
-        .build()
         .register()
 
     val SPRINKLER_TILE =
@@ -134,7 +134,9 @@ object Content {
             .source { ForgeFlowingFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.MAIN_TAB.key)
-            .model(AssetLookup.existingItemModel()).build().register()
+            .model(AssetLookup.existingItemModel())
+            .build()
+            .register()
 
     fun register(modBus: IEventBus) {
         REGISTRATE.registerEventListeners(modBus)
