@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.common.util.MinecraftExtension
+
 val mod_id: String by extra
 val mod_version: String by extra
 val mc_version: String by extra
@@ -25,6 +27,15 @@ withKotlin()
 forge {
     enableMixins()
     dataGen()
+}
+
+configure<MinecraftExtension> {
+    runs {
+        forEach {
+            it.jvmArg("-XX:+AllowEnhancedClassRedefinition")
+            it.property("production", "true")
+        }
+    }
 }
 
 configure<BasePluginExtension> {
