@@ -1,18 +1,21 @@
 package com.possible_triangle.sliceanddice.datagen
 
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.possible_triangle.sliceanddice.PonderScenes
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.simibubi.create.foundation.data.LangPartial
 import com.simibubi.create.foundation.ponder.PonderLocalization
 import com.simibubi.create.infrastructure.ponder.AllPonderTags
-import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.DataProvider
+import net.minecraft.data.HashCache
 
 private typealias LangProvider = () -> JsonObject
 
 class LangGen(private val generator: DataGenerator) : DataProvider {
+
+    private val GSON = GsonBuilder().setPrettyPrinting().create()
 
     companion object {
         private val PARTIALS = listOf<LangProvider>(
@@ -36,14 +39,14 @@ class LangGen(private val generator: DataGenerator) : DataProvider {
         }
     }
 
-    override fun run(cache: CachedOutput) {
+    override fun run(cache: HashCache) {
         val json = JsonObject()
         PARTIALS.map { it() }.forEach { partial ->
             partial.entrySet().forEach { json.add(it.key, it.value) }
         }
 
         val target = generator.outputFolder.resolve("assets/${SliceAndDice.MOD_ID}/lang/en_us.json")
-        DataProvider.saveStable(cache, json, target)
+        DataProvider.save(GSON, cache, json, target)
     }
 
     override fun getName() = "${SliceAndDice.MOD_ID} lang partials"
