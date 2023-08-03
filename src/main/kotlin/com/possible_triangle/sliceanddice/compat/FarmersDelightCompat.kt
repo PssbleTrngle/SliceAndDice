@@ -5,16 +5,13 @@ import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe
 import com.simibubi.create.content.processing.recipe.HeatCondition
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
-import com.simibubi.create.foundation.fluid.FluidIngredient
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraftforge.fluids.FluidStack
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe
 import vectorwing.farmersdelight.integration.jei.FDRecipeTypes
@@ -78,29 +75,14 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
         SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
 
-        fun fluidOf(ingredient: Ingredient): FluidStack? {
-            if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return null
-            val cloned = Ingredient.fromJson(ingredient.toJson())
-            val fluids = cloned.items.mapNotNull { stack ->
-                emptyingRecipes.find {
-                    val required = it.ingredients[0]
-                    required.test(stack)
-                }?.resultingFluid
-            }
-
-            return fluids.minByOrNull { it.amount }
-        }
-
         return cookingRecipes.forEach { (originalID, recipe) ->
             val id = ResourceLocation(SliceAndDice.MOD_ID, "cooking/${originalID.namespace}/${originalID.path}")
-            val builder = ProcessingRecipeBuilder(::MixingRecipe, id)
+            val builder = ProcessingRecipeBuilder(::LazyMixingRecipe, id)
             builder.duration(recipe.cookTime)
             builder.requiresHeat(HeatCondition.HEATED)
 
             recipe.ingredients.forEach { ingredient ->
-                val fluid = fluidOf(ingredient)
-                if (fluid != null) builder.require(FluidIngredient.fromFluidStack(fluid))
-                else builder.require(ingredient)
+                builder.require(ingredient)
             }
 
             @Suppress("SENSELESS_COMPARISON")
@@ -109,7 +91,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             }
 
             builder.output(recipe.resultItem)
-            add.accept(id, builder.build())
+            add.accept(id, builder.build().withRecipeLookup(emptyingRecipes))
         }
     }
 
