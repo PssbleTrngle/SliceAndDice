@@ -1,12 +1,17 @@
 {
+  "block.sliceanddice.fertilizer": "Flüssiger Dünger",
   "block.sliceanddice.slicer": "Thermomix",
   "block.sliceanddice.sprinkler": "Sprinkler",
   "block.sliceanddice.wet_air": "Feuchte Luft",
-  "block.sliceanddice.fertilizer": "Flüssiger Dünger",
+  "fluid.sliceanddice.fertilizer": "Flüssiger Dünger",
   "item.sliceanddice.fertilizer_bucket": "Eimer voll flüssigem Dünger",
+  "sliceanddice.gui.contraptions.wrong_direction": "Es scheint, dass sich dieser %s in die _falsche Richtung_ dreht.",
   "sliceanddice.ponder.slicer.header": "Automatisches Schneiden mit dem Thermomix",
   "sliceanddice.ponder.slicer.text_1": "Recht-Klick mit einem erlaubten Werkzeug",
   "sliceanddice.ponder.slicer.text_2": "Der Thermomix kann auch mit einem Behälter genutzt werden",
-  "sliceanddice.tooltip.rotationDirection": "Rotationsrichtung",
-  "sliceanddice.gui.contraptions.wrong_direction": "Es scheint, dass sich dieser %s in die _falsche Richtung_ dreht."
+  "sliceanddice.ponder.sprinkler/intro.header": "Der Sprinkler",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Plaziere einen Sprinkler unterhalb einer Röhre",
+  "sliceanddice.ponder.sprinkler/uses.header": "Anwendungsfälle des Sprinklers",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Verschiedene Flüssigkeiten haben unterschiedliche Effekte auf Kreaturen",
+  "sliceanddice.tooltip.rotationDirection": "Rotationsrichtung"
 }
