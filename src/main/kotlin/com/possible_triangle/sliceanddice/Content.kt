@@ -11,6 +11,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerB
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.datagen.LangGen
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
@@ -20,19 +21,23 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem
 import com.simibubi.create.foundation.data.*
+import com.simibubi.create.foundation.item.ItemDescription
+import com.simibubi.create.foundation.item.KineticStats
+import com.simibubi.create.foundation.item.TooltipHelper
+import com.simibubi.create.foundation.item.TooltipModifier
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
+import com.tterrag.registrate.util.entry.ItemEntry
 import com.tterrag.registrate.util.nullness.NonNullFunction
+import dev.latvian.mods.kubejs.item.ItemBuilder
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.Item
+import net.minecraft.world.item.BucketItem
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
@@ -128,6 +133,7 @@ object Content {
 
     val FERTILIZER_BLACKLIST = TagKey.create(Registries.BLOCK, modLoc("fertilizer_blacklist"))
 
+    val FERTILIZER_BUCKET: ItemEntry<BucketItem>
     val FERTILIZER =
         REGISTRATE.fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
             .tag(FERTILIZERS)
@@ -135,7 +141,8 @@ object Content {
             .bucket()
             .tab(AllCreativeModeTabs.MAIN_TAB.key)
             .model(AssetLookup.existingItemModel())
-            .build()
+            .apply { FERTILIZER_BUCKET = register() }
+            .parent
             .register()
 
     fun register(modBus: IEventBus) {
@@ -147,7 +154,7 @@ object Content {
         RECIPE_SERIALIZERS.register(modBus)
         RECIPE_TYPES.register(modBus)
 
-        modBus.addListener { _: GatherDataEvent -> PonderScenes.register() }
+        modBus.addListener { e: GatherDataEvent -> e.generator.addProvider(true, LangGen(e.generator.packOutput)) }
         modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
         DistExecutor.unsafeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
 
