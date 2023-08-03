@@ -159,7 +159,7 @@ object PonderScenes {
             }
         }
 
-        HELPER.forComponents(Content.SPRINKLER_BLOCK).addStoryBoard("sprinkler/intro") { scene, util ->
+        HELPER.forComponents(Content.SPRINKLER_BLOCK, Content.FERTILIZER_BUCKET).addStoryBoard("sprinkler/intro") { scene, util ->
             scene.intro("sprinkler/intro", "Sprinkles on top", 5)
 
             val tank = util.select.fromTo(4, 1, 2, 4, 4, 2)
@@ -271,7 +271,7 @@ object PonderScenes {
                 scene.fillTank(tankController, fluid)
                 scene.world.propagatePipeChange(pump)
                 scene.idle(4)
-                scene.sprinklerParticles(fluid, sprinkler, 60)
+                scene.sprinklerParticles(fluid, sprinkler, 80)
             }
 
             scene.idle(10)
