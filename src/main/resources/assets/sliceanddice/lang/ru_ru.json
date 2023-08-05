@@ -5,7 +5,7 @@
   "block.sliceanddice.wet_air": "Влажный воздух",
   "fluid.sliceanddice.fertilizer": "Жидкие удобрения",
   "item.sliceanddice.fertilizer_bucket": "Ведро с жидким удобрением",
-  "sliceanddice.gui.contraptions.wrong_direction": Похоже, что этот %s вращается в неправильном направлении",
+  "sliceanddice.gui.contraptions.wrong_direction":"Похоже, что этот %s вращается в неправильном направлении",
   "sliceanddice.ponder.slicer.header": "Резка с помощью слайсера",
   "sliceanddice.ponder.slicer.text_1": "Щелкните правой кнопкой мыши с помощью допустимого инструмента",
   "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на Чаше",
