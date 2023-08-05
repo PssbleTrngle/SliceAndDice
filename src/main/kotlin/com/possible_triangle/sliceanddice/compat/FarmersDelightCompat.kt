@@ -4,17 +4,14 @@ import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
-import com.simibubi.create.content.contraptions.components.mixer.MixingRecipe
-import com.simibubi.create.content.contraptions.processing.EmptyingRecipe
-import com.simibubi.create.content.contraptions.processing.HeatCondition
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder
-import com.simibubi.create.foundation.fluid.FluidIngredient
+import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
+import com.simibubi.create.content.processing.recipe.HeatCondition
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraftforge.fluids.FluidStack
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe
 import vectorwing.farmersdelight.integration.jei.FDRecipeTypes
@@ -49,11 +46,16 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         processingCutting(existing, add)
     }
 
+    private fun shouldConvert(key: ResourceLocation): Boolean {
+        return !key.path.endsWith("_manual_only")
+    }
+
     private fun processingCutting(
         recipes: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
         val cuttingRecipes = recipes
+            .filterKeys { shouldConvert(it) }
             .filterValues { it is CuttingBoardRecipe }
             .mapValues { it.value as CuttingBoardRecipe }
 
@@ -73,42 +75,29 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
         val emptyingRecipes = recipes.values.filterIsInstance<EmptyingRecipe>()
         val cookingRecipes = recipes
+            .filterKeys { shouldConvert(it) }
             .filterValues { it is CookingPotRecipe }
             .mapValues { it.value as CookingPotRecipe }
 
         SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
 
-        fun fluidOf(ingredient: Ingredient): FluidStack? {
-            if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return null
-            val cloned = Ingredient.fromJson(ingredient.toJson())
-            val fluids = cloned.items.mapNotNull { stack ->
-                emptyingRecipes.find {
-                    val required = it.ingredients[0]
-                    required.test(stack)
-                }?.resultingFluid
-            }
-
-            return fluids.minByOrNull { it.amount }
-        }
-
         return cookingRecipes.forEach { (originalID, recipe) ->
             val id = ResourceLocation(SliceAndDice.MOD_ID, "cooking/${originalID.namespace}/${originalID.path}")
-            val builder = ProcessingRecipeBuilder(::MixingRecipe, id)
+            val builder = ProcessingRecipeBuilder(::LazyMixingRecipe, id)
             builder.duration(recipe.cookTime)
             builder.requiresHeat(HeatCondition.HEATED)
 
             recipe.ingredients.forEach { ingredient ->
-                val fluid = fluidOf(ingredient)
-                if (fluid != null) builder.require(FluidIngredient.fromFluidStack(fluid))
-                else builder.require(ingredient)
+                builder.require(ingredient)
             }
 
+            @Suppress("SENSELESS_COMPARISON")
             if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
                 builder.require(Ingredient.of(recipe.outputContainer))
             }
 
             builder.output(recipe.resultItem)
-            add.accept(id, builder.build())
+            add.accept(id, builder.build().withRecipeLookup(emptyingRecipes))
         }
     }
 

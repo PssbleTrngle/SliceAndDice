@@ -4,9 +4,9 @@ import com.jozufozu.flywheel.api.Instancer
 import com.jozufozu.flywheel.api.MaterialManager
 import com.jozufozu.flywheel.api.instance.DynamicInstance
 import com.possible_triangle.sliceanddice.SlicerPartials
-import com.simibubi.create.AllBlockPartials
-import com.simibubi.create.content.contraptions.base.flwdata.RotatingData
-import com.simibubi.create.content.contraptions.relays.encased.EncasedCogInstance
+import com.simibubi.create.AllPartialModels
+import com.simibubi.create.content.kinetics.base.flwdata.RotatingData
+import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogInstance
 import com.simibubi.create.foundation.render.AllMaterialSpecs
 import com.simibubi.create.foundation.utility.AnimationTickHolder
 import net.minecraft.core.Direction
@@ -15,7 +15,7 @@ class SlicerInstance(modelManager: MaterialManager, private val mixer: SlicerTil
     EncasedCogInstance(modelManager, mixer, false), DynamicInstance {
 
     private val mixerPole = orientedMaterial
-        .getModel(AllBlockPartials.MECHANICAL_MIXER_POLE, blockState)
+        .getModel(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)
         .createInstance()
 
     private val mixerHead = rotatingMaterial.getModel(SlicerPartials.SLICER_HEAD, blockState)
@@ -31,7 +31,7 @@ class SlicerInstance(modelManager: MaterialManager, private val mixer: SlicerTil
     override fun getCogModel(): Instancer<RotatingData> {
         return materialManager.defaultSolid()
             .material(AllMaterialSpecs.ROTATING)
-            .getModel(AllBlockPartials.SHAFTLESS_COGWHEEL, blockEntity.blockState)
+            .getModel(AllPartialModels.SHAFTLESS_COGWHEEL, blockEntity.blockState)
     }
 
     override fun beginFrame() {

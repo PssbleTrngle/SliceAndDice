@@ -1,11 +1,11 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.config.Configs
-import com.simibubi.create.content.contraptions.fluids.FluidFX
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation
+import com.simibubi.create.content.fluids.FluidFX
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour
 import com.simibubi.create.foundation.utility.VecHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -15,18 +15,18 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.ForgeCapabilities
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 import net.minecraftforge.fluids.capability.IFluidHandler
 
-class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : SmartTileEntity(type, pos, state),
+class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : SmartBlockEntity(type, pos, state),
     IHaveGoggleInformation {
 
     private lateinit var tank: SmartFluidTankBehaviour
     private var processingTicks = -1
 
-    override fun addBehaviours(behaviours: MutableList<TileEntityBehaviour>) {
+    override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         behaviours.add(SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get()).allowInsertion()
             .also { tank = it })
     }
@@ -58,11 +58,12 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     }
 
     override fun <T> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
-        return if (cap === CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && side === Direction.UP) tank.capability.cast()
+        return if (cap === ForgeCapabilities.FLUID_HANDLER && side === Direction.UP) tank.capability.cast()
         else super.getCapability(cap, side)
     }
 
     private fun spawnProcessingParticles(fluid: FluidStack) {
+        if(fluid.isEmpty) return
         val world = level ?: return
 
         val particle = FluidFX.getFluidParticle(fluid)
@@ -91,7 +92,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
 
     override fun addToGoggleTooltip(tooltip: MutableList<Component>, sneaking: Boolean): Boolean {
         return containedFluidTooltip(
-            tooltip, sneaking, getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP)
+            tooltip, sneaking, getCapability(ForgeCapabilities.FLUID_HANDLER, Direction.UP)
         )
     }
 
