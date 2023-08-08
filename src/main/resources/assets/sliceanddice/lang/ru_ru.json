@@ -1,13 +1,17 @@
 {
-    "block.sliceanddice.sprinkler": "Опрыскиватель",
-    "block.sliceanddice.slicer": "Слайсер",
-    "block.sliceanddice.wet_air": "Влажный воздух",
-    "block.sliceanddice.fertilizer": "Удобрение",
-    "fluid.sliceanddice.fertilizer": "Удобрение",
-    "item.sliceanddice.fertilizer_bucket": "Ведро с  удобрениями",
-    "sliceanddice.ponder.slicer.header": "Резка при помощи слайсера",
-    "sliceanddice.ponder.slicer.text_1": "Щелкните по нему правой кнопкой мыши с помощью подходящего инструмента",
-    "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на торцевой позиции",
-    "sliceanddice.tooltip.rotationDirection": "Направление вращения",
-    "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в неправильном направлении."
-  }
+  "block.sliceanddice.fertilizer": "Жидкие удобрения",
+  "block.sliceanddice.slicer": "Слайсер",
+  "block.sliceanddice.sprinkler": "Разбрызгиватель",
+  "block.sliceanddice.wet_air": "Влажный воздух",
+  "fluid.sliceanddice.fertilizer": "Жидкие удобрения",
+  "item.sliceanddice.fertilizer_bucket": "Ведро с жидким удобрением",
+  "sliceanddice.gui.contraptions.wrong_direction": "Похоже, что этот %s вращается в неправильном направлении",
+  "sliceanddice.ponder.slicer.header": "Резка с помощью слайсера",
+  "sliceanddice.ponder.slicer.text_1": "Щелкните правой кнопкой мыши с помощью допустимого инструмента",
+  "sliceanddice.ponder.slicer.text_2": "Слайсер также может работать на Чаше",
+  "sliceanddice.ponder.sprinkler/intro.header": "Брызгает сверху",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Разместите разбрызгиватель под трубой",
+  "sliceanddice.ponder.sprinkler/uses.header": "Виды разбрызгивателей",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Различные жидкости также по-разному воздействуют на объекты",
+  "sliceanddice.tooltip.rotationDirection": "Направление вращения"
+}
