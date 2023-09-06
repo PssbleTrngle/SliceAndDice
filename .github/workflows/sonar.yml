@@ -1,7 +1,7 @@
 name: Analyze
 on:
   push:
-    branches: [ 1.19.x ]
+    branches: ["[0-9]+.[0-9]+.x"]
 
 jobs:
   build:

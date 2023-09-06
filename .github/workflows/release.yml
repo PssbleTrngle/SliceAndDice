@@ -44,4 +44,3 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: build/libs/sliceanddice-forge-${{ github.event.release.tag_name }}.jar
-          asset_name: sliceanddice-forge-${{ github.event.release.tag_name }}.jar
