@@ -1,0 +1,17 @@
+{
+  "block.sliceanddice.fertilizer": "액체 비료",
+  "block.sliceanddice.slicer": "슬라이서",
+  "block.sliceanddice.sprinkler": "스프링클러",
+  "block.sliceanddice.wet_air": "습한 공기",
+  "fluid.sliceanddice.fertilizer": "액체 비료",
+  "item.sliceanddice.fertilizer_bucket": "액체 비료 양동이",
+  "sliceanddice.gui.contraptions.wrong_direction": "%s가 _잘못된 방향_으로 회전하고 있습니다.",
+  "sliceanddice.ponder.slicer.header": "슬라이서로 자르기",
+  "sliceanddice.ponder.slicer.text_1": "유효한 도구를 들고 슬라이서를 우클릭하세요.",
+  "sliceanddice.ponder.slicer.text_2": "슬라이서는 대야에서도 작동할 수 있습니다.",
+  "sliceanddice.ponder.sprinkler/intro.header": "위에서 물 뿌리기",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "파이프 아래에 스프링클러를 설치하세요.",
+  "sliceanddice.ponder.sprinkler/uses.header": "액체의 종류",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "유체에 따라 개체에 미치는 영향도 달라집니다.",
+  "sliceanddice.tooltip.rotationDirection": "회전 방향"
+}
