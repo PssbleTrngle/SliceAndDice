@@ -19,7 +19,7 @@ val thermal_expansion_version: String by extra
 val thermal_cultivation_version: String by extra
 
 plugins {
-    id("net.somethingcatchy.gradle") version ("0.0.6")
+    id("com.possible-triangle.gradle") version ("0.1.0")
 }
 
 withKotlin()
