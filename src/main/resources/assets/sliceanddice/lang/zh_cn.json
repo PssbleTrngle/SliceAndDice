@@ -6,7 +6,7 @@
    "fluid.sliceanddice.fertilizer": "液体肥料", 
    "item.sliceanddice.fertilizer_bucket": "液体肥料桶", 
    "sliceanddice.gui.contraptions.wrong_direction": "看起来 %s 正在向 _错误的方向_ 旋转", 
-   "sliceanddice.ponder.slicer.header": "使用切片器切片", 
+   "sliceanddice.ponder.slicer.header": "使用切片器和流水线代替砧板", 
    "sliceanddice.ponder.slicer.text_1": "用正确的工具右键", 
    "sliceanddice.ponder.slicer.text_2": "切片器也可以和工作盆一同工作", 
    "sliceanddice.ponder.sprinkler/intro.header": "上面的喷头...", 
