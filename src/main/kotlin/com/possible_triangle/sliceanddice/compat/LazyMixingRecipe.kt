@@ -29,7 +29,7 @@ class LazyMixingRecipe(params: ProcessingRecipeParams) : MixingRecipe(params) {
     private fun fluidOf(ingredient: Ingredient): FluidStack {
         if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return FluidStack.EMPTY
         val fluids = ingredient.items.mapNotNull { stack ->
-            emptyingRecipes.find {
+            emptyingRecipes.filter { it.ingredients.isNotEmpty() }.find {
                 val required = it.ingredients[0]
                 required.test(stack)
             }?.resultingFluid
