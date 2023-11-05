@@ -1,0 +1,17 @@
+{
+  "block.sliceanddice.fertilizer": "Nawóz w płynie",
+  "block.sliceanddice.slicer": "Krajalnica",
+  "block.sliceanddice.sprinkler": "Zraszacz",
+  "block.sliceanddice.wet_air": "Mokre powietrze",
+  "fluid.sliceanddice.fertilizer": "Nawóz w płynie",
+  "item.sliceanddice.fertilizer_bucket": "Wiadro płynnego nawozu",
+  "sliceanddice.gui.contraptions.wrong_direction": "Wygląda na to, że ten %s skręca w _złym kierunku_.",
+  "sliceanddice.ponder.slicer.header": "Automatyczne krojenie za pomocą krajalnicy",
+  "sliceanddice.ponder.slicer.text_1": "Kliknij prawym przyciskiem myszy za pomocą dozwolonego narzędzia",
+  "sliceanddice.ponder.slicer.text_2": "Krajalnica może być również używana z pojemnikiem",
+  "sliceanddice.ponder.sprinkler/intro.header": "Zraszacz",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Umieść zraszacz pod rurą",
+  "sliceanddice.ponder.sprinkler/uses.header": "Przypadki użycia zraszacza",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Różne płyny mają różny wpływ na stworzenia",
+  "sliceanddice.tooltip.rotationDirection": "Kierunek obrotu"
+}
