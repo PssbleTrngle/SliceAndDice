@@ -15,7 +15,7 @@ val blueprint_version: String by extra
 val neapolitan_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version ("0.1.0")
+    id("com.possible-triangle.gradle") version ("0.1.1")
 }
 
 withKotlin()
@@ -112,9 +112,7 @@ tasks.withType<Jar> {
 }
 
 enablePublishing {
-    repositories {
-        githubPackages(project)
-    }
+    githubPackages()
 }
 
 uploadToCurseforge {

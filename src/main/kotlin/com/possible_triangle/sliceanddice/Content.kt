@@ -77,7 +77,7 @@ object Content {
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .transform(BlockStressDefaults.setImpact(4.0))
         .item(::AssemblyOperatorBlockItem)
-        .tab(AllCreativeModeTabs.MAIN_TAB.key)
+        .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
         .transform(ModelGen.customItemModel())
         .recipe { c, p ->
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry).pattern("A").pattern("B").pattern("C")
@@ -115,7 +115,7 @@ object Content {
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
         .item()
-        .tab(AllCreativeModeTabs.MAIN_TAB.key)
+        .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
         .transform(ModelGen.customItemModel("_"))
         .recipe { c, p ->
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry, 3).pattern("SPS").pattern("SBS")
@@ -139,7 +139,7 @@ object Content {
             .tag(FERTILIZERS)
             .source { ForgeFlowingFluid.Source(it) }
             .bucket()
-            .tab(AllCreativeModeTabs.MAIN_TAB.key)
+            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .model(AssetLookup.existingItemModel())
             .apply { FERTILIZER_BUCKET = register() }
             .parent

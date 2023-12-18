@@ -27,7 +27,7 @@ issueTrackerURL = "https://github.com/${repository}/issues"
 [[dependencies.${mod_id}]]
     modId = "create"
     mandatory = true
-    versionRange = "[0.5.1.d,)"
+    versionRange = "[0.5.1.e,)"
     ordering = "NONE"
     side = "BOTH"
 
