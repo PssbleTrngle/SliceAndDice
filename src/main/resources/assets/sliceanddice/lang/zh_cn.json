@@ -1,13 +1,17 @@
-{
-  "block.sliceanddice.sprinkler": "洒水器",
-  "block.sliceanddice.slicer": "切割器",
-  "block.sliceanddice.wet_air": "湿润空气",
-  "block.sliceanddice.fertilizer": "液体肥料",
-  "fluid.sliceanddice.fertilizer": "液体肥料",
-  "item.sliceanddice.fertilizer_bucket": "液体肥料桶",
-  "sliceanddice.ponder.slicer.header": "使用切割器进行切割",
-  "sliceanddice.ponder.slicer.text_1": "用有效的工具右键点击",
-  "sliceanddice.ponder.slicer.text_2": "切割器也可以用于盆中操作",
-  "sliceanddice.tooltip.rotationDirection": "旋转方向",
-  "sliceanddice.gui.contraptions.wrong_direction": "看起来这个%s正在以_错误的方向_旋转。"
-}
+{ 
+   "block.sliceanddice.fertilizer": "液体肥料", 
+   "block.sliceanddice.slicer": "切片器", 
+   "block.sliceanddice.sprinkler": "洒水喷头", 
+   "block.sliceanddice.wet_air": "湿润的空气", 
+   "fluid.sliceanddice.fertilizer": "液体肥料", 
+   "item.sliceanddice.fertilizer_bucket": "液体肥料桶", 
+   "sliceanddice.gui.contraptions.wrong_direction": "看起来 %s 正在向 _错误的方向_ 旋转", 
+   "sliceanddice.ponder.slicer.header": "使用切片器和流水线代替砧板", 
+   "sliceanddice.ponder.slicer.text_1": "用正确的工具右键", 
+   "sliceanddice.ponder.slicer.text_2": "切片器也可以和工作盆一同工作", 
+   "sliceanddice.ponder.sprinkler/intro.header": "上面的喷头...", 
+   "sliceanddice.ponder.sprinkler/intro.text_1": "在流体管道的下方放置洒水喷头", 
+   "sliceanddice.ponder.sprinkler/uses.header": "喷洒不同液体的喷头", 
+   "sliceanddice.ponder.sprinkler/uses.text_1": "不同的流体有不一样的效果", 
+   "sliceanddice.tooltip.rotationDirection": "旋转方向" 
+ }
