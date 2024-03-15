@@ -13,6 +13,10 @@ val overweight_farming_version: String by extra
 val farmers_delight_version: String by extra
 val blueprint_version: String by extra
 val neapolitan_version: String by extra
+val cofh_core_version: String by extra
+val thermal_foundation_version: String by extra
+val thermal_expansion_version: String by extra
+val thermal_cultivation_version: String by extra
 
 plugins {
     id("com.possible-triangle.gradle") version ("0.1.1")
