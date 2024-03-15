@@ -73,7 +73,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
 
         val renderedHeadOffset = te.getRenderedHeadOffset(partialTicks)
         val speed = te.getRenderedHeadRotationSpeed()
-        val time = AnimationTickHolder.getRenderTime(te.getLevel())
+        val time = AnimationTickHolder.getRenderTime(te.level)
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         val poleRender = CachedBufferer.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)

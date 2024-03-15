@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice.datagen
 
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.possible_triangle.sliceanddice.PonderScenes
 import com.possible_triangle.sliceanddice.SliceAndDice
@@ -13,6 +14,8 @@ import net.minecraft.data.DataProvider
 private typealias LangProvider = () -> JsonObject
 
 class LangGen(private val generator: DataGenerator) : DataProvider {
+
+    private val GSON = GsonBuilder().setPrettyPrinting().create()
 
     companion object {
         private val PARTIALS = listOf<LangProvider>(
