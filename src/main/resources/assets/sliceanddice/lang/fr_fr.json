@@ -1,0 +1,18 @@
+{
+  "block.sliceanddice.fertilizer": "Engrais liquide",
+  "block.sliceanddice.slicer": "Trancheuse",
+  "block.sliceanddice.sprinkler": "Arroseur",
+  "block.sliceanddice.wet_air": "Air humide",
+  "fluid.sliceanddice.fertilizer": "Engrais liquide",
+  "item.sliceanddice.fertilizer_bucket": "Seau d'engrais liquide",
+  "sliceanddice.gui.contraptions.wrong_direction": "Il semblerait que ce(t)(te) %s tourne dans la _mauvaise direction_.",
+  "sliceanddice.ponder.slicer.header": "Couper avec la trancheuse",
+  "sliceanddice.ponder.slicer.text_1": "Clic droit avec un outil valide",
+  "sliceanddice.ponder.slicer.text_2": "La trancheuse peut aussi fonctionner sur un bassin",
+  "sliceanddice.ponder.sprinkler/intro.header": "Pluie d'arrosage",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Placer un arroseur sous un tuyau",
+  "sliceanddice.ponder.sprinkler/uses.header": "Différents arrosages",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Des fluides différents affectent les entités différemment",
+  "sliceanddice.tooltip.rotationDirection": "Sens de rotation"
+}
+
