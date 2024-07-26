@@ -13,7 +13,7 @@
 
 <!-- modrinth_exclude.start -->
 
-# Create Slice & Dice
+# Create Slice & Dice <!-- modrinth_exclude.start --> <img src="https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
 
 [Looking for the Fabric version?](https://github.com/PssbleTrngle/SliceAndDice-Fabric)
 
