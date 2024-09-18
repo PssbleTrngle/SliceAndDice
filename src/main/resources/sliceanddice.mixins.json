@@ -8,6 +8,7 @@
     "EntityMixin",
     "HarvesterMovementBehaviourMixin",
     "LevelMixin",
+    "PressingBehaviourMixin",
     "RecipeEventJSMixin",
     "RecipeManagerAccessor",
     "RecipeManagerMixin"

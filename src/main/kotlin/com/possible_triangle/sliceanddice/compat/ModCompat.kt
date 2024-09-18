@@ -2,12 +2,15 @@ package com.possible_triangle.sliceanddice.compat
 
 import com.possible_triangle.sliceanddice.SliceAndDice
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.ItemLike
 import net.minecraftforge.fml.ModList
 import vectorwing.farmersdelight.common.registry.ModItems
+import vectorwing.farmersdelight.common.registry.ModSounds
 import java.util.function.BiConsumer
 
 interface IRecipeInjector {
@@ -37,6 +40,11 @@ object ModCompat : IRecipeInjector {
     val harvesterTool
         get(): ItemStack? {
             return ifLoaded(FARMERS_DELIGHT) { ModItems.IRON_KNIFE.get() }?.let(::ItemStack) ?: ItemStack.EMPTY
+        }
+
+    val cuttingSound
+        get(): SoundEvent {
+            return ifLoaded(FARMERS_DELIGHT) { ModSounds.BLOCK_CUTTING_BOARD_KNIFE.get() } ?: SoundEvents.SHEEP_SHEAR
         }
 
     val exampleTool
