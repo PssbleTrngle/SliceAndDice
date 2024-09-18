@@ -223,11 +223,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         val recipe = recipeFor(input.stack) ?: return false
         if (simulate) return true
 
-        val particleStack =
-            if (Configs.CLIENT.spawnBloodParticles) ItemStack(Items.REDSTONE)
-            else input.stack
-
-        addToParticleItems(particleStack)
+        addToParticleItems(input.stack)
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
         val outputs = RecipeApplier.applyRecipeOn(toProcess, recipe)
