@@ -1,5 +1,3 @@
-val mod_name: String by extra
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -7,5 +5,3 @@ pluginManagement {
         maven { url = uri("https://repo.spongepowered.org/repository/maven-public/") }
     }
 }
-
-rootProject.name = mod_name

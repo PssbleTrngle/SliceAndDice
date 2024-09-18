@@ -32,7 +32,6 @@ forge {
 configure<MinecraftExtension> {
     runs {
         forEach {
-            it.jvmArg("-XX:+AllowEnhancedClassRedefinition")
             it.property("production", "true")
         }
     }
