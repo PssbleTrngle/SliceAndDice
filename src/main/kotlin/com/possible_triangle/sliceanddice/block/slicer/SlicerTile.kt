@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.block.slicer
 
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack
@@ -24,10 +25,14 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
@@ -57,6 +62,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         get() = _heldItem
         set(value) {
             _heldItem = value
+            basinChecker.scheduleUpdate()
             sendData()
         }
 
@@ -181,6 +187,15 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(_heldItem) }
     }
 
+    private fun addToParticleItems(stack: ItemStack) {
+        if (Configs.CLIENT.spawnBloodParticles) {
+            behaviour.particleItems.add(ItemStack(Items.REDSTONE))
+            behaviour.particleItems.add(ItemStack(Items.RED_DYE))
+        } else {
+            behaviour.particleItems.add(stack)
+        }
+    }
+
     override fun tryProcessInBasin(simulate: Boolean): Boolean {
         if (!canProcess) return false
         applyBasinRecipe()
@@ -190,9 +205,11 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             for (slot in 0 until inputs.slots) {
                 val stackInSlot = inputs.getItem(slot)
                 if (stackInSlot.isEmpty) continue
-                behaviour.particleItems.add(stackInSlot)
+                addToParticleItems(stackInSlot)
             }
         }
+
+        tryContinueWithPreviousRecipe()
 
         return true
     }
@@ -206,7 +223,11 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         val recipe = recipeFor(input.stack) ?: return false
         if (simulate) return true
 
-        behaviour.particleItems.add(input.stack)
+        val particleStack =
+            if (Configs.CLIENT.spawnBloodParticles) ItemStack(Items.REDSTONE)
+            else input.stack
+
+        addToParticleItems(particleStack)
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
         val outputs = RecipeApplier.applyRecipeOn(level, toProcess, recipe)
@@ -228,17 +249,33 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return recipe !is CuttingProcessingRecipe || recipe.tool?.test(_heldItem) == true
     }
 
-    override fun onPressingCompleted() {
-        val canContinue = behaviour.onBasin()
-                && matchBasinRecipe(currentRecipe)
-                && hasRequiredTool(currentRecipe)
-                && basin.filter { it.canContinueProcessing() }.isPresent
-
-        if (canContinue) startProcessingBasin()
-        else basinChecker.scheduleUpdate()
+    private fun tryContinueWithPreviousRecipe(): Boolean {
+        return if (behaviour.onBasin()
+            && matchBasinRecipe(currentRecipe)
+            && basin.filter { it.canContinueProcessing() }.isPresent
+        ) {
+            continueWithPreviousRecipe()
+        } else {
+            false
+        }
     }
 
-    override fun getParticleAmount() = 10
+    override fun continueWithPreviousRecipe(): Boolean {
+        val canContinue = hasRequiredTool(currentRecipe)
+        if (canContinue) {
+            behaviour.runningTicks = 100
+        }
+        return canContinue
+    }
+
+    override fun onPressingCompleted() {
+        basinChecker.scheduleUpdate()
+    }
+
+    override fun getParticleAmount(): Int {
+        return if (Configs.CLIENT.spawnBloodParticles) 20
+        else 10
+    }
 
     override fun getKineticSpeed() = getSpeed()
 
@@ -271,6 +308,14 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         } else {
             super.getCapability(cap, side)
         }
+    }
+
+    fun playSound(world: Level, pos: BlockPos, muffeled: Boolean) {
+        if (Configs.CLIENT.spawnBloodParticles && world.random.nextInt(5) == 0) {
+            world.playSound(null, pos, SoundEvents.GOAT_DEATH, SoundSource.BLOCKS, 0.5F, 1F)
+        }
+
+        world.playSound(null, pos, ModCompat.cuttingSound, SoundSource.BLOCKS, 1F, world.random.nextFloat() * 0.2F + 0.9F)
     }
 
 }

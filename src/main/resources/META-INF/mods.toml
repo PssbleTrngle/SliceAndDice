@@ -4,11 +4,12 @@ license = "https://github.com/${repository}/blob/1.20.x/LICENSE.txt"
 issueTrackerURL = "https://github.com/${repository}/issues"
 
 [[mods]]
-    modId = "${mod_id}"
-    version = "${mod_version}"
-    displayName = "${mod_name}"
-    authors = "${mod_author}"
-    description = '''Making automation for Farmers Delight more sensible'''
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+authors = "${mod_author}"
+description = '''Making automation for Farmers Delight more sensible'''
+updateJSONURL="https://api.modrinth.com/updates/slice-and-dice/forge_updates.json"
 
 [[dependencies.${mod_id}]]
     modId = "forge"
