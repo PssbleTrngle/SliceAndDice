@@ -48,6 +48,7 @@ class LazyMixingRecipe(params: ProcessingRecipeParams) : MixingRecipe(params) {
         resolvedIngredients = super.ingredients.filterNot { replaceable.containsKey(it) }.toNonnullList()
         resolvedFluidIngredients = (super.fluidIngredients + replaceable.values).toNonnullList()
         resolved = true
+        emptyingRecipes = emptyList()
     }
 
     override fun getIngredients(): NonNullList<Ingredient> {
