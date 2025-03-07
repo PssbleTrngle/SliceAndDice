@@ -76,3 +76,9 @@ as well as showing the axe-stripping of overweight crops in JEI.
 
 ![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/strip.png)
 ![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/wax.png)
+
+### Custom Recipes
+
+If you want to add custom recipes using a datapack, this can now be done for the newest 1.20 release.
+It works for both single recipes and steps of a sequences assembly recipe.
+Examples for these can be found in the [example datapack](https://github.com/PssbleTrngle/SliceAndDice/raw/1.20.x/example_datapack.zip).

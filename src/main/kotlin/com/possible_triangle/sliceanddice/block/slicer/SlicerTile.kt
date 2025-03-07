@@ -10,6 +10,7 @@ import com.simibubi.create.content.kinetics.press.PressingBehaviour
 import com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode
 import com.simibubi.create.content.kinetics.press.PressingBehaviour.PressingBehaviourSpecifics
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.TooltipHelper
 import com.simibubi.create.foundation.recipe.RecipeApplier
@@ -40,6 +41,7 @@ import net.minecraft.world.phys.Vec3
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.ItemHandlerHelper
+import kotlin.streams.asSequence
 
 
 class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
@@ -181,6 +183,17 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
     @Suppress("UNCHECKED_CAST")
     private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
+        val assemblyRecipe = SequencedAssemblyRecipe.getRecipes(
+            level,
+            stack,
+            CuttingProcessingRecipe.getType(),
+            CuttingProcessingRecipe::class.java
+        ).asSequence().filter {
+            it.tool?.test(_heldItem) == true
+        }.firstOrNull()
+
+        if (assemblyRecipe != null) return assemblyRecipe
+
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
             if (it !is CuttingProcessingRecipe) false
             else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
@@ -312,7 +325,14 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             world.playSound(null, pos, SoundEvents.GOAT_DEATH, SoundSource.BLOCKS, 0.5F, 1F)
         }
 
-        world.playSound(null, pos, ModCompat.cuttingSound, SoundSource.BLOCKS, 1F, world.random.nextFloat() * 0.2F + 0.9F)
+        world.playSound(
+            null,
+            pos,
+            ModCompat.cuttingSound,
+            SoundSource.BLOCKS,
+            1F,
+            world.random.nextFloat() * 0.2F + 0.9F
+        )
     }
 
 }

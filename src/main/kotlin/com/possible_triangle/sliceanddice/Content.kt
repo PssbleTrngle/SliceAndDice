@@ -97,9 +97,7 @@ object Content {
     val CUTTING_RECIPE_TYPE = createRecipeType<CuttingProcessingRecipe>(CuttingProcessingRecipe.id)
 
     val CUTTING_SERIALIZER = RECIPE_SERIALIZERS.register(CuttingProcessingRecipe.id.path) {
-        ProcessingRecipeSerializer(
-            ::CuttingProcessingRecipe
-        )
+        CuttingProcessingRecipe.Serializer
     }
 
     val WET_AIR = REGISTRATE.block<WetAir>("wet_air", ::WetAir).initialProperties { Blocks.CAVE_AIR }
@@ -160,6 +158,9 @@ object Content {
             "sliceanddice.gui.contraptions.wrong_direction",
             "It appears that this %s is rotating in the _wrong direction_."
         )
+
+        REGISTRATE.addRawLang("$MOD_ID.recipe.assembly.slicer", "Cut with Slicer")
+        REGISTRATE.addRawLang("$MOD_ID.recipe.slicer", "Slicer")
 
         LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)

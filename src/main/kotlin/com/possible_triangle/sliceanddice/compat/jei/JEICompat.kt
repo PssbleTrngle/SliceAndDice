@@ -1,12 +1,16 @@
-package com.possible_triangle.sliceanddice.compat
+package com.possible_triangle.sliceanddice.compat.jei
 
 import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.compat.FarmersDelightCompat
+import com.possible_triangle.sliceanddice.compat.OverweightFarmingCompat
 import com.simibubi.create.AllRecipeTypes
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
 import mezz.jei.api.recipe.RecipeType
 import mezz.jei.api.registration.IRecipeCatalystRegistration
+import mezz.jei.api.registration.IRecipeCategoryRegistration
+import mezz.jei.api.registration.IRecipeRegistration
 import mezz.jei.api.runtime.IJeiRuntime
 import net.minecraft.resources.ResourceLocation
 
@@ -14,12 +18,24 @@ import net.minecraft.resources.ResourceLocation
 @Suppress("unused")
 class JEICompat : IModPlugin {
 
+    private val cutting = CuttingProcessingCategory()
+
     override fun getPluginUid() = ResourceLocation(SliceAndDice.MOD_ID, "jei")
 
+    override fun registerCategories(registration: IRecipeCategoryRegistration) {
+        registration.addRecipeCategories(cutting)
+    }
+
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
-        FarmersDelightCompat.ifLoaded {
+        cutting.registerCatalysts(registration)
+
+        FarmersDelightCompat.Companion.ifLoaded {
             addCatalysts(registration)
         }
+    }
+
+    override fun registerRecipes(registration: IRecipeRegistration) {
+        cutting.registerRecipes(registration)
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {
@@ -28,7 +44,7 @@ class JEICompat : IModPlugin {
         }.findFirst().map { it.recipeType as RecipeType<ItemApplicationRecipe> }
 
         itemApplication.ifPresent { category ->
-            OverweightFarmingCompat.ifLoaded {
+            OverweightFarmingCompat.Companion.ifLoaded {
                 registerRecipes { recipes ->
                     jeiRuntime.recipeManager.addRecipes(category, recipes)
                 }

@@ -22,7 +22,7 @@ private fun CuttingBoardRecipe.toBasin(): CuttingProcessingRecipe {
     val builder = ProcessingRecipeBuilder(::CuttingProcessingRecipe, basinId)
     ingredients.forEach { builder.require(it) }
     rollableResults.forEach { builder.output(it.chance, it.stack) }
-    return builder.build().copy(tool = tool)
+    return builder.build().copy(tool = tool, converted = true)
 }
 
 class FarmersDelightCompat private constructor() : IRecipeInjector {
