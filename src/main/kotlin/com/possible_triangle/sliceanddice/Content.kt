@@ -11,26 +11,24 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerB
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
 import com.possible_triangle.sliceanddice.config.Configs
-import com.possible_triangle.sliceanddice.datagen.LangGen
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
-import com.simibubi.create.content.kinetics.BlockStressDefaults
+import com.simibubi.create.api.registry.CreateRegistries
+import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
 import com.simibubi.create.foundation.data.*
-import com.simibubi.create.foundation.item.ItemDescription
-import com.simibubi.create.foundation.item.KineticStats
-import com.simibubi.create.foundation.item.TooltipHelper
-import com.simibubi.create.foundation.item.TooltipModifier
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
+import com.tterrag.registrate.providers.ProviderType
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.entry.ItemEntry
 import com.tterrag.registrate.util.nullness.NonNullFunction
-import dev.latvian.mods.kubejs.item.ItemBuilder
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
+import net.createmod.ponder.foundation.PonderIndex
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
@@ -49,12 +47,11 @@ import net.minecraftforge.fluids.ForgeFlowingFluid
 import net.minecraftforge.fml.DistExecutor
 import net.minecraftforge.fml.DistExecutor.SafeCallable
 import net.minecraftforge.fml.config.ModConfig
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
-import java.util.function.BiFunction
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import java.util.function.Supplier
 
 object Content {
@@ -75,7 +72,7 @@ object Content {
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
         }
         .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .transform(BlockStressDefaults.setImpact(4.0))
+        .onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
         .item(::AssemblyOperatorBlockItem)
         .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
         .transform(ModelGen.customItemModel())
@@ -87,7 +84,7 @@ object Content {
         }.register()
 
     val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerTile))
-        .instance { BiFunction { manager, tile -> SlicerInstance(manager, tile) } }
+        .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
@@ -136,17 +133,33 @@ object Content {
     val FERTILIZER_BUCKET: ItemEntry<BucketItem>
     val FERTILIZER =
         REGISTRATE.fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
+            .lang("Liquid Fertilizer")
             .tag(FERTILIZERS)
             .source { ForgeFlowingFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .model(AssetLookup.existingItemModel())
+            .lang("Bucket of Liquid Fertilizer")
             .apply { FERTILIZER_BUCKET = register() }
             .parent
             .register()
 
+    val SLICER_INTERACTION_POINT =
+        REGISTRATE
+            .generic<ArmInteractionPointType, SlicerArmInteractionType>(
+                "slicer",
+                CreateRegistries.ARM_INTERACTION_POINT_TYPE
+            ) { SlicerArmInteractionType }
+            .register()
+
     fun register(modBus: IEventBus) {
         REGISTRATE.registerEventListeners(modBus)
+
+        REGISTRATE.addRawLang("sliceanddice.tooltip.rotationDirection", "Rotation Direction")
+        REGISTRATE.addRawLang(
+            "sliceanddice.gui.contraptions.wrong_direction",
+            "It appears that this %s is rotating in the _wrong direction_."
+        )
 
         LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
@@ -154,16 +167,22 @@ object Content {
         RECIPE_SERIALIZERS.register(modBus)
         RECIPE_TYPES.register(modBus)
 
-        modBus.addListener { e: GatherDataEvent -> e.generator.addProvider(true, LangGen(e.generator.packOutput)) }
-        modBus.addListener { _: FMLClientSetupEvent -> PonderScenes.register() }
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT) { SafeCallable { SlicerPartials.load() } }
+        DistExecutor.unsafeCallWhenOn(Dist.CLIENT) {
+            SafeCallable {
+                SlicerPartials.load()
+                PonderScenes.setup()
+            }
+        }
+
+        REGISTRATE.addDataGenerator(ProviderType.LANG) { provider ->
+            PonderScenes.setup()
+            PonderIndex.getLangAccess().provideLang(MOD_ID, provider::add)
+        }
 
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
         SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
-
-        ArmInteractionPointType.register(SlicerArmInteractionType)
     }
 
 }

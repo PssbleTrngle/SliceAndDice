@@ -14,8 +14,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.TooltipHelper
 import com.simibubi.create.foundation.recipe.RecipeApplier
 import com.simibubi.create.foundation.recipe.RecipeFinder
-import com.simibubi.create.foundation.utility.Lang
-import com.simibubi.create.foundation.utility.VecHelper
+import net.createmod.catnip.lang.FontHelper
+import net.createmod.catnip.lang.Lang
+import net.createmod.catnip.math.VecHelper
 import net.minecraft.ChatFormatting
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
@@ -83,7 +84,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         return !correctDirection || super.updateBasin()
     }
 
-    override fun addToTooltip(tooltip: MutableList<Component>?, isPlayerSneaking: Boolean): Boolean {
+    override fun addToTooltip(tooltip: MutableList<Component>, isPlayerSneaking: Boolean): Boolean {
         if (super.addToTooltip(tooltip, isPlayerSneaking)) return true
         if (!correctDirection && speed != 0F) {
             Lang.builder(SliceAndDice.MOD_ID)
@@ -93,9 +94,9 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             val hint = Lang.builder(SliceAndDice.MOD_ID)
                 .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
                 .component()
-            val cutString = TooltipHelper.cutTextComponent(hint, TooltipHelper.Palette.GRAY)
+            val cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY)
             for (i in cutString.indices) {
-                Lang.builder().add(cutString[i].copy()).forGoggles(tooltip)
+                Lang.builder(SliceAndDice.MOD_ID).add(cutString[i].copy()).forGoggles(tooltip)
             }
             return true
         }

@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-object SlicerArmInteractionType : ArmInteractionPointType(Content.modLoc("slicer")) {
+object SlicerArmInteractionType : ArmInteractionPointType() {
 
     override fun canCreatePoint(level: Level, pos: BlockPos, state: BlockState): Boolean {
         return state.block == Content.SLICER_BLOCK.get()

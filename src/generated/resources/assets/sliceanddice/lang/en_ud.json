@@ -3,6 +3,15 @@
   "block.sliceanddice.slicer": "ɹǝɔıןS",
   "block.sliceanddice.sprinkler": "ɹǝןʞuıɹdS",
   "block.sliceanddice.wet_air": "ɹıⱯ ʇǝM",
-  "fluid.sliceanddice.fertilizer": "ɹǝzıןıʇɹǝℲ",
-  "item.sliceanddice.fertilizer_bucket": "ʇǝʞɔnᗺ ɹǝzıןıʇɹǝℲ"
+  "fluid.sliceanddice.fertilizer": "ɹǝzıןıʇɹǝℲ pınbıꞀ",
+  "item.sliceanddice.fertilizer_bucket": "ɹǝzıןıʇɹǝℲ pınbıꞀ ɟo ʇǝʞɔnᗺ",
+  "sliceanddice.gui.contraptions.wrong_direction": "˙‾uoıʇɔǝɹıp buoɹʍ‾ ǝɥʇ uı buıʇɐʇoɹ sı %s sıɥʇ ʇɐɥʇ sɹɐǝddɐ ʇI",
+  "sliceanddice.ponder.slicer.header": "ɹǝɔıןs ǝɥʇ ɥʇıʍ buıʇʇnƆ",
+  "sliceanddice.ponder.slicer.text_1": "ןooʇ pıןɐʌ ɐ ɥʇıʍ ʇı ʞɔıןɔ-ʇɥbıᴚ",
+  "sliceanddice.ponder.slicer.text_2": "uısɐq ɐ uo ǝʇɐɹǝdo osןɐ uɐɔ ɹǝɔıןs ǝɥ⟘",
+  "sliceanddice.ponder.sprinkler/intro.header": "doʇ uo sǝןʞuıɹdS",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "ǝdıd ɐ ʍoןǝq ɹǝןʞuıɹds ɐ ǝɔɐןԀ",
+  "sliceanddice.ponder.sprinkler/uses.header": "sǝןʞuıɹds ɟo sǝdʎ⟘",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "ʎןʇuǝɹǝɟɟıp sǝıʇıʇuǝ ʇɔǝɟɟɐ osןɐ spınןɟ ʇuǝɹǝɟɟıᗡ",
+  "sliceanddice.tooltip.rotationDirection": "uoıʇɔǝɹıᗡ uoıʇɐʇoᴚ"
 }

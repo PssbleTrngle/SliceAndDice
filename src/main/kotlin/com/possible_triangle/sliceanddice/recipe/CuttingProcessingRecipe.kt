@@ -4,9 +4,9 @@ import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.simibubi.create.content.processing.basin.BasinRecipe
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams
-import com.simibubi.create.foundation.item.SmartInventory
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
@@ -23,5 +23,6 @@ data class CuttingProcessingRecipe(val params: ProcessingRecipeParams, val tool:
         override fun <T : RecipeType<*>?> getType() = Content.CUTTING_RECIPE_TYPE.get() as T
     }
 
-    override fun matches(inv: SmartInventory, world: Level) = true
+    override fun matches(inv: Container, world: Level) = true
+
 }

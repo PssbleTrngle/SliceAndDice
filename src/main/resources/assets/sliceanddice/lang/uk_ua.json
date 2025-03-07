@@ -1,0 +1,17 @@
+{
+  "block.sliceanddice.fertilizer": "Рідке добриво",
+  "block.sliceanddice.sprinkler": "Розбризкувач",
+  "block.sliceanddice.slicer": "Ломтерізка",
+  "block.sliceanddice.wet_air": "Вологе повітря",
+  "fluid.sliceanddice.fertilizer": "Рідке добриво",
+  "item.sliceanddice.fertilizer_bucket": "Відро рідкого добрива",
+  "sliceanddice.gui.contraptions.wrong_direction": "Здається, що ця %s обертається у _неправильному напрямку_.",
+  "sliceanddice.ponder.slicer.header": "Нарізання з ломтерізкою",
+  "sliceanddice.ponder.slicer.text_1": "ПКМ допустимим інструментом",
+  "sliceanddice.ponder.slicer.text_2": "Ломтерізка також може працювати на чаші",
+  "sliceanddice.ponder.sprinkler/intro.header": "Розбризкувач на верху",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Розмістіть розбризкувач нижче труби",
+  "sliceanddice.ponder.sprinkler/uses.header": "Tипи розбризкувачів",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Різні рідини впливають на сутностей по різному",
+  "sliceanddice.tooltip.rotationDirection": "Напрямок оберту"
+}

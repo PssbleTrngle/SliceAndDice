@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice
 
-import com.jozufozu.flywheel.core.PartialModel
+import dev.engine_room.flywheel.lib.model.baked.PartialModel
 
 object SlicerPartials {
 
@@ -8,6 +8,6 @@ object SlicerPartials {
         // Only here so the class gets loaded
     }
 
-    val SLICER_HEAD = PartialModel(Content.modLoc("block/slicer/head"))
+    val SLICER_HEAD = PartialModel.of(Content.modLoc("block/slicer/head"))
 
 }
