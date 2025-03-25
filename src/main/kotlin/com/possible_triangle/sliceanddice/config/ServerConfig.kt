@@ -13,5 +13,6 @@ class ServerConfig(builder: ForgeConfigSpec.Builder) {
 
     val SPRINKLER_CAPACITY = builder.defineInRange("sprinkler.fluid_capacity", 300, 10, 2048)
     val SPRINKLER_USAGE = builder.defineInRange("sprinkler.fluid_per_use", 100, 0, 2048)
+    val SPRINKLER_RANGE = builder.defineInRange("sprinkler.horizontal_range", 5, 1, 32)
 
 }

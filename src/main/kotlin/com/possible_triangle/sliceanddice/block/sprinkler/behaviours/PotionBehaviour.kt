@@ -17,15 +17,21 @@ object PotionBehaviour : SprinkleBehaviour {
 
         range.getEntities(LivingEntity::class.java).forEach { entity ->
             effects.forEach {
-                val shorter = MobEffectInstance(
-                    it.effect,
-                    max(20 * 2, it.duration / 50),
-                    it.amplifier,
-                    it.isAmbient,
-                    it.isVisible,
-                    it.showIcon()
-                )
-                entity.addEffect(shorter)
+
+                if (it.effect.isInstantenous) {
+                    it.effect.applyInstantenousEffect(null, null, entity, it.amplifier, 0.5)
+                } else {
+                    entity.addEffect(
+                        MobEffectInstance(
+                            it.effect,
+                            max(20 * 12, it.duration / 25),
+                            it.amplifier,
+                            it.isAmbient,
+                            it.isVisible,
+                            it.showIcon()
+                        )
+                    )
+                }
             }
         }
     }

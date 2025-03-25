@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
+import com.possible_triangle.sliceanddice.config.Configs
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
@@ -16,7 +17,7 @@ import kotlin.math.floor
 private data class RegisteredBehaviour(
     val predicate: (FluidStack) -> Boolean,
     val behaviour: SprinkleBehaviour,
-    val range: Vec3i,
+    val rangeBonus: Int,
 )
 
 
@@ -53,19 +54,19 @@ fun interface SprinkleBehaviour {
     companion object {
         private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
 
-        private val DEFAULT_RANGE = Vec3i(5, 7, 5)
-
-        fun register(tag: TagKey<Fluid>, behaviour: SprinkleBehaviour, range: Vec3i = DEFAULT_RANGE) {
-            register({ it.fluid.`is`(tag) }, behaviour, range)
+        fun register(tag: TagKey<Fluid>, behaviour: SprinkleBehaviour, rangeBonus: Int = 0) {
+            register({ it.fluid.`is`(tag) }, behaviour, rangeBonus)
         }
 
-        fun register(predicate: (FluidStack) -> Boolean, behaviour: SprinkleBehaviour, range: Vec3i = DEFAULT_RANGE) {
-            BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, range))
+        fun register(predicate: (FluidStack) -> Boolean, behaviour: SprinkleBehaviour, rangeBonus: Int = 0) {
+            BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, rangeBonus))
         }
 
         fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: RandomSource) {
             BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
-                val range = Range(it.range, pos, world)
+                val radius = Configs.SERVER.SPRINKLER_RANGE.get()
+                val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
+                val range = Range(area, pos, world)
                 it.behaviour.act(range, world, fluid, random)
             }
         }
