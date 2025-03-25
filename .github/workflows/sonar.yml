@@ -3,6 +3,10 @@ on:
   push:
     branches: ["[0-9]+.[0-9]+.x"]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Analyze
