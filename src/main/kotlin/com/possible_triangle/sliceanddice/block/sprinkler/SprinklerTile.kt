@@ -27,11 +27,18 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     private var processingTicks = -1
 
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
-        behaviours.add(SmartFluidTankBehaviour.single(this, Configs.SERVER.SPRINKLER_CAPACITY.get()).allowInsertion()
-            .also { tank = it })
+        behaviours.add(
+            SmartFluidTankBehaviour
+                .single(this, Configs.SERVER.SPRINKLER_CAPACITY.get())
+                .allowInsertion()
+                .whenFluidUpdates(::notifyUpdate)
+                .also { tank = it }
+        )
     }
 
     override fun tick() {
+        super.tick()
+
         val world = level ?: return
 
         val below = world.getBlockState(blockPos.below())
@@ -44,8 +51,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
             val fluid = it.drain(used, IFluidHandler.FluidAction.SIMULATE)
             if (fluid.amount >= used) {
                 it.drain(used, IFluidHandler.FluidAction.EXECUTE)
-                processingTicks = 20 * 10
-                notifyUpdate()
+                processingTicks = 20
             }
         }
 
@@ -63,7 +69,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
     }
 
     private fun spawnProcessingParticles(fluid: FluidStack) {
-        if(fluid.isEmpty) return
+        if (fluid.isEmpty) return
         val world = level ?: return
 
         val particle = FluidFX.getFluidParticle(fluid)
