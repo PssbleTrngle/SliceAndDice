@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, IBE<SprinklerTile> {
+class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, IBE<SprinklerBlockEntity> {
 
-    override fun getBlockEntityClass() = SprinklerTile::class.java
+    override fun getBlockEntityClass() = SprinklerBlockEntity::class.java
 
-    override fun getBlockEntityType() = Content.SPRINKLER_TILE.get()
+    override fun getBlockEntityType() = Content.SPRINKLER_BLOCK_ENTITY.get()
 
     companion object {
         val SHAPE: VoxelShape = box(2.0, 10.0, 2.0, 14.0, 16.0, 14.0)

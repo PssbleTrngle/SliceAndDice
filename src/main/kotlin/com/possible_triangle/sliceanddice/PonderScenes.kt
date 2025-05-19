@@ -1,9 +1,8 @@
 package com.possible_triangle.sliceanddice
 
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.simibubi.create.AllFluids
-import com.simibubi.create.Create.RANDOM
 import com.simibubi.create.content.fluids.FluidFX
 import com.simibubi.create.content.fluids.potion.PotionFluid
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity
@@ -17,22 +16,26 @@ import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper
 import net.createmod.ponder.foundation.PonderIndex
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.alchemy.PotionUtils
+import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.material.Fluids
-import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction
+import net.neoforged.neoforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.capability.IFluidHandler
+import java.util.*
 
 object PonderScenes : PonderPlugin {
+
+    private val RANDOM = Random()
 
     fun setup() {
         PonderIndex.addPlugin(this)
@@ -41,7 +44,7 @@ object PonderScenes : PonderPlugin {
     override fun getModId() = SliceAndDice.MOD_ID
 
     override fun registerScenes(byId: PonderSceneRegistrationHelper<ResourceLocation>) {
-        val helper = byId.withKeyFunction<ItemProviderEntry<*>> { it.id }
+        val helper = byId.withKeyFunction<ItemProviderEntry<*, *>> { it.id }
 
         helper.forComponents(Content.SLICER_BLOCK).addStoryBoard("slicer") { builder, util ->
             val scene = CreateSceneBuilder(builder)
@@ -75,10 +78,10 @@ object PonderScenes : PonderPlugin {
 
             val knife = ItemStack(ModCompat.exampleTool)
             scene.overlay().showControls(VecHelper.getCenterOf(beltSlicer.above()), Pointing.DOWN, 50).withItem(knife)
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 it.heldItem = knife
             }
-            scene.world().modifyBlockEntity(basinSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(basinSlicer, SlicerBlockEntity::class.java) {
                 it.heldItem = knife
             }
 
@@ -97,7 +100,7 @@ object PonderScenes : PonderPlugin {
             scene.world().removeItemsFromBelt(beltOutputPos)
             val slicesInWorld = scene.world().createItemOnBelt(beltOutputPos, Direction.UP, slices)
 
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 it.cuttingBehaviour.makePressingParticleEffect(
                     VecHelper.getCenterOf(beltOutputPos).add(0.0, 0.6, 0.0), slices
                 )
@@ -105,7 +108,7 @@ object PonderScenes : PonderPlugin {
 
             scene.idle(5)
             scene.world().stallBeltItem(slicesInWorld, false)
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 //it.cuttingBehaviour.running = false
             }
 
@@ -125,7 +128,7 @@ object PonderScenes : PonderPlugin {
             val basinOutputPos = basin.north().below()
             for (i in 0..3) {
                 scene.idleSeconds(2)
-                scene.world().modifyBlockEntity(basinSlicer, SlicerTile::class.java) {
+                scene.world().modifyBlockEntity(basinSlicer, SlicerBlockEntity::class.java) {
                     it.cuttingBehaviour.start(PressingBehaviour.Mode.BASIN)
                 }
                 scene.idleSeconds(1)
@@ -260,11 +263,11 @@ object PonderScenes : PonderPlugin {
                 scene.addKeyframe()
 
                 scene.overlay().showControls(tank.center, Pointing.LEFT, 10).withItem(ItemStack(Items.POTION).also {
-                    PotionUtils.setPotion(it, Potions.INVISIBILITY)
+                    it.set(DataComponents.POTION_CONTENTS, PotionContents(Potions.INVISIBILITY))
                 })
 
-                FluidStack(AllFluids.POTION.get(), 100000, CompoundTag()).also { fluid ->
-                    PotionFluid.addPotionToFluidStack(fluid, Potions.INVISIBILITY)
+                FluidStack(AllFluids.POTION.get(), 100000).also { fluid ->
+                    PotionFluid.addPotionToFluidStack(fluid, PotionContents(Potions.INVISIBILITY))
 
                     scene.fillTank(tankController, fluid)
                     scene.world().propagatePipeChange(pump)
@@ -278,21 +281,16 @@ object PonderScenes : PonderPlugin {
                     it.isInvisible = true
                 }
 
-                val color = MobEffects.INVISIBILITY.color
-                val r: Double = (color shr 16 and 255).toDouble() / 255.0
-                val g: Double = (color shr 8 and 255).toDouble() / 255.0
-                val b: Double = (color shr 0 and 255).toDouble() / 255.0
+                val color = MobEffects.INVISIBILITY.value().color
                 scene.effects().emitParticles(
                     cowPos.add(0.0, 1.0, 0.0),
                     { w, x, y, z ->
                         w.addParticle(
-                            ParticleTypes.ENTITY_EFFECT,
+                            ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, color),
                             x + RANDOM.nextDouble(-0.4, 0.4),
                             y + RANDOM.nextDouble(-0.4, 0.4),
                             z + RANDOM.nextDouble(-0.4, 0.4),
-                            r,
-                            g,
-                            b
+                            0.0, 0.0, 0.0
                         )
                     },
                     1F, 240
@@ -324,10 +322,10 @@ object PonderScenes : PonderPlugin {
         world().modifyBlockEntity(at, FluidTankBlockEntity::class.java) { be ->
             be.tankInventory.apply {
                 fluid.amount.takeIf { it > 0 }?.let {
-                    drain(it, FluidAction.EXECUTE)
+                    drain(it, IFluidHandler.FluidAction.EXECUTE)
                     idle(10)
                 }
-                fill(fluid, FluidAction.EXECUTE)
+                fill(fluid, IFluidHandler.FluidAction.EXECUTE)
             }
         }
     }

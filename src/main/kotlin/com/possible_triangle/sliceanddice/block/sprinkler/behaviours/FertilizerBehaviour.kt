@@ -5,7 +5,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.BonemealableBlock
-import net.minecraftforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.FluidStack
 
 object FertilizerBehaviour : SprinkleBehaviour {
 
@@ -16,7 +16,7 @@ object FertilizerBehaviour : SprinkleBehaviour {
             val block = state.block
 
             if (block !is BonemealableBlock) return@forEachBlock
-            if (!block.isValidBonemealTarget(world, pos, state, false)) return@forEachBlock
+            if (!block.isValidBonemealTarget(world, pos, state)) return@forEachBlock
             if (world.gameTime % 20 != 0L || random.nextInt(30) < 26) return@forEachBlock
             if (!block.isBonemealSuccess(world, random, pos, state)) return@forEachBlock
 

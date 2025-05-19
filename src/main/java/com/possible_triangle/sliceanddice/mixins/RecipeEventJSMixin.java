@@ -3,14 +3,13 @@ package com.possible_triangle.sliceanddice.mixins;
 import com.google.gson.JsonObject;
 import com.possible_triangle.sliceanddice.RecipeInjection;
 import dev.latvian.mods.kubejs.recipe.RecipesEventJS;
+import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Map;
 
 @Mixin(value = RecipesEventJS.class, remap = false)
 public class RecipeEventJSMixin {

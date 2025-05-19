@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.mixins;
 
 import com.google.gson.JsonElement;
 import com.possible_triangle.sliceanddice.RecipeInjection;
+import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -13,8 +14,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Map;
 
 @Mixin(RecipeManager.class)
 public abstract class RecipeManagerMixin {

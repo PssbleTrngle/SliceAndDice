@@ -16,12 +16,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
 
-class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerTile>(context) {
+class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerBlockEntity>(context) {
 
-    override fun shouldRenderOffScreen(te: SlicerTile) = true
+    override fun shouldRenderOffScreen(te: SlicerBlockEntity) = true
 
     private fun renderTool(
-        tile: SlicerTile, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
+        tile: SlicerBlockEntity, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
         light: Int, overlay: Int,
     ) {
         if (tile.heldItem.isEmpty) return
@@ -54,7 +54,7 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
     }
 
     override fun renderSafe(
-        te: SlicerTile,
+        te: SlicerBlockEntity,
         partialTicks: Float,
         ms: PoseStack,
         buffer: MultiBufferSource,

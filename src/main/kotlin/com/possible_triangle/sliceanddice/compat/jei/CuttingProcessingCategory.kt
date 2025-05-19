@@ -16,14 +16,15 @@ import mezz.jei.api.recipe.RecipeType
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.RecipeHolder
 import java.util.function.Supplier
 
+@Suppress("UNCHECKED_CAST")
 class CuttingProcessingCategory() :
     CreateRecipeCategory<CuttingProcessingRecipe>(
         Info(
-            RecipeType(ResourceLocation(SliceAndDice.MOD_ID, "slicer"), CuttingProcessingRecipe::class.java),
+            RecipeType.createRecipeHolderType(Content.modLoc("slicer")),
             Component.translatable("${SliceAndDice.MOD_ID}.recipe.slicer"),
             EmptyBackground(177, 85),
             ItemIcon(SLICER),
@@ -37,7 +38,7 @@ class CuttingProcessingCategory() :
     companion object {
         private val SLICER = Supplier { ItemStack(Content.SLICER_BLOCK) }
 
-        private fun loadRecipes(): List<CuttingProcessingRecipe> {
+        private fun loadRecipes(): List<RecipeHolder<CuttingProcessingRecipe>> {
             val manager = Minecraft.getInstance().connection?.recipeManager ?: return emptyList()
             val recipes = manager.getAllRecipesFor(Content.CUTTING_RECIPE_TYPE.get())
 
@@ -45,7 +46,7 @@ class CuttingProcessingCategory() :
                 return recipes
             }
 
-            return recipes.filterNot { it.converted }
+            return recipes.filterNot { it.value().converted }
         }
     }
 

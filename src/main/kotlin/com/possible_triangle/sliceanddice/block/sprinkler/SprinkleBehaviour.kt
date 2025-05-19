@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
-import net.minecraftforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.ceil
 import kotlin.math.floor
 

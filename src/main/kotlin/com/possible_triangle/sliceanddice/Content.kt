@@ -1,10 +1,11 @@
 package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
+import com.possible_triangle.sliceanddice.SliceAndDice.REGISTRATE
 import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerTile
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import com.possible_triangle.sliceanddice.block.sprinkler.WetAir
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
@@ -20,8 +21,8 @@ import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
 import com.simibubi.create.foundation.data.*
+import com.tterrag.registrate.AbstractRegistrate
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.providers.ProviderType
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
@@ -30,6 +31,7 @@ import com.tterrag.registrate.util.nullness.NonNullFunction
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.createmod.ponder.foundation.PonderIndex
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder
@@ -40,30 +42,18 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.data.event.GatherDataEvent
-import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.fluids.ForgeFlowingFluid
-import net.minecraftforge.fml.DistExecutor
-import net.minecraftforge.fml.DistExecutor.SafeCallable
-import net.minecraftforge.fml.config.ModConfig
-import net.minecraftforge.registries.DeferredRegister
-import net.minecraftforge.registries.ForgeRegistries
-import net.minecraftforge.registries.RegistryObject
-import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
+import net.neoforged.bus.api.IEventBus
+import net.neoforged.fml.ModContainer
+import net.neoforged.fml.config.ModConfig
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
+import net.neoforged.neoforge.fluids.BaseFlowingFluid
 import java.util.function.Supplier
 
 object Content {
 
     fun modLoc(path: String): ResourceLocation {
-        return ResourceLocation(MOD_ID, path)
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
     }
-
-    private val REGISTRATE = CreateRegistrate.create(MOD_ID)
-
-    val RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID)
-    val RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, MOD_ID)
 
     val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
 
@@ -83,22 +73,25 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerTile))
+    val SLICER_BLOCK_ENTITY = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
         .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 
-    private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
-        val type = object : RecipeType<T> {
-            override fun toString() = id.toString()
+    private fun <T : Recipe<*>> AbstractRegistrate<*>.recipeType(name: String) =
+        generic(name, Registries.RECIPE_TYPE) {
+            object : RecipeType<T> {
+                override fun toString() = ResourceLocation.fromNamespaceAndPath(modid, name).toString()
+            }
         }
-        return RECIPE_TYPES.register(id.path) { type }
-    }
 
-    val CUTTING_RECIPE_TYPE = createRecipeType<CuttingProcessingRecipe>(CuttingProcessingRecipe.id)
+    val CUTTING_RECIPE_TYPE = REGISTRATE
+        .recipeType<CuttingProcessingRecipe>("cutting")
+        .register()
 
-    val CUTTING_SERIALIZER = RECIPE_SERIALIZERS.register(CuttingProcessingRecipe.id.path) {
-        CuttingProcessingRecipe.Serializer
-    }
+    val CUTTING_SERIALIZER = REGISTRATE.`object`("cutting")
+        .generic(Registries.RECIPE_SERIALIZER) { CuttingProcessingRecipe.Serializer }
+        .register()
+
 
     val WET_AIR = REGISTRATE.block<WetAir>("wet_air", ::WetAir).initialProperties { Blocks.CAVE_AIR }
         .properties { it.randomTicks() }.blockstate { c, p ->
@@ -114,13 +107,13 @@ object Content {
         .transform(ModelGen.customItemModel("_"))
         .recipe { c, p ->
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry, 3).pattern("SPS").pattern("SBS")
-                .define('S', AllTags.forgeItemTag("plates/copper")).define('B', Blocks.IRON_BARS)
+                .define('S', AllTags.commonTag(BuiltInRegistries.ITEM, "plates/copper")).define('B', Blocks.IRON_BARS)
                 .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
         }
         .register()
 
-    val SPRINKLER_TILE =
-        REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerTile)).validBlock(SPRINKLER_BLOCK).register()
+    val SPRINKLER_BLOCK_ENTITY =
+        REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity)).validBlock(SPRINKLER_BLOCK).register()
 
     private val WET_FLUIDS = TagKey.create(Registries.FLUID, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registries.FLUID, modLoc("burning"))
@@ -133,7 +126,7 @@ object Content {
         REGISTRATE.fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
             .lang("Liquid Fertilizer")
             .tag(FERTILIZERS)
-            .source { ForgeFlowingFluid.Source(it) }
+            .source { BaseFlowingFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .model(AssetLookup.existingItemModel())
@@ -150,9 +143,7 @@ object Content {
             ) { SlicerArmInteractionType }
             .register()
 
-    fun register(modBus: IEventBus) {
-        REGISTRATE.registerEventListeners(modBus)
-
+    fun register(container: ModContainer, modBus: IEventBus) {
         REGISTRATE.addRawLang("sliceanddice.tooltip.rotationDirection", "Rotation Direction")
         REGISTRATE.addRawLang(
             "sliceanddice.gui.contraptions.wrong_direction",
@@ -162,18 +153,8 @@ object Content {
         REGISTRATE.addRawLang("$MOD_ID.recipe.assembly.slicer", "Cut with Slicer")
         REGISTRATE.addRawLang("$MOD_ID.recipe.slicer", "Slicer")
 
-        LOADING_CONTEXT.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
-        LOADING_CONTEXT.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
-
-        RECIPE_SERIALIZERS.register(modBus)
-        RECIPE_TYPES.register(modBus)
-
-        DistExecutor.unsafeCallWhenOn(Dist.CLIENT) {
-            SafeCallable {
-                SlicerPartials.load()
-                PonderScenes.setup()
-            }
-        }
+        container.registerConfig(ModConfig.Type.COMMON, Configs.SERVER_SPEC)
+        container.registerConfig(ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
 
         REGISTRATE.addDataGenerator(ProviderType.LANG) { provider ->
             PonderScenes.setup()
@@ -184,6 +165,16 @@ object Content {
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
         SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
+
+        modBus.addListener { event: RegisterCapabilitiesEvent ->
+            SprinklerBlockEntity.registerCapabilities(event)
+            SlicerBlockEntity.registerCapabilities(event)
+        }
+    }
+
+    fun clientInit() {
+        SlicerPartials.load()
+        PonderScenes.setup()
     }
 
 }

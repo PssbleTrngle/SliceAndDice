@@ -1,5 +1,3 @@
-import net.minecraftforge.gradle.common.util.MinecraftExtension
-
 val mod_id: String by extra
 val mod_version: String by extra
 val mc_version: String by extra
@@ -10,33 +8,24 @@ val flywheel_version: String by extra
 val jei_version: String by extra
 val kubejs_version: String by extra
 val farmers_delight_version: String by extra
-val mixin_extras_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version("0.1.4")
+    id("com.possible-triangle.gradle") version ("0.2.8")
 }
 
 withKotlin()
 
-forge {
+neoforge {
     enableMixins()
     dataGen()
 }
 
-configure<MinecraftExtension> {
-    runs {
-        forEach {
-            it.property("production", "true")
-        }
-    }
-}
-
 configure<BasePluginExtension> {
-    archivesName.set("$mod_id-forge-${mod_version}")
+    archivesName.set("$mod_id-neoforge-${mod_version}")
 }
 
 repositories {
-    curseMaven()
+    modrinthMaven()
 
     maven {
         url = uri("https://maven.saps.dev/minecraft")
@@ -51,7 +40,7 @@ repositories {
         }
     }
     maven {
-        url = uri("https://maven.tterrag.com/")
+        url = uri("https://mvn.devos.one/snapshots")
         content {
             includeGroup("com.tterrag.registrate")
         }
@@ -82,24 +71,29 @@ repositories {
             includeGroup("dev.latvian.mods")
         }
     }
+    maven {
+        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+        content {
+            includeGroup("fuzs.forgeconfigapiport")
+        }
+    }
 }
 
 dependencies {
     modCompileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    modCompileOnly("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    modRuntimeOnly("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    modCompileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    modRuntimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
 
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     modImplementation("com.simibubi.create:create-${mc_version}:${create_version}:slim") { isTransitive = false }
-    modImplementation("net.createmod.ponder:Ponder-Forge-${mc_version}:${ponder_version}")
-    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-api-${mc_version}:${flywheel_version}")
-    modRuntimeOnly("dev.engine-room.flywheel:flywheel-forge-${mc_version}:${flywheel_version}")
-    implementation("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")
+    modImplementation("net.createmod.ponder:Ponder-NeoForge-${mc_version}:${ponder_version}")
+    modCompileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${mc_version}:${flywheel_version}")
+    modRuntimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
 
-    modImplementation("curse.maven:farmers-delight-398521:${farmers_delight_version}")
+    modImplementation("maven.modrinth:farmers-delight:${farmers_delight_version}")
     //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
 
-    compileOnly("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    compileOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     if (!env.isCI) {
         //modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")
@@ -139,3 +133,4 @@ uploadToModrinth {
 }
 
 enableSonarQube()
+enableSpotless()

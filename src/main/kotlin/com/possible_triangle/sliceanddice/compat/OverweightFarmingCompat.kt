@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.compat.ModCompat.OVERWEIGHT_FARMING
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe
@@ -11,7 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraftforge.registries.ForgeRegistries
 import java.util.function.BiConsumer
 import java.util.function.Supplier
 
@@ -35,12 +34,9 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
     fun registerRecipes(register: (List<ManualApplicationRecipe>) -> Unit) {
         val axe = Ingredient.of(Items.IRON_AXE)
         val recipes = MiscEvents.PEELABLES.get().map { (from, to) ->
-            val fromId = ForgeRegistries.BLOCKS.getKey(from)!!
-            val toId = ForgeRegistries.BLOCKS.getKey(to)!!
-            val id = ResourceLocation(
-                SliceAndDice.MOD_ID,
-                "$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}"
-            )
+            val fromId = from.builtInRegistryHolder().key().location()
+            val toId = to.builtInRegistryHolder().key().location()
+            val id = Content.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
             ProcessingRecipeBuilder(::ManualApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)
@@ -58,12 +54,9 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
         MiscEvents.WAXABLES.get().forEach { (from, to) ->
-            val fromId = ForgeRegistries.BLOCKS.getKey(from)!!
-            val toId = ForgeRegistries.BLOCKS.getKey(to)!!
-            val id = ResourceLocation(
-                SliceAndDice.MOD_ID,
-                "$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}"
-            )
+            val fromId = from.builtInRegistryHolder().key().location()
+            val toId = to.builtInRegistryHolder().key().location()
+            val id = Content.modLoc("$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}")
             val recipe = ProcessingRecipeBuilder(::DeployerApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)

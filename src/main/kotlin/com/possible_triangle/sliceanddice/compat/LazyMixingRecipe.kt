@@ -7,7 +7,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.foundation.fluid.FluidIngredient
 import net.minecraft.core.NonNullList
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraftforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.FluidStack
 
 private fun <T> Collection<T>.toNonnullList() = let {
     NonNullList.createWithCapacity<T>(it.size).apply {

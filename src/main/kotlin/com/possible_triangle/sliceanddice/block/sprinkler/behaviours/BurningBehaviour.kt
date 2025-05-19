@@ -4,7 +4,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.LivingEntity
-import net.minecraftforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.FluidStack
 
 object BurningBehaviour : SprinkleBehaviour {
 

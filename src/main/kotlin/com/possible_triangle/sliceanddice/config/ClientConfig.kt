@@ -1,9 +1,9 @@
 package com.possible_triangle.sliceanddice.config
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import java.util.*
 
-class ClientConfig(builder: ForgeConfigSpec.Builder) {
+class ClientConfig(builder: ModConfigSpec.Builder) {
 
     companion object {
         private val calendar = Calendar.getInstance()

@@ -21,35 +21,41 @@ import net.createmod.catnip.math.VecHelper
 import net.minecraft.ChatFormatting
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.RegistryOps
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.Container
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeHolder
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.items.ItemHandlerHelper
+import net.neoforged.neoforge.capabilities.Capabilities
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import kotlin.streams.asSequence
 
 
-class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
+class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
 
     companion object {
         private val inWorldCacheKey = Any()
         private val basinCacheKey = Any()
+
+        fun registerCapabilities(event: RegisterCapabilitiesEvent) {
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, Content.SLICER_BLOCK_ENTITY.get(), { it, _ ->
+                it.inventory
+            })
+        }
     }
 
     override fun getRecipeCacheKey() = basinCacheKey
@@ -60,6 +66,8 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     private lateinit var behaviour: PressingBehaviour
     val cuttingBehaviour get() = behaviour
 
+    private val inventory = SlicerItemHandler(this)
+
     private var _heldItem = ItemStack.EMPTY
     var heldItem: ItemStack
         get() = _heldItem
@@ -68,19 +76,6 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             basinChecker.scheduleUpdate()
             sendData()
         }
-
-    private var invHandler: LazyOptional<SlicerItemHandler>? = null
-
-    override fun initialize() {
-        super.initialize()
-        initHandler()
-    }
-
-    private fun initHandler() {
-        if (invHandler == null) {
-            invHandler = LazyOptional.of { SlicerItemHandler(this) }
-        }
-    }
 
     override fun updateBasin(): Boolean {
         return !correctDirection || super.updateBasin()
@@ -123,22 +118,24 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         super.applyBasinRecipe()
         val world = level ?: return
         if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
-            if (_heldItem.hurt(1, level!!.random, null)) {
+            _heldItem.hurtAndBreak(1, world, null) {
                 _heldItem = ItemStack.EMPTY
                 sendData()
             }
         }
     }
 
-    override fun <C : Container> matchStaticFilters(recipe: Recipe<C>): Boolean {
+    override fun matchStaticFilters(holder: RecipeHolder<out Recipe<*>>): Boolean {
+        val recipe = holder.value()
         if (recipe !is CuttingProcessingRecipe) return false
         return recipe.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
     }
 
-    override fun read(compound: CompoundTag, clientPacket: Boolean) {
-        super.read(compound, clientPacket)
+    override fun read(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
+        super.read(compound, registries, clientPacket)
+        val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
         _heldItem = compound.get("HeldItem").let {
-            val decoded = ItemStack.CODEC.parse(NbtOps.INSTANCE, it).result()
+            val decoded = ItemStack.CODEC.parse(ops, it).result()
             decoded.orElse(ItemStack.EMPTY)
         }
 
@@ -148,10 +145,11 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         }
     }
 
-    override fun write(compound: CompoundTag, clientPacket: Boolean) {
-        super.write(compound, clientPacket)
+    override fun write(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
+        super.write(compound, registries, clientPacket)
+        val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
         if (!_heldItem.isEmpty) {
-            val encoded = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, _heldItem).result()
+            val encoded = ItemStack.CODEC.encodeStart(ops, _heldItem).result()
             encoded.ifPresent { compound.put("HeldItem", it) }
         }
     }
@@ -188,15 +186,17 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
             stack,
             CuttingProcessingRecipe.getType(),
             CuttingProcessingRecipe::class.java
-        ).asSequence().filter {
-            it.tool?.test(_heldItem) == true
-        }.firstOrNull()
+        ).asSequence()
+            .map { it.value() }
+            .filter { it.tool?.test(_heldItem) == true }
+            .firstOrNull()
 
         if (assemblyRecipe != null) return assemblyRecipe
 
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
-            if (it !is CuttingProcessingRecipe) false
-            else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
+            val recipe = it.value()
+            if (recipe !is CuttingProcessingRecipe) false
+            else recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.tool != null
         } as List<CuttingProcessingRecipe>
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(_heldItem) }
     }
@@ -239,7 +239,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
 
         addToParticleItems(input.stack)
 
-        val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
+        val toProcess = if (canProcessInBulk()) input.stack else input.stack.copyWithCount(1)
         val outputs = RecipeApplier.applyRecipeOn(level, toProcess, recipe)
         outputList?.addAll(outputs)
         return true
@@ -311,16 +311,7 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         }
     }
 
-    override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
-        return if (isItemHandlerCap(cap)) {
-            if (this.invHandler == null) this.initHandler()
-            this.invHandler!!.cast()
-        } else {
-            super.getCapability(cap, side)
-        }
-    }
-
-    fun playSound(world: Level, pos: BlockPos, muffeled: Boolean) {
+    fun playSound(world: Level, pos: BlockPos) {
         if (Configs.CLIENT.spawnBloodParticles && world.random.nextInt(5) == 0) {
             world.playSound(null, pos, SoundEvents.GOAT_DEATH, SoundSource.BLOCKS, 0.5F, 1F)
         }

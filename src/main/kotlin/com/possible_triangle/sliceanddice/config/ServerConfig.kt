@@ -1,8 +1,8 @@
 package com.possible_triangle.sliceanddice.config
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 
-class ServerConfig(builder: ForgeConfigSpec.Builder) {
+class ServerConfig(builder: ModConfigSpec.Builder) {
 
     val CONSUME_DURABILTY = builder.define("slicer.consume_tool_durability", true)
     val IGNORE_ROTATION = builder.define("slicer.ignore_rotation", false)

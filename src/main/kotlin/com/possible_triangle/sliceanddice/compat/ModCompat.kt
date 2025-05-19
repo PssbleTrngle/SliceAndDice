@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.ItemLike
-import net.minecraftforge.fml.ModList
+import net.neoforged.fml.ModList
 import vectorwing.farmersdelight.common.registry.ModItems
 import vectorwing.farmersdelight.common.registry.ModSounds
 import java.util.function.BiConsumer
