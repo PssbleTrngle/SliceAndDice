@@ -13,7 +13,7 @@ val farmers_delight_version: String by extra
 val mixin_extras_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version("0.1.4")
+    id("com.possible-triangle.gradle") version("0.2.8")
 }
 
 withKotlin()
@@ -77,7 +77,7 @@ repositories {
         }
     }
     maven {
-        url = uri("https://maven.saps.dev/minecraft")
+        url = uri("https://maven.latvian.dev/releases")
         content {
             includeGroup("dev.latvian.mods")
         }
