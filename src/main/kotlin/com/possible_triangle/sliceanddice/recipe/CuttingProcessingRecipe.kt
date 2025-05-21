@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.jei.CuttingProcessingSubCategory
-import com.simibubi.create.AllRecipeTypes
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory
 import com.simibubi.create.content.processing.basin.BasinRecipe
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams
@@ -58,7 +57,7 @@ data class CuttingProcessingRecipe(
 
         private val CODEC: MapCodec<CuttingProcessingRecipe> = RecordCodecBuilder.mapCodec { builder ->
             builder.group(
-                codec<CuttingProcessingRecipe>(CuttingProcessingRecipe as AllRecipeTypes).forGetter { it },
+                codec<CuttingProcessingRecipe>(CuttingProcessingRecipe).forGetter { it },
                 Ingredient.CODEC.fieldOf("tool").forGetter { it.tool }
             ).apply(builder, { recipe, tool -> recipe.copy(tool = tool) })
         }

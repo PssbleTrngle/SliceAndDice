@@ -10,7 +10,7 @@
     "LevelMixin",
     "PressingBehaviourMixin",
     "ProcessingRecipeSerializerMixin",
-    "RecipeEventJSMixin",
+    "RecipesKubeEventMixin",
     "RecipeManagerAccessor",
     "RecipeManagerMixin"
   ],

@@ -10,7 +10,7 @@ val kubejs_version: String by extra
 val farmers_delight_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version ("0.2.8")
+    id("com.possible-triangle.gradle") version ("0.2.9")
 }
 
 withKotlin()
@@ -26,6 +26,7 @@ configure<BasePluginExtension> {
 
 repositories {
     modrinthMaven()
+    mavenLocal()
 
     maven {
         url = uri("https://maven.saps.dev/minecraft")
