@@ -127,6 +127,7 @@ uploadToCurseforge {
     dependencies {
         required("create")
         optional("farmers-delight")
+        optional("create-enchantment-industry")
         optional("overweight-farming")
     }
 }
@@ -135,6 +136,7 @@ uploadToModrinth {
     dependencies {
         required("LNytGWDc")
         optional("R2OftAxM")
+        optional("JWGBpFUP")
     }
 
     syncBodyFromReadme()
