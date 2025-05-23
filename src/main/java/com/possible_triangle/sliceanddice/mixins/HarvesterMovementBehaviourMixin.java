@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.mixins;
 
 import com.google.common.base.Suppliers;
 import com.possible_triangle.sliceanddice.compat.ModCompat;
+import com.possible_triangle.sliceanddice.config.Configs;
 import com.simibubi.create.content.contraptions.actors.harvester.HarvesterMovementBehaviour;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +24,11 @@ public class HarvesterMovementBehaviourMixin {
             at = @At(value = "STORE", ordinal = 0)
     )
     private ItemStack overwriteDefaultItem(ItemStack stack) {
-        return sliceanddice$TOOL.get();
+        if(Configs.INSTANCE.getSERVER().getHARVESTER_USES_KNIFE().get()) {
+            return sliceanddice$TOOL.get();
+        } else {
+            return stack;
+        }
     }
 
 }
