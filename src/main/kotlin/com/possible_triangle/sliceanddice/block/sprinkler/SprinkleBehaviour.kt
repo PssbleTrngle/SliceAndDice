@@ -10,7 +10,11 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.Shapes.DoubleLineConsumer
 import net.minecraftforge.fluids.FluidStack
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -44,6 +48,33 @@ fun interface SprinkleBehaviour {
                 floor(aabb.maxX).toInt(), floor(aabb.maxY).toInt(), floor(aabb.maxZ).toInt(),
             )) {
                 consumer(block)
+            }
+        }
+
+        fun forEachGroundBlock(consumer: (BlockPos) -> Unit) {
+            val minX = ceil(aabb.minX).toInt()
+            val maxX = floor(aabb.maxX).toInt()
+            val minZ = ceil(aabb.minZ).toInt()
+            val maxZ = floor(aabb.maxZ).toInt()
+            val minY = ceil(aabb.minY).toInt()
+            val maxY = floor(aabb.maxY).toInt()
+
+            for (x in minX..maxX) {
+                horiz@
+                for (z in minZ..maxZ) {
+                    var y = maxY + 1
+                    vert@
+                    while (y > minY) {
+                        y--
+                        val pos = BlockPos(x, y, z)
+                        val state = world.getBlockState(pos)
+                        val shape = state.getCollisionShape(world, pos, CollisionContext.empty())
+
+                        if (y == minY) { consumer(pos); continue@horiz }
+                        if (state.isAir || shape.isEmpty) { continue@vert }
+                        if (shape.equals(Shapes.block())) { consumer(pos); continue@horiz }
+                    }
+                }
             }
         }
 

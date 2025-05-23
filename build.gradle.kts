@@ -10,6 +10,7 @@ val flywheel_version: String by extra
 val jei_version: String by extra
 val kubejs_version: String by extra
 val farmers_delight_version: String by extra
+val create_enchantment_industry_version: String by extra
 val mixin_extras_version: String by extra
 
 plugins {
@@ -97,6 +98,7 @@ dependencies {
     implementation("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")
 
     modImplementation("curse.maven:farmers-delight-398521:${farmers_delight_version}")
+    modImplementation("curse.maven:create-enchantment-industry-688768:${create_enchantment_industry_version}")
     //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
 
     compileOnly("dev.latvian.mods:kubejs-forge:${kubejs_version}")
