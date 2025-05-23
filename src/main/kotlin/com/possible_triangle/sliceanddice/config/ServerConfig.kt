@@ -4,6 +4,8 @@ import net.neoforged.neoforge.common.ModConfigSpec
 
 class ServerConfig(builder: ModConfigSpec.Builder) {
 
+    val HARVESTER_USES_KNIFE = builder.define("harvester.uses_knife", true)
+
     val CONSUME_DURABILTY = builder.define("slicer.consume_tool_durability", true)
     val IGNORE_ROTATION = builder.define("slicer.ignore_rotation", false)
     val SHOW_CONVERTED_RECIPES = builder.define("slicer.jei_show_converted_recipes", false)
