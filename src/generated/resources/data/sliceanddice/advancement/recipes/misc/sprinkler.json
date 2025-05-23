@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "create:fluid_pipe"
-            ]
+            "items": "create:fluid_pipe"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_pipe",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_pipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "sliceanddice:sprinkler"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

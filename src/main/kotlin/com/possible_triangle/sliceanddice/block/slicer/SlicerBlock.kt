@@ -43,8 +43,9 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<Slicer
     ): ItemInteractionResult {
         val held = player.getItemInHand(hand).copy()
 
-        if (AllItems.WRENCH.isIn(held)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
-        if (!held.`is`(Content.ALLOWED_TOOLS)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        if(held.isEmpty) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        if (AllItems.WRENCH.isIn(held)) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+        if (!held.`is`(Content.ALLOWED_TOOLS)) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
 
         if (!level.isClientSide) withBlockEntityDo(level, pos) {
             val heldByDeployer = it.heldItem.copy()

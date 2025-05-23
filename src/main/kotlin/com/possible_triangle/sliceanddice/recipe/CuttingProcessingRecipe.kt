@@ -59,22 +59,23 @@ data class CuttingProcessingRecipe(
             builder.group(
                 codec<CuttingProcessingRecipe>(CuttingProcessingRecipe).forGetter { it },
                 Ingredient.CODEC.fieldOf("tool").forGetter { it.tool }
-            ).apply(builder, { recipe, tool -> recipe.copy(tool = tool) })
+            ).apply(builder) { recipe, tool -> recipe.copy(tool = tool) }
         }
 
         override fun codec() = CODEC
 
         override fun toNetwork(buffer: RegistryFriendlyByteBuf, recipe: CuttingProcessingRecipe) {
             super.toNetwork(buffer, recipe)
+            buffer.writeBoolean(recipe.converted)
             buffer.writeBoolean(recipe.tool != null)
             if (recipe.tool != null) Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.tool)
         }
 
         override fun fromNetwork(buffer: RegistryFriendlyByteBuf): CuttingProcessingRecipe {
             val recipe = super.fromNetwork(buffer)
-            if (!buffer.readBoolean()) return recipe
-            val tool = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer)
-            return recipe.copy(tool = tool)
+            val converted = buffer.readBoolean()
+            val tool = if (buffer.readBoolean()) Ingredient.CONTENTS_STREAM_CODEC.decode(buffer) else null
+            return recipe.copy(tool = tool, converted = converted)
         }
 
     }

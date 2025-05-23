@@ -9,7 +9,7 @@
       "item": "create:fluid_pipe"
     },
     "S": {
-      "tag": "forge:plates/copper"
+      "tag": "c:plates/copper"
     }
   },
   "pattern": [
@@ -18,7 +18,6 @@
   ],
   "result": {
     "count": 3,
-    "item": "sliceanddice:sprinkler"
-  },
-  "show_notification": true
+    "id": "sliceanddice:sprinkler"
+  }
 }

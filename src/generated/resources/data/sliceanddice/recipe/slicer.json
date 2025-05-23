@@ -18,7 +18,7 @@
     "C"
   ],
   "result": {
-    "item": "sliceanddice:slicer"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "sliceanddice:slicer"
+  }
 }

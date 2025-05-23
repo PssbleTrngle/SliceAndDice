@@ -1,10 +1,10 @@
 {
   "replace": false,
   "values": [
-    "create:dough",
     {
-      "id": "farmersdelight:wheat_dough",
+      "id": "#c:tools/knife",
       "required": false
-    }
+    },
+    "#minecraft:axes"
   ]
 }

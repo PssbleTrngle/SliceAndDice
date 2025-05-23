@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ProcessingRecipeSerializerMixin {
 
     @Redirect(
-            method = "writeToBuffer",
+            method = "toNetwork",
             at = @At(value = "FIELD", target = "Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;ingredients:Lnet/minecraft/core/NonNullList;", opcode = Opcodes.GETFIELD)
     )
     private NonNullList<Ingredient> useIngredientsGetter(ProcessingRecipe<?> instance) {
@@ -22,7 +22,7 @@ public class ProcessingRecipeSerializerMixin {
     }
 
     @Redirect(
-            method = "writeToBuffer",
+            method = "toNetwork",
             at = @At(value = "FIELD", target = "Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;fluidIngredients:Lnet/minecraft/core/NonNullList;", opcode = Opcodes.GETFIELD)
     )
     private NonNullList<FluidIngredient> useFluidIngredientsGetter(ProcessingRecipe<?> instance) {

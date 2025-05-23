@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "create:mechanical_mixer"
-            ]
+            "items": "create:mechanical_mixer"
           }
         ]
       },
@@ -23,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "sliceanddice:allowed_tools"
+            "items": "#sliceanddice:allowed_tools"
           }
         ]
       },
@@ -32,15 +30,14 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_tool",
-      "has_mixer",
-      "has_the_recipe"
+      "has_mixer"
     ]
   ],
   "rewards": {
     "recipes": [
       "sliceanddice:slicer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
