@@ -11,7 +11,6 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerB
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
 import com.possible_triangle.sliceanddice.compat.CreateEnchantmentIndustryCompat
-import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks

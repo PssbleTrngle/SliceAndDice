@@ -12,9 +12,7 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
-import net.minecraft.world.phys.shapes.Shapes.DoubleLineConsumer
 import net.minecraftforge.fluids.FluidStack
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
