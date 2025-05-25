@@ -128,7 +128,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     override fun matchStaticFilters(holder: RecipeHolder<out Recipe<*>>): Boolean {
         val recipe = holder.value()
         if (recipe !is CuttingProcessingRecipe) return false
-        return recipe.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
+        return recipe.params.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
     }
 
     override fun read(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
@@ -188,7 +188,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
             CuttingProcessingRecipe::class.java
         ).asSequence()
             .map { it.value() }
-            .filter { it.tool?.test(_heldItem) == true }
+            .filter { it.params.tool?.test(_heldItem) == true }
             .firstOrNull()
 
         if (assemblyRecipe != null) return assemblyRecipe
@@ -196,9 +196,9 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
             val recipe = it.value()
             if (recipe !is CuttingProcessingRecipe) false
-            else recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.tool != null
+            else recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.params.tool != null
         } as List<CuttingProcessingRecipe>
-        return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(_heldItem) }
+        return recipes.firstOrNull { it.ingredients[0].test(stack) && it.params.tool!!.test(_heldItem) }
     }
 
     private fun addToParticleItems(stack: ItemStack) {
@@ -256,7 +256,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     }
 
     private fun hasRequiredTool(recipe: Recipe<*>): Boolean {
-        return recipe !is CuttingProcessingRecipe || recipe.tool?.test(_heldItem) == true
+        return recipe !is CuttingProcessingRecipe || recipe.params.tool?.test(_heldItem) == true
     }
 
     private fun tryContinueWithPreviousRecipe(): Boolean {

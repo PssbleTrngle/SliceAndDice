@@ -3,7 +3,7 @@ package com.possible_triangle.sliceanddice.compat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams
 import com.simibubi.create.foundation.fluid.FluidIngredient
 import net.minecraft.core.NonNullList
 import net.minecraft.world.item.crafting.Ingredient

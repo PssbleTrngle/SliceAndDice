@@ -6,7 +6,7 @@ import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.processing.recipe.HeatCondition
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -18,10 +18,12 @@ import vectorwing.farmersdelight.integration.jei.FDRecipeTypes
 import java.util.function.BiConsumer
 
 private fun CuttingBoardRecipe.toBasin(id: ResourceLocation): CuttingProcessingRecipe {
-    val builder = ProcessingRecipeBuilder(::CuttingProcessingRecipe, id)
+    val builder = CuttingProcessingRecipe.Builder(id)
     ingredients.forEach { builder.require(it) }
     rollableResults.forEach { builder.output(it.chance, it.stack) }
-    return builder.build().copy(tool = tool, converted = true)
+    builder.tool(tool)
+    builder.converted()
+    return builder.build()
 }
 
 class FarmersDelightCompat private constructor() : IRecipeInjector {
@@ -85,7 +87,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
         return cookingRecipes.forEach { (originalID, recipe) ->
             val id = Content.modLoc("cooking/${originalID.namespace}/${originalID.path}")
-            val builder = ProcessingRecipeBuilder(::LazyMixingRecipe, id)
+            val builder = StandardProcessingRecipe.Builder(::LazyMixingRecipe, id)
             builder.duration(recipe.cookTime)
             builder.requiresHeat(HeatCondition.HEATED)
 
