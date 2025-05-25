@@ -82,6 +82,14 @@ data class CuttingProcessingRecipe(val params: Params) :
 
     }
 
+    override fun validate(): List<String> {
+        val errors = super.validate()
+        if(params.tool == null) {
+            errors.add("recipe tool should not be null")
+        }
+        return errors
+    }
+
     class Builder(recipeId: ResourceLocation) :
         ProcessingRecipeBuilder<Params, CuttingProcessingRecipe, Builder>(::CuttingProcessingRecipe, recipeId) {
 

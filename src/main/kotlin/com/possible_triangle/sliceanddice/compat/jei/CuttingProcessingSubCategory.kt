@@ -21,7 +21,7 @@ class CuttingProcessingSubCategory : SequencedAssemblySubCategory(25) {
     ) {
         val recipe = sequencedRecipe.asAssemblyRecipe
         if (recipe !is CuttingProcessingRecipe) return
-        val tool = recipe.tool ?: return;
+        val tool = recipe.params.tool ?: return;
 
         builder.addSlot(RecipeIngredientRole.INPUT, x + 4, 15)
             .setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
