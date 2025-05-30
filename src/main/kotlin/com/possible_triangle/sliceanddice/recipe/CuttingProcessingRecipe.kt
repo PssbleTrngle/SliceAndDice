@@ -84,7 +84,7 @@ data class CuttingProcessingRecipe(val params: Params) :
 
     override fun validate(): List<String> {
         val errors = super.validate()
-        if(params.tool == null) {
+        if (params.tool == null) {
             errors.add("recipe tool should not be null")
         }
         return errors
