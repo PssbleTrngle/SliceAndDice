@@ -37,6 +37,8 @@ class CuttingProcessingSubCategory : SequencedAssemblySubCategory(25) {
     ) {
         val ms = graphics.pose()
 
+        slicer.setRecipe(sequencedRecipe.recipe)
+
         slicer.offset = index
         ms.pushPose()
         ms.translate(-5.0f, 50.0f, 0.0f)
