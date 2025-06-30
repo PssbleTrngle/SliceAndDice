@@ -4,9 +4,9 @@ on:
   push:
     branches: ["[0-9]+.[0-9]+.x"]
     paths:
-      - '**/*.kt'
-      - '**/*.kts'
-      - '**/*.java'
+      - "**/*.kt"
+      - "**/*.kts"
+      - "**/*.java"
 
 env:
   CI: true
@@ -29,7 +29,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: temurin
 
       - name: Cache SonarQube packages
