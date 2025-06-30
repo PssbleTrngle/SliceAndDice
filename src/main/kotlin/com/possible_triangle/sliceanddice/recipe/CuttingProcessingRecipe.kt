@@ -12,6 +12,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.*
@@ -68,6 +69,21 @@ data class CuttingProcessingRecipe(val params: Params) :
             }
 
             val STREAM_CODEC = streamCodec(::Params)
+        }
+
+        override fun encode(buffer: RegistryFriendlyByteBuf) {
+            super.encode(buffer)
+            buffer.writeBoolean(tool != null)
+            tool?.let {
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, it)
+            }
+        }
+
+        override fun decode(buffer: RegistryFriendlyByteBuf) {
+            super.decode(buffer)
+            if (buffer.readBoolean()) {
+                tool = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer)
+            }
         }
     }
 

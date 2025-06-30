@@ -27,17 +27,22 @@ updateJSONURL="https://api.modrinth.com/updates/slice-and-dice/forge_updates.jso
 
 [[dependencies.${mod_id}]]
     modId="kotlinforforge"
-    mandatory=true
     versionRange="[5.8,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId = "create"
-    mandatory = true
     versionRange = "[6.0.6,7.0.0)"
     ordering = "NONE"
     side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "create_enchantment_industry"
+    versionRange = "[1.3.0,)"
+    ordering = "NONE"
+    side = "BOTH"
+    type = "optional"
 
 [[mixins]]
     config="${mod_id}.mixins.json"

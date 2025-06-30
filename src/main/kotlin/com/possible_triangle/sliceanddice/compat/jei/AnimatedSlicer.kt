@@ -20,9 +20,9 @@ class AnimatedSlicer(private val basin: Boolean) : AnimatedKinetics() {
 
     private var held: ItemStack = ItemStack.EMPTY
 
-    fun setRecipe(recipe: ProcessingRecipe<*>) {
+    fun setRecipe(recipe: ProcessingRecipe<*,*>) {
         if (recipe is CuttingProcessingRecipe) {
-            val stack = recipe.tool?.items?.firstOrNull()
+            val stack = recipe.params.tool?.items?.firstOrNull()
             held = stack ?: ItemStack.EMPTY
         }
     }

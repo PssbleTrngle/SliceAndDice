@@ -8,6 +8,7 @@ val flywheel_version: String by extra
 val jei_version: String by extra
 val kubejs_version: String by extra
 val farmers_delight_version: String by extra
+val create_enchantment_industry_version: String by extra
 
 plugins {
     id("com.possible-triangle.gradle") version ("0.2.13")
@@ -92,6 +93,7 @@ dependencies {
     modRuntimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
 
     modImplementation("maven.modrinth:farmers-delight:${farmers_delight_version}")
+    modCompileOnly("maven.modrinth:create-enchantment-industry:${create_enchantment_industry_version}")
     //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
 
     compileOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
@@ -120,6 +122,7 @@ uploadToCurseforge {
     dependencies {
         required("create")
         optional("farmers-delight")
+        optional("create-enchantment-industry")
         optional("overweight-farming")
     }
 }
@@ -128,6 +131,7 @@ uploadToModrinth {
     dependencies {
         required("LNytGWDc")
         optional("R2OftAxM")
+        optional("JWGBpFUP")
     }
 
     syncBodyFromReadme()
