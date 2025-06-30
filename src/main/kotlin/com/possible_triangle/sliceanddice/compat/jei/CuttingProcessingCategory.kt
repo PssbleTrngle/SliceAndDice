@@ -80,9 +80,11 @@ class CuttingProcessingCategory() :
         mouseX: Double,
         mouseY: Double
     ) {
+        slicer.setRecipe(recipe)
+
         AllGuiTextures.JEI_SHADOW.render(graphics, 61, 56)
         AllGuiTextures.JEI_LONG_ARROW.render(graphics, 52, 69)
-        this.slicer.draw(graphics, background.width / 2 - 17, 22)
+        slicer.draw(graphics, background.width / 2 - 17, 22)
     }
 
 }
