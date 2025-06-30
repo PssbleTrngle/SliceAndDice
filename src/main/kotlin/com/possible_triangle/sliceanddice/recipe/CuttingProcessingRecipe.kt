@@ -5,25 +5,22 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.jei.CuttingProcessingSubCategory
+import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe.Params
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory
-import com.simibubi.create.content.processing.basin.BasinRecipe
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo
-import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import java.util.function.Supplier
 
-data class CuttingProcessingRecipe(
-    val params: ProcessingRecipeParams,
-    val tool: Ingredient? = null,
-    val converted: Boolean = false
-) :
-    BasinRecipe(CuttingProcessingRecipe, params), IAssemblyRecipe {
+data class CuttingProcessingRecipe(val params: Params) :
+    ProcessingRecipe<RecipeInput, Params>(CuttingProcessingRecipe, params), IAssemblyRecipe {
 
     companion object : IRecipeTypeInfo {
         override fun getId() = Content.CUTTING_RECIPE_TYPE.key!!.location()
@@ -53,29 +50,59 @@ data class CuttingProcessingRecipe(
 
     override fun getMaxInputCount() = 1
 
-    object Serializer : ProcessingRecipeSerializer<CuttingProcessingRecipe>(::CuttingProcessingRecipe) {
+    override fun getMaxOutputCount() = 1
 
-        private val CODEC: MapCodec<CuttingProcessingRecipe> = RecordCodecBuilder.mapCodec { builder ->
-            builder.group(
-                codec<CuttingProcessingRecipe>(CuttingProcessingRecipe).forGetter { it },
-                Ingredient.CODEC.fieldOf("tool").forGetter { it.tool }
-            ).apply(builder) { recipe, tool -> recipe.copy(tool = tool) }
+    class Params() : ProcessingRecipeParams() {
+        var tool: Ingredient? = null
+        var converted: Boolean = false
+
+        companion object {
+            val CODEC: MapCodec<Params> = RecordCodecBuilder.mapCodec { builder ->
+                builder.group(
+                    codec(::Params).forGetter { it },
+                    Ingredient.CODEC.fieldOf("tool").forGetter { it.tool }
+                ).apply(builder) { params, tool ->
+                    params.tool = tool
+                    params
+                }
+            }
+
+            val STREAM_CODEC = streamCodec(::Params)
         }
+    }
+
+    object Serializer : RecipeSerializer<CuttingProcessingRecipe> {
+
+        private val CODEC = codec(::CuttingProcessingRecipe, Params.CODEC)
+        private val STREAM_CODEC = streamCodec(::CuttingProcessingRecipe, Params.STREAM_CODEC)
 
         override fun codec() = CODEC
 
-        override fun toNetwork(buffer: RegistryFriendlyByteBuf, recipe: CuttingProcessingRecipe) {
-            super.toNetwork(buffer, recipe)
-            buffer.writeBoolean(recipe.converted)
-            buffer.writeBoolean(recipe.tool != null)
-            if (recipe.tool != null) Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.tool)
+        override fun streamCodec() = STREAM_CODEC
+
+    }
+
+    override fun validate(): List<String> {
+        val errors = super.validate()
+        if (params.tool == null) {
+            errors.add("recipe tool should not be null")
+        }
+        return errors
+    }
+
+    class Builder(recipeId: ResourceLocation) :
+        ProcessingRecipeBuilder<Params, CuttingProcessingRecipe, Builder>(::CuttingProcessingRecipe, recipeId) {
+
+        override fun createParams() = Params()
+
+        override fun self() = this
+
+        fun tool(tool: Ingredient) = apply {
+            params.tool = tool
         }
 
-        override fun fromNetwork(buffer: RegistryFriendlyByteBuf): CuttingProcessingRecipe {
-            val recipe = super.fromNetwork(buffer)
-            val converted = buffer.readBoolean()
-            val tool = if (buffer.readBoolean()) Ingredient.CONTENTS_STREAM_CODEC.decode(buffer) else null
-            return recipe.copy(tool = tool, converted = converted)
+        fun converted() = apply {
+            params.converted = true
         }
 
     }

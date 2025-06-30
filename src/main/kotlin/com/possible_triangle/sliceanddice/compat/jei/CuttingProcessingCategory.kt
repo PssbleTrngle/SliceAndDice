@@ -46,7 +46,7 @@ class CuttingProcessingCategory() :
                 return recipes
             }
 
-            return recipes.filterNot { it.value().converted }
+            return recipes.filterNot { it.value().params.converted }
         }
     }
 
@@ -59,10 +59,10 @@ class CuttingProcessingCategory() :
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(recipe.getIngredients()[0])
 
-        if (recipe.tool != null) {
+        recipe.params.tool?.let { tool ->
             builder.addSlot(RecipeIngredientRole.INPUT, 45, 5)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(recipe.tool)
+                .addIngredients(tool)
         }
 
         recipe.rollableResults.forEachIndexed { i, output ->

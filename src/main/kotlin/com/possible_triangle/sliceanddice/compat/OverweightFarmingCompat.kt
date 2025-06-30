@@ -3,8 +3,8 @@ package com.possible_triangle.sliceanddice.compat
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.compat.ModCompat.OVERWEIGHT_FARMING
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
@@ -37,7 +37,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
             val fromId = from.builtInRegistryHolder().key().location()
             val toId = to.builtInRegistryHolder().key().location()
             val id = Content.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
-            ProcessingRecipeBuilder(::ManualApplicationRecipe, id).let {
+            ItemApplicationRecipe.Builder(::ManualApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)
                 it.require(axe)
@@ -57,7 +57,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
             val fromId = from.builtInRegistryHolder().key().location()
             val toId = to.builtInRegistryHolder().key().location()
             val id = Content.modLoc("$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}")
-            val recipe = ProcessingRecipeBuilder(::DeployerApplicationRecipe, id).let {
+            val recipe = ItemApplicationRecipe.Builder(::DeployerApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)
                 it.require(Blocks.HONEYCOMB_BLOCK)

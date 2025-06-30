@@ -9,7 +9,6 @@
     "HarvesterMovementBehaviourMixin",
     "LevelMixin",
     "PressingBehaviourMixin",
-    "ProcessingRecipeSerializerMixin",
     "RecipesKubeEventMixin",
     "RecipeManagerAccessor",
     "RecipeManagerMixin"
