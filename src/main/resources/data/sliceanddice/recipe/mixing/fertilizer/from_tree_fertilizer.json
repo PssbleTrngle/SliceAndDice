@@ -5,13 +5,14 @@
       "item": "create:tree_fertilizer"
     },
     {
-      "fluid": "minecraft:water",
-      "amount": 500
+      "type": "fluid_stack",
+      "amount": 500,
+      "fluid": "minecraft:water"
     }
   ],
   "results": [
     {
-      "fluid": "sliceanddice:fertilizer",
+      "id": "sliceanddice:fertilizer",
       "amount": 500
     }
   ]

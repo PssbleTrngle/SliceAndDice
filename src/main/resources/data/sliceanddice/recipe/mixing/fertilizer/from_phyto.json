@@ -5,19 +5,20 @@
       "item": "thermal:phytogro"
     },
     {
-      "fluid": "minecraft:water",
-      "amount": 1000
+      "type": "fluid_stack",
+      "amount": 1000,
+      "fluid": "minecraft:water"
     }
   ],
   "results": [
     {
-      "fluid": "sliceanddice:fertilizer",
+      "id": "sliceanddice:fertilizer",
       "amount": 1000
     }
   ],
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "thermal_foundation"
     }
   ]
