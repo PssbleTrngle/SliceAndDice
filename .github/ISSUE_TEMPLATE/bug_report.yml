@@ -21,6 +21,7 @@ body:
       options:
         - forge
         - fabric
+        - neoforge
     validations:
       required: true
 
@@ -37,6 +38,7 @@ body:
       label: Minecraft Version
       multiple: false
       options:
+        - "1.21"
         - "1.20"
         - "1.19"
         - "1.18"
