@@ -10,6 +10,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBeha
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
+import com.possible_triangle.sliceanddice.compat.CreateEnchantmentIndustryCompat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
@@ -184,6 +185,7 @@ object Content {
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
         SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
         SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
+        CreateEnchantmentIndustryCompat.ifLoaded { registerSprinkleBehaviour() }
     }
 
 }
