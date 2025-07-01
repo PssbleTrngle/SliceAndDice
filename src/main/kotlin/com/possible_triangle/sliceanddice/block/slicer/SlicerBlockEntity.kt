@@ -132,17 +132,19 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     }
 
     override fun read(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
-        super.read(compound, registries, clientPacket)
         val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
         _heldItem = compound.get("HeldItem").let {
             val decoded = ItemStack.CODEC.parse(ops, it).result()
             decoded.orElse(ItemStack.EMPTY)
         }
 
-        if (clientPacket && behaviour.mode != Mode.BASIN && compound.contains("ParticleItems", 9)) {
+        if (clientPacket && compound.contains("ParticleItems", 9)) {
             val particles = compound.getList("ParticleItems", 10)
-            if (particles.isNotEmpty()) cuttingParticles()
+            if (particles.isNotEmpty() && behaviour.mode != Mode.BASIN) cuttingParticles()
+            if (particles.isEmpty()) compound.remove("ParticleItems")
         }
+
+        super.read(compound, registries, clientPacket)
     }
 
     override fun write(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
@@ -197,7 +199,9 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
             val recipe = it.value()
             if (recipe !is CuttingProcessingRecipe) false
             else recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.params.tool != null
-        } as List<CuttingProcessingRecipe>
+        }.map {
+            it.value() as CuttingProcessingRecipe
+        }
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.params.tool!!.test(_heldItem) }
     }
 
