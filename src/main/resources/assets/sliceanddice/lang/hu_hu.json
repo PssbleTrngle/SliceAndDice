@@ -1,0 +1,19 @@
+{
+  "block.sliceanddice.fertilizer": "Folyékony műtrágya",
+  "block.sliceanddice.slicer": "Szeletelő",
+  "block.sliceanddice.sprinkler": "Öntöző",
+  "block.sliceanddice.wet_air": "Nedves levegő",
+  "fluid.sliceanddice.fertilizer": "Folyékony műtrágya",
+  "item.sliceanddice.fertilizer_bucket": "Folyékony műtrágyás vödör",
+  "sliceanddice.gui.contraptions.wrong_direction": "Úgy tűnik, hogy a %s a _rossz irányba_ forog.",
+  "sliceanddice.ponder.slicer.header": "Szeletelés",
+  "sliceanddice.ponder.slicer.text_1": "Jobb kattintás egy érvényes eszközzel",
+  "sliceanddice.ponder.slicer.text_2": "A szeletelő képes működni egy a teknőn is",
+  "sliceanddice.ponder.sprinkler/intro.header": "Öntözés a tetején",
+  "sliceanddice.ponder.sprinkler/intro.text_1": "Helyezz egy öntözőt egy cső alá",
+  "sliceanddice.ponder.sprinkler/uses.header": "Öntözők típusai",
+  "sliceanddice.ponder.sprinkler/uses.text_1": "Különböző folyadékok különbözően hatnak az entitásokra",
+  "sliceanddice.recipe.assembly.slicer": "Szeletelés a szeletelővel",
+  "sliceanddice.recipe.slicer": "Szeletelő",
+  "sliceanddice.tooltip.rotationDirection": "Forgás iránya"
+}
