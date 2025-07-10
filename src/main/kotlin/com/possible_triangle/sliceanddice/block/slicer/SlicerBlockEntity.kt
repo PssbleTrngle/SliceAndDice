@@ -114,8 +114,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         }.toMutableList()
     }
 
-    override fun applyBasinRecipe() {
-        super.applyBasinRecipe()
+    private fun consumeDurability() {
         val world = level ?: return
         if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
             _heldItem.hurtAndBreak(1, world, null) {
@@ -123,6 +122,11 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
                 sendData()
             }
         }
+    }
+
+    override fun applyBasinRecipe() {
+        super.applyBasinRecipe()
+        consumeDurability()
     }
 
     override fun matchStaticFilters(holder: RecipeHolder<out Recipe<*>>): Boolean {
@@ -246,6 +250,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         val toProcess = if (canProcessInBulk()) input.stack else input.stack.copyWithCount(1)
         val outputs = RecipeApplier.applyRecipeOn(level, toProcess, recipe)
         outputList?.addAll(outputs)
+        consumeDurability()
         return true
     }
 
