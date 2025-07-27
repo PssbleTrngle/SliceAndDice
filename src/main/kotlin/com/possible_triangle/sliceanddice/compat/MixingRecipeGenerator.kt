@@ -45,7 +45,6 @@ object MixingRecipeGenerator {
     ) = mutableListOf(Ingredients(ArrayList(initialIngredients), mutableListOf())).also { list ->
 
         fun addAlternativeRecipes(fluidIngredient: FluidIngredient, itemIngredient: Ingredient) {
-            println("adding alternative recipe: ${itemIngredient.items.map { it.item }} instead of ${fluidIngredient.matchingFluidStacks}")
             val iterator = list.listIterator()
             iterator.forEach { ingredients ->
                 iterator.add(
@@ -67,7 +66,6 @@ object MixingRecipeGenerator {
             if (pair.first == FluidIngredient.EMPTY) return@forEach // no fluid found
 
             list.forEach {
-                println("replacing ${ingredient.items.first().item} with ${pair.first.matchingFluidStacks?.map { it.fluid.fluidType }} (recipe: $id)")
                 it.item.remove(ingredient)
                 it.fluid.add(pair.first)
             }
