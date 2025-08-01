@@ -59,10 +59,6 @@ object MixingRecipeGenerator {
         initialIngredients.forEach { ingredient ->
             val pair = findFluid(ingredient, emptyingRecipes)
 
-            println(pair.first)
-            println(pair.second.items.asList())
-            println()
-
             if (pair.first == FluidIngredient.EMPTY) return@forEach // no fluid found
 
             list.forEach {
