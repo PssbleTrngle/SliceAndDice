@@ -12,7 +12,7 @@
     "ProcessingRecipeSerializerMixin",
     "RecipeEventJSMixin",
     "RecipeManagerAccessor",
-    "RecipeManagerMixin"
+    "ReloadableServerResourcesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
