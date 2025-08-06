@@ -9,7 +9,9 @@ import com.simibubi.create.foundation.fluid.FluidIngredient
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraftforge.common.capabilities.ForgeCapabilities
 import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.capability.IFluidHandler
 
 
 object MixingRecipeGenerator {
@@ -21,11 +23,18 @@ object MixingRecipeGenerator {
 
         val nonFluidIngredients = mutableListOf<ItemStack>()
 
+        fun getFromEmptying(stack: ItemStack) = emptyingRecipes.filter { it.ingredients.isNotEmpty() }.find {
+            val required = it.ingredients[0]
+            required.test(stack)
+        }?.resultingFluid
+
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "UNNECESSARY_SAFE_CALL")
+        fun getFromFluidHandler(stack: ItemStack): FluidStack? =
+            stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
+                .orElse(null)?.drain(1000, IFluidHandler.FluidAction.SIMULATE)
+
         val fluids = ingredient.items.mapNotNull { stack ->
-            emptyingRecipes.filter { it.ingredients.isNotEmpty() }.find {
-                val required = it.ingredients[0]
-                required.test(stack)
-            }?.resultingFluid ?: null.also { nonFluidIngredients.add(stack) }
+            getFromEmptying(stack) ?: getFromFluidHandler(stack) ?: null.also { nonFluidIngredients.add(stack) }
         }.groupBy { it.fluid.fluidType }.values.map { fluidStackList -> fluidStackList.minBy { it.amount } }
 
         return Pair(fluids, Ingredient.of(nonFluidIngredients.stream()))
