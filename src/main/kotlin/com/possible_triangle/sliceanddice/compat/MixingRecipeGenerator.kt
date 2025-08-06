@@ -14,10 +14,10 @@ import net.minecraftforge.fluids.FluidStack
 
 object MixingRecipeGenerator {
 
-    private fun findFluid(
+    private fun findFluids(
         ingredient: Ingredient, emptyingRecipes: Collection<EmptyingRecipe>
-    ): Pair<FluidIngredient, Ingredient> {
-        if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return Pair(FluidIngredient.EMPTY, Ingredient.EMPTY)
+    ): Pair<Collection<FluidStack>, Ingredient> {
+        if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return Pair(listOf(), Ingredient.EMPTY)
 
         val nonFluidIngredients = mutableListOf<ItemStack>()
 
@@ -25,56 +25,59 @@ object MixingRecipeGenerator {
             emptyingRecipes.filter { it.ingredients.isNotEmpty() }.find {
                 val required = it.ingredients[0]
                 required.test(stack)
-            }?.resultingFluid ?: FluidStack.EMPTY.also { nonFluidIngredients.add(stack) }
-        }
+            }?.resultingFluid ?: null.also { nonFluidIngredients.add(stack) }
+        }.groupBy { it.fluid.fluidType }.values.map { fluidStackList -> fluidStackList.minBy { it.amount } }
 
-        return Pair(
-            if (fluids.all { it.isEmpty }) FluidIngredient.EMPTY
-            else FluidIngredient.fromFluidStack(fluids.filter { !it.isEmpty }.minBy { it.amount }),
-            Ingredient.of(nonFluidIngredients.stream())
-        )
+        return Pair(fluids, Ingredient.of(nonFluidIngredients.stream()))
     }
 
 
     fun resolveAll(
-        initialIngredients: MutableList<Ingredient>,
+        initialIngredients: List<Ingredient>,
         output: ItemStack,
         cookTime: Int,
         id: ResourceLocation,
         emptyingRecipes: Collection<EmptyingRecipe>
-    ) = mutableListOf(Ingredients(ArrayList(initialIngredients), mutableListOf())).also { list ->
+    ) = mutableListOf(Ingredients(initialIngredients, listOf())).also { list ->
 
-        fun addAlternativeRecipes(fluidIngredient: FluidIngredient, itemIngredient: Ingredient) {
-            val iterator = list.listIterator()
-            iterator.forEach { ingredients ->
-                iterator.add(
-                    Ingredients(
-                        ArrayList(ingredients.item).also { it.add(itemIngredient) },
-                        ArrayList(ingredients.fluid).also { it.remove(fluidIngredient) }
-                    )
-                )
+        for (ingredient in initialIngredients) {
+            val (fluids, nonFluidIngredients) = findFluids(ingredient, emptyingRecipes)
+            if (fluids.isEmpty()) continue
+
+            val listIterator = list.listIterator()
+            listIterator.forEach { ingredients ->
+
+                val fluidIterator = fluids.iterator()
+
+                listIterator.set(ingredients.replaceItemsWithFluid(ingredient, fluidIterator.next()))
+
+                if (!nonFluidIngredients.isEmpty) {
+                    listIterator.add(ingredients.replaceItems(ingredient, nonFluidIngredients))
+                }
+                fluidIterator.forEach { fluidStack ->
+                    listIterator.add(ingredients.replaceItemsWithFluid(ingredient, fluidStack))
+                }
             }
-        }
-
-        initialIngredients.forEach { ingredient ->
-            val pair = findFluid(ingredient, emptyingRecipes)
-
-            if (pair.first == FluidIngredient.EMPTY) return@forEach // no fluid found
-
-            list.forEach {
-                it.item.remove(ingredient)
-                it.fluid.add(pair.first)
-            }
-            if (!pair.second.isEmpty) addAlternativeRecipes(pair.first, pair.second)
         }
     }.mapIndexed { i, ingredients ->
         ProcessingRecipeBuilder(::MixingRecipe, id.withSuffix("_$i"))
-            .withItemIngredients(*ingredients.item.toTypedArray())
-            .withFluidIngredients(*ingredients.fluid.toTypedArray())
+            .withItemIngredients(*ingredients.items.toTypedArray())
+            .withFluidIngredients(*ingredients.fluids.toTypedArray())
             .requiresHeat(HeatCondition.HEATED)
             .duration(cookTime)
             .withSingleItemOutput(output).build()
     }
 }
 
-data class Ingredients(val item: MutableList<Ingredient>, val fluid: MutableList<FluidIngredient>)
+data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidIngredient>) {
+
+    fun replaceItems(original: Ingredient, new: Ingredient) = Ingredients(
+        items.toMutableList().apply { remove(original); add(new) },
+        fluids.toMutableList()
+    )
+
+    fun replaceItemsWithFluid(item: Ingredient, fluid: FluidStack) = Ingredients(
+        items.toMutableList().apply { remove(item) },
+        fluids.toMutableList().apply { add(FluidIngredient.fromFluidStack(fluid)) }
+    )
+}

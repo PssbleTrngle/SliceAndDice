@@ -87,7 +87,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             // Cooking recipes do not use the registryAccess
             val result = recipe.getResultItem(null)
 
-            val initialIngredients = ArrayList(recipe.ingredients)
+            val initialIngredients = recipe.ingredients.toMutableList()
             @Suppress("SENSELESS_COMPARISON")
             if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
                 initialIngredients.add(Ingredient.of(recipe.outputContainer))
