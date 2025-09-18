@@ -66,8 +66,8 @@ object MixingRecipeGenerator {
                 }
             }
         }
-    }.mapIndexed { i, ingredients ->
-        StandardProcessingRecipe.Builder(::MixingRecipe, id.withSuffix("_$i"))
+    }.map { ingredients ->
+        StandardProcessingRecipe.Builder(::MixingRecipe, id)
             .withItemIngredients(*ingredients.items.toTypedArray())
             .withFluidIngredients(*ingredients.fluids.toTypedArray())
             .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
