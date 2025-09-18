@@ -5,7 +5,6 @@ import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
-import com.simibubi.create.content.processing.recipe.HeatCondition
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
@@ -83,23 +82,21 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
         return cookingRecipes.forEach { (originalID, recipe) ->
             val id = ResourceLocation(SliceAndDice.MOD_ID, "cooking/${originalID.namespace}/${originalID.path}")
-            val builder = ProcessingRecipeBuilder(::LazyMixingRecipe, id)
-            builder.duration(recipe.cookTime)
-            builder.requiresHeat(HeatCondition.HEATED)
-
-            recipe.ingredients.forEach { ingredient ->
-                builder.require(ingredient)
-            }
-
-            @Suppress("SENSELESS_COMPARISON")
-            if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
-                builder.require(Ingredient.of(recipe.outputContainer))
-            }
 
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             // Cooking recipes do not use the registryAccess
-            builder.output(recipe.getResultItem(null))
-            add.accept(id, builder.build().withRecipeLookup(emptyingRecipes))
+            val result = recipe.getResultItem(null)
+
+            val initialIngredients = recipe.ingredients.toMutableList()
+            @Suppress("SENSELESS_COMPARISON")
+            if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
+                initialIngredients.add(Ingredient.of(recipe.outputContainer))
+            }
+
+            MixingRecipeGenerator.resolveAll(initialIngredients, result, recipe.cookTime, id, emptyingRecipes)
+                .forEachIndexed { i, recipe ->
+                    add.accept(recipe.id.withSuffix("_$i"), recipe)
+                }
         }
     }
 
