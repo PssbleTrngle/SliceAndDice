@@ -11,7 +11,7 @@
     "PressingBehaviourMixin",
     "RecipesKubeEventMixin",
     "RecipeManagerAccessor",
-    "RecipeManagerMixin"
+    "ReloadableServerResourcesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

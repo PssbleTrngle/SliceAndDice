@@ -5,8 +5,6 @@ import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
-import com.simibubi.create.content.processing.recipe.HeatCondition
-import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -86,24 +84,22 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
 
         return cookingRecipes.forEach { (originalID, recipe) ->
-            val id = Content.modLoc("cooking/${originalID.namespace}/${originalID.path}")
-            val builder = StandardProcessingRecipe.Builder(::LazyMixingRecipe, id)
-            builder.duration(recipe.cookTime)
-            builder.requiresHeat(HeatCondition.HEATED)
-
-            recipe.ingredients.forEach { ingredient ->
-                builder.require(ingredient)
-            }
-
-            @Suppress("SENSELESS_COMPARISON")
-            if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
-                builder.require(Ingredient.of(recipe.outputContainer))
-            }
+            val id = Content.modLoc( "cooking/${originalID.namespace}/${originalID.path}")
 
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             // Cooking recipes do not use the registryAccess
-            builder.output(recipe.getResultItem(null))
-            add.accept(id, builder.build().withRecipeLookup(emptyingRecipes))
+            val result = recipe.getResultItem(null)
+
+            val initialIngredients = recipe.ingredients.toMutableList()
+            @Suppress("SENSELESS_COMPARISON")
+            if (recipe.outputContainer != null && !recipe.outputContainer.isEmpty) {
+                initialIngredients.add(Ingredient.of(recipe.outputContainer))
+            }
+
+            MixingRecipeGenerator.resolveAll(initialIngredients, result, recipe.cookTime, id, emptyingRecipes)
+                .forEachIndexed { i, recipe ->
+                    add.accept(id.withSuffix("_$i"), recipe)
+                }
         }
     }
 
