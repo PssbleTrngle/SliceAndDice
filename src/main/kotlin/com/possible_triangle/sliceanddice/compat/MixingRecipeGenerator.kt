@@ -72,7 +72,7 @@ object MixingRecipeGenerator {
         ProcessingRecipeBuilder(::MixingRecipe, id.withSuffix("_$i"))
             .withItemIngredients(*ingredients.items.toTypedArray())
             .withFluidIngredients(*ingredients.fluids.toTypedArray())
-            .requiresHeat(HeatCondition.HEATED)
+            .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
             .duration(cookTime)
             .withSingleItemOutput(output).build()
     }
