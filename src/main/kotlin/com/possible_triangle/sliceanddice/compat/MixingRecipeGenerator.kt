@@ -3,7 +3,6 @@ package com.possible_triangle.sliceanddice.compat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe
-import com.simibubi.create.content.processing.recipe.HeatCondition
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
 import com.simibubi.create.foundation.fluid.FluidIngredient
 import net.minecraft.resources.ResourceLocation
@@ -71,7 +70,7 @@ object MixingRecipeGenerator {
         StandardProcessingRecipe.Builder(::MixingRecipe, id.withSuffix("_$i"))
             .withItemIngredients(*ingredients.items.toTypedArray())
             .withFluidIngredients(*ingredients.fluids.toTypedArray())
-            .requiresHeat(HeatCondition.HEATED)
+            .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
             .duration(cookTime)
             .withSingleItemOutput(output).build()
     }

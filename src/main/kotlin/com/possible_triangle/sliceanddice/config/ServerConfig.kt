@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.config
 
 import net.neoforged.neoforge.common.ModConfigSpec
+import com.simibubi.create.content.processing.recipe.HeatCondition
 
 class ServerConfig(builder: ModConfigSpec.Builder) {
 
@@ -12,6 +13,7 @@ class ServerConfig(builder: ModConfigSpec.Builder) {
 
     val BASIN_COOKING = builder.define("basin_cooking.enabled", true)
     val REPLACE_FLUID_CONTAINERS = builder.define("basin_cooking.replace_fluid_containers", true)
+    val COOKING_HEAT_CONDITION = builder.define("basin_cooking.heat_condition", HeatCondition.HEATED)
 
     val SPRINKLER_CAPACITY = builder.defineInRange("sprinkler.fluid_capacity", 300, 10, 2048)
     val SPRINKLER_USAGE = builder.defineInRange("sprinkler.fluid_per_use", 100, 0, 2048)
