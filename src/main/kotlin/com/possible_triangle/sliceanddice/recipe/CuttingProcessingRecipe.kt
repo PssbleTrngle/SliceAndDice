@@ -77,6 +77,7 @@ data class CuttingProcessingRecipe(val params: Params) :
             tool?.let {
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, it)
             }
+            buffer.writeBoolean(converted)
         }
 
         override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -84,6 +85,7 @@ data class CuttingProcessingRecipe(val params: Params) :
             if (buffer.readBoolean()) {
                 tool = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer)
             }
+            converted = buffer.readBoolean()
         }
     }
 
