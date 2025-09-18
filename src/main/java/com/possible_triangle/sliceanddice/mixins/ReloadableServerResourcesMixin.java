@@ -17,7 +17,7 @@ public abstract class ReloadableServerResourcesMixin {
     public abstract RecipeManager getRecipes();
 
     @Inject(at = @At("RETURN"), method = "updateRegistryTags(Lnet/minecraft/core/RegistryAccess;)V")
-    public void injectRecipes(RegistryAccess p_206869_, CallbackInfo ci) {
+    public void injectRecipes(RegistryAccess access, CallbackInfo ci) {
         RecipeInjection.INSTANCE.injectRecipes(((RecipeManagerAccessor) getRecipes()));
     }
 

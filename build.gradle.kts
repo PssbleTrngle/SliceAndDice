@@ -11,6 +11,7 @@ val jei_version: String by extra
 val kubejs_version: String by extra
 val farmers_delight_version: String by extra
 val create_enchantment_industry_version: String by extra
+val vegan_delight_version: String by extra
 
 plugins {
     id("com.possible-triangle.gradle") version("0.2.18")
@@ -37,6 +38,7 @@ configure<BasePluginExtension> {
 
 repositories {
     curseMaven()
+    modrinthMaven()
 
     maven {
         url = uri("https://maven.saps.dev/minecraft")
@@ -109,6 +111,8 @@ dependencies {
         //modRuntimeOnly("curse.maven:thermal-foundation-222880:${thermal_foundation_version}")
         //modRuntimeOnly("curse.maven:thermal-expansion-69163:${thermal_expansion_version}")
         //modRuntimeOnly("curse.maven:thermal-cultivation-271835:${thermal_cultivation_version}")
+
+        modRuntimeOnly("maven.modrinth:vegan-delight:${vegan_delight_version}")
     }
 }
 
