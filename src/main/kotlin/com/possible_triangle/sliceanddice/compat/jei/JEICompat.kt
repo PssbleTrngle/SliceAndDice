@@ -29,7 +29,7 @@ class JEICompat : IModPlugin {
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
         cutting.registerCatalysts(registration)
 
-        FarmersDelightCompat.Companion.ifLoaded {
+        FarmersDelightCompat.ifLoaded {
             addCatalysts(registration)
         }
     }
@@ -44,7 +44,7 @@ class JEICompat : IModPlugin {
         }.findFirst().map { it.recipeType as RecipeType<ItemApplicationRecipe> }
 
         itemApplication.ifPresent { category ->
-            OverweightFarmingCompat.Companion.ifLoaded {
+            OverweightFarmingCompat.ifLoaded {
                 registerRecipes { recipes ->
                     jeiRuntime.recipeManager.addRecipes(category, recipes)
                 }

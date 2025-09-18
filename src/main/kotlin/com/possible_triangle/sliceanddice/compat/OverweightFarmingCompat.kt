@@ -9,18 +9,12 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraftforge.registries.ForgeRegistries
+import net.orcinus.overweightfarming.events.MiscEvents
 import java.util.function.BiConsumer
-import java.util.function.Supplier
-
 
 class OverweightFarmingCompat private constructor() : IRecipeInjector {
-    private object MiscEvents {
-        val PEELABLES = Supplier { emptyMap<Block, Block>() }
-        val WAXABLES = Supplier { emptyMap<Block, Block>() }
-    }
 
     companion object {
         private val INSTANCE = OverweightFarmingCompat()
