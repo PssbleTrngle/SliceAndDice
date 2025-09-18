@@ -12,8 +12,8 @@
   ],
   "results": [
     {
-      "id": "sliceanddice:fertilizer",
-      "amount": 500
+      "amount": 500,
+      "id": "sliceanddice:fertilizer"
     }
   ]
 }

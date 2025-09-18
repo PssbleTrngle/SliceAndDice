@@ -13,6 +13,7 @@ import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehavi
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
 import com.possible_triangle.sliceanddice.compat.CreateEnchantmentIndustryCompat
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.data.CompatRecipes
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
@@ -161,6 +162,8 @@ object Content {
             PonderScenes.setup()
             PonderIndex.getLangAccess().provideLang(MOD_ID, provider::add)
         }
+
+        REGISTRATE.addDataGenerator(ProviderType.RECIPE, CompatRecipes::generate)
 
         SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
         SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
