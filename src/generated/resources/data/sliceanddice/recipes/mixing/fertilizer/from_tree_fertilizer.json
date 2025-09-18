@@ -1,0 +1,19 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "create:tree_fertilizer"
+    },
+    {
+      "amount": 500,
+      "fluid": "minecraft:water",
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "amount": 500,
+      "fluid": "sliceanddice:fertilizer"
+    }
+  ]
+}

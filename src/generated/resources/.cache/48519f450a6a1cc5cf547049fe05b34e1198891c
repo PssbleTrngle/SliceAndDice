@@ -1,4 +1,4 @@
-// 1.20.1	2025-03-07T19:32:59.1469424	Registrate Provider for sliceanddice [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-09-18T12:34:35.5756155	Registrate Provider for sliceanddice [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 d1407b71743b468d52f9a3e86dafef3f125643e9 assets/sliceanddice/blockstates/fertilizer.json
 1f09e5b178829c25dc4c53b628548d7b1ae6c227 assets/sliceanddice/blockstates/slicer.json
 b8e84c3e21b8c4dcf4d4470bc200f7b110a7a12e assets/sliceanddice/blockstates/sprinkler.json
@@ -16,6 +16,11 @@ b38bcbb8de3cce3b08e6054fe43b037a81f6495c data/sliceanddice/advancements/recipes/
 20b22b10f59e9e4371e6ab0135836f8004d1aea0 data/sliceanddice/loot_tables/blocks/slicer.json
 3159b0d6e5ed2e124a57e02cbe915e60c10d15c0 data/sliceanddice/loot_tables/blocks/sprinkler.json
 94f0dafefbbd20e0eda12059818395a6b451cb8a data/sliceanddice/loot_tables/blocks/wet_air.json
+10284ac627e5787af447a7751905ddb59a301ca9 data/sliceanddice/recipes/filling/hot_cocoa_from_fluid.json
+235af6903adfd5cc9c234d88bd8fd556c5c926ce data/sliceanddice/recipes/filling/rich_soil.json
+7fab2073cba38c313e299c44840bfa0a51cde813 data/sliceanddice/recipes/mixing/fertilizer/from_compost.json
+621da498fb261d516baa73b8b37fef5aaac5e4ad data/sliceanddice/recipes/mixing/fertilizer/from_phyto.json
+bea9d2f6def57d9c0eb56bfe4862c5805239e7f1 data/sliceanddice/recipes/mixing/fertilizer/from_tree_fertilizer.json
 7e430580230199bd0932c754ac141edadbf5b11c data/sliceanddice/recipes/slicer.json
 b6987037a5efdcec88908793e30b56d034194313 data/sliceanddice/recipes/sprinkler.json
 2a6189a1368c2d6eb8f4b1d391a1ecce7ae9cfba data/sliceanddice/tags/fluids/fertilizer.json

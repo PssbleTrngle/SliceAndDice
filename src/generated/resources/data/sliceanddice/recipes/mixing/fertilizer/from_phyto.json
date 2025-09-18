@@ -1,0 +1,25 @@
+{
+  "type": "create:mixing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "thermal_foundation"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "thermal:phytogro"
+    },
+    {
+      "amount": 1000,
+      "fluid": "minecraft:water",
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "amount": 1000,
+      "fluid": "sliceanddice:fertilizer"
+    }
+  ]
+}
