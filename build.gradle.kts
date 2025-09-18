@@ -13,7 +13,7 @@ val farmers_delight_version: String by extra
 val create_enchantment_industry_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version("0.2.13")
+    id("com.possible-triangle.gradle") version("0.2.18")
 }
 
 withKotlin()
@@ -119,6 +119,7 @@ tasks.withType<Jar> {
 
 enablePublishing {
     githubPackages()
+    nexus()
 }
 
 uploadToCurseforge {
