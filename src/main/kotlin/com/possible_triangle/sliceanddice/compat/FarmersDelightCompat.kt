@@ -94,8 +94,8 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             }
 
             MixingRecipeGenerator.resolveAll(initialIngredients, result, recipe.cookTime, id, emptyingRecipes)
-                .forEachIndexed { i, recipe ->
-                    add.accept(recipe.id.withSuffix("_$i"), recipe)
+                .forEach { recipe ->
+                    add.accept(recipe.id, recipe)
                 }
         }
     }
