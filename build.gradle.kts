@@ -6,7 +6,6 @@ val create_version: String by extra
 val ponder_version: String by extra
 val flywheel_version: String by extra
 val jei_version: String by extra
-val kubejs_version: String by extra
 val farmers_delight_version: String by extra
 val create_enchantment_industry_version: String by extra
 val vegan_delight_version: String by extra
@@ -96,8 +95,6 @@ dependencies {
     modImplementation("maven.modrinth:farmers-delight:${farmers_delight_version}")
     modCompileOnly("maven.modrinth:create-enchantment-industry:${create_enchantment_industry_version}")
     //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
-
-    compileOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     if (!env.isCI) {
         //modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")

@@ -9,6 +9,12 @@ import com.simibubi.create.content.kinetics.mixer.MixingRecipe
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
 import com.simibubi.create.foundation.data.recipe.Mods
 import com.tterrag.registrate.providers.RegistrateRecipeProvider
+import net.minecraft.core.registries.Registries
+import net.minecraft.data.recipes.RecipeCategory
+import net.minecraft.data.recipes.ShapelessRecipeBuilder
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.material.Fluids
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition
@@ -45,6 +51,13 @@ object CompatRecipes {
             .output(ModBlocks.RICH_SOIL.get())
             .withCondition(ModLoadedCondition(ModCompat.FARMERS_DELIGHT))
             .build(output)
+
+        val doughTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/dough"))
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
+            .requires(doughTag)
+            .requires(DyeColor.LIME.tag)
+            .unlockedBy("has_item", RegistrateRecipeProvider.has(doughTag))
+            .save(output, ResourceLocation.fromNamespaceAndPath("create", "crafting/appliances/slime_ball"))
     }
 
     private fun fertilizerMixing(amount: Int, id: String): StandardProcessingRecipe.Builder<MixingRecipe> {

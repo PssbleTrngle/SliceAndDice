@@ -82,9 +82,10 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             .mapValues { it.value as CookingPotRecipe }
 
         SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
+        val generator = MixingRecipeGenerator(emptyingRecipes)
 
         return cookingRecipes.forEach { (originalID, recipe) ->
-            val id = Content.modLoc( "cooking/${originalID.namespace}/${originalID.path}")
+            val id = Content.modLoc("cooking/${originalID.namespace}/${originalID.path}")
 
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             // Cooking recipes do not use the registryAccess
@@ -96,10 +97,10 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
                 initialIngredients.add(Ingredient.of(recipe.outputContainer))
             }
 
-            MixingRecipeGenerator.resolveAll(initialIngredients, result, recipe.cookTime, id, emptyingRecipes)
-                .forEachIndexed { i, recipe ->
-                    add.accept(id.withSuffix("_$i"), recipe)
-                }
+            val mixingRecipes = generator.resolveAll(initialIngredients, result, recipe.cookTime, id)
+            mixingRecipes.forEachIndexed { i, recipe ->
+                add.accept(id.withSuffix("_$i"), recipe)
+            }
         }
     }
 

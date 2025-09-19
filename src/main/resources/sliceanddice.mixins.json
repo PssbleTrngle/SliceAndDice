@@ -9,7 +9,6 @@
     "HarvesterMovementBehaviourMixin",
     "LevelMixin",
     "PressingBehaviourMixin",
-    "RecipesKubeEventMixin",
     "RecipeManagerAccessor",
     "ReloadableServerResourcesMixin"
   ],
