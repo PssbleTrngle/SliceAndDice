@@ -1,7 +1,7 @@
+import com.possible_triangle.gradle.ModExtension
 import net.minecraftforge.gradle.common.util.MinecraftExtension
 
 val mod_id: String by extra
-val mod_version: String by extra
 val mc_version: String by extra
 val registrate_version: String by extra
 val create_version: String by extra
@@ -14,7 +14,7 @@ val vegan_delight_version: String by extra
 val overweight_farming_version: String by extra
 
 plugins {
-    id("com.possible-triangle.gradle") version("0.2.18")
+    id("com.possible-triangle.gradle") version ("0.2.18")
 }
 
 withKotlin()
@@ -32,8 +32,9 @@ configure<MinecraftExtension> {
     }
 }
 
+val modVersion = the<ModExtension>().version
 configure<BasePluginExtension> {
-    archivesName.set("$mod_id-forge-${mod_version}")
+    archivesName = modVersion.map { "$mod_id-forge-$it" }
 }
 
 repositories {
