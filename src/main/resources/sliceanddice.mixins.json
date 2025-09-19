@@ -9,8 +9,6 @@
     "HarvesterMovementBehaviourMixin",
     "LevelMixin",
     "PressingBehaviourMixin",
-    "ProcessingRecipeSerializerMixin",
-    "RecipeEventJSMixin",
     "RecipeManagerAccessor",
     "ReloadableServerResourcesMixin"
   ],

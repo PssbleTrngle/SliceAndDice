@@ -8,7 +8,6 @@ val create_version: String by extra
 val ponder_version: String by extra
 val flywheel_version: String by extra
 val jei_version: String by extra
-val kubejs_version: String by extra
 val farmers_delight_version: String by extra
 val create_enchantment_industry_version: String by extra
 val vegan_delight_version: String by extra
@@ -40,6 +39,7 @@ configure<BasePluginExtension> {
 repositories {
     curseMaven()
     modrinthMaven()
+    mavenLocal()
 
     maven {
         url = uri("https://maven.saps.dev/minecraft")
@@ -101,8 +101,6 @@ dependencies {
     modImplementation("curse.maven:farmers-delight-398521:${farmers_delight_version}")
     modCompileOnly("curse.maven:create-enchantment-industry-688768:${create_enchantment_industry_version}")
     modImplementation("maven.modrinth:overweight-farming:${overweight_farming_version}")
-
-    compileOnly("dev.latvian.mods:kubejs-forge:${kubejs_version}")
 
     if (!env.isCI) {
         //modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")
