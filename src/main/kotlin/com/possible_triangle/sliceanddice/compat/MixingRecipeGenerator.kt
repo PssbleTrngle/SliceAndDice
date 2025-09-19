@@ -74,8 +74,8 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
         }
 
         return try {
-            variations.map {
-                val recipe = it.createRecipe(id, cookTime, output)
+            variations.mapIndexed { i, it ->
+                val recipe = it.createRecipe(id.withSuffix("_$i"), cookTime, output)
                 if (recipe.fluidIngredients.size > 2) throw IllegalArgumentException("too many fluid ingredients")
                 recipe
             }
@@ -96,7 +96,7 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
     fun replaceItemsWithFluid(original: Ingredient, fluid: FluidStack): Ingredients {
         val filteredItems = items.filter { it != original }
 
-        val fluidMatch = fluids.indexOfFirst { FluidStack.areFluidStackTagsEqual(it, fluid) }
+        val fluidMatch = fluids.indexOfFirst { it.isFluidEqual(fluid) }
         val modifiedFluids =
             if (fluidMatch < 0)
                 fluids + fluid

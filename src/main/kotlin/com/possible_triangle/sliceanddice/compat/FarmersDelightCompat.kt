@@ -97,8 +97,8 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             }
 
             val mixingRecipes = generator.resolveAll(initialIngredients, result, recipe.cookTime, id)
-            mixingRecipes.forEachIndexed { i, recipe ->
-                add.accept(id.withSuffix("_$i"), recipe)
+            mixingRecipes.forEach { recipe ->
+                add.accept(recipe.id, recipe)
             }
         }
     }
