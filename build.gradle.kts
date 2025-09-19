@@ -1,5 +1,6 @@
+import com.possible_triangle.gradle.ModExtension
+
 val mod_id: String by extra
-val mod_version: String by extra
 val mc_version: String by extra
 val registrate_version: String by extra
 val create_version: String by extra
@@ -21,8 +22,9 @@ neoforge {
     dataGen()
 }
 
+val modVersion = the<ModExtension>().version
 configure<BasePluginExtension> {
-    archivesName.set("$mod_id-neoforge-${mod_version}")
+    archivesName = modVersion.map { "$mod_id-forge-$it" }
 }
 
 repositories {
