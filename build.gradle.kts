@@ -10,6 +10,8 @@ val jei_version: String by extra
 val farmers_delight_version: String by extra
 val create_enchantment_industry_version: String by extra
 val vegan_delight_version: String by extra
+val configured_version: String by extra
+val catalog_version: String by extra
 
 plugins {
     id("com.possible-triangle.gradle") version ("0.2.18")
@@ -29,6 +31,7 @@ configure<BasePluginExtension> {
 
 repositories {
     modrinthMaven()
+    curseMaven()
     mavenLocal()
 
     maven {
@@ -108,6 +111,8 @@ dependencies {
         //modRuntimeOnly("curse.maven:thermal-cultivation-271835:${thermal_cultivation_version}")
 
         modRuntimeOnly("maven.modrinth:vegan-delight:${vegan_delight_version}")
+        modRuntimeOnly("curse.maven:configured-457570:${configured_version}")
+        modRuntimeOnly("curse.maven:catalogue-459701:${catalog_version}")
     }
 }
 
