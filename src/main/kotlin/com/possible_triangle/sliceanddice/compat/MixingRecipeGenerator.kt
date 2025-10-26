@@ -6,10 +6,10 @@ import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
-import com.simibubi.create.foundation.fluid.FluidIngredient
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.material.FlowingFluid
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
@@ -29,6 +29,7 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
     private fun getFromFluidHandler(stack: ItemStack): FluidStack? =
         stack.getCapability(Capabilities.FluidHandler.ITEM)
             ?.drain(1000, IFluidHandler.FluidAction.SIMULATE)
+            ?.takeUnless { it.isEmpty }
 
     private fun resolveIngredient(stack: ItemStack): Either<FluidStack, ItemStack> {
         val fluid = getFromEmptying(stack) ?: getFromFluidHandler(stack)
@@ -113,14 +114,20 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
     }
 
     fun createRecipe(id: ResourceLocation, cookTime: Int, output: ItemStack): MixingRecipe {
-        val fluidIngredients = fluids.map { FluidIngredient.fromFluidStack(it) }
-        return StandardProcessingRecipe.Builder(::MixingRecipe, id)
+        val builder = StandardProcessingRecipe.Builder(::MixingRecipe, id)
             .withItemIngredients(*items.toTypedArray())
-            .withFluidIngredients(*fluidIngredients.toTypedArray())
             .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
             .duration(cookTime)
             .withSingleItemOutput(output)
-            .build()
+        
+        fluids.forEach { fluidStack ->
+            val fluid = fluidStack.fluid
+            if (fluid is FlowingFluid) {
+                builder.require(fluid, fluidStack.amount)
+            }
+        }
+        
+        return builder.build()
     }
 
 }
