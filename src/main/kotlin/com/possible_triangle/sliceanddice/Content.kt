@@ -22,7 +22,6 @@ import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
 import com.simibubi.create.foundation.data.*
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.providers.ProviderType
@@ -43,7 +42,6 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fluids.ForgeFlowingFluid
 import net.minecraftforge.fml.DistExecutor
@@ -53,7 +51,6 @@ import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
 import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import java.util.function.Supplier
 
 object Content {
@@ -85,7 +82,7 @@ object Content {
                 .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
         }.register()
 
-    val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerTile))
+    val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
         .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
         .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
 

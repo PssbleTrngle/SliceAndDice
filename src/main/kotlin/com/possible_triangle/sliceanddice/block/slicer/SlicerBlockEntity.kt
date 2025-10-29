@@ -44,7 +44,7 @@ import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.streams.asSequence
 
 
-class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
+class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
     BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
 
     companion object {
@@ -244,7 +244,8 @@ class SlicerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
         addToParticleItems(input.stack)
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
-        val outputs = RecipeApplier.applyRecipeOn(level, toProcess, recipe)
+        val world = this.level ?: return false
+        val outputs = RecipeApplier.applyRecipeOn(world, toProcess, recipe, true)
         outputList?.addAll(outputs)
         consumeDurability()
         return true

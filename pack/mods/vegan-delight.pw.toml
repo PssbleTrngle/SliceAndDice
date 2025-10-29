@@ -1,0 +1,13 @@
+name = "Vegan Delight"
+filename = "vegandelight-2.0.0-beta4.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/Na8nA0jA/versions/7YzqM6MD/vegandelight-2.0.0-beta4.jar"
+hash-format = "sha512"
+hash = "2e6a2c2c3d751550696de36015f301db4130328823085fc315472174976dbd8a49795a25bc6212649bc5b94b1339128c611346300342fcaf00054c28a3600b4d"
+
+[update]
+[update.modrinth]
+mod-id = "Na8nA0jA"
+version = "7YzqM6MD"

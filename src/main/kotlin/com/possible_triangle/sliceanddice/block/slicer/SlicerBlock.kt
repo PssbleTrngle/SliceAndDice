@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
@@ -25,9 +24,9 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<SlicerTile>, ICogWheel {
+class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<SlicerBlockEntity>, ICogWheel {
 
-    override fun getBlockEntityClass() = SlicerTile::class.java
+    override fun getBlockEntityClass() = SlicerBlockEntity::class.java
 
     override fun getBlockEntityType() = Content.SLICER_TILE.get()
 
@@ -41,7 +40,7 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<Slicer
         if (!held.`is`(Content.ALLOWED_TOOLS) && !held.isEmpty) return InteractionResult.PASS
 
         if (!world.isClientSide) withBlockEntityDo(world, pos) {
-            if (it !is SlicerTile) return@withBlockEntityDo
+            if (it !is SlicerBlockEntity) return@withBlockEntityDo
             val heldByDeployer = it.heldItem.copy()
             if (heldByDeployer.isEmpty && held.isEmpty) return@withBlockEntityDo
             player.setItemInHand(hand, heldByDeployer)

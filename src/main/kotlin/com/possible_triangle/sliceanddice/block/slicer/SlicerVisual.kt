@@ -12,8 +12,8 @@ import dev.engine_room.flywheel.lib.model.Models
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual
 import java.util.function.Consumer
 
-class SlicerVisual(context: VisualizationContext, private val mixer: SlicerTile, partialTick: Float) :
-    SingleAxisRotatingVisual<SlicerTile>(
+class SlicerVisual(context: VisualizationContext, private val mixer: SlicerBlockEntity, partialTick: Float) :
+    SingleAxisRotatingVisual<SlicerBlockEntity>(
         context, mixer, partialTick,
         Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL)
     ), SimpleDynamicVisual {

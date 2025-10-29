@@ -1,0 +1,13 @@
+name = "Overweight Farming"
+filename = "overweightfarming-1.20.1-2.1.0-forge.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/bCxmmxKN/versions/cRR55xmK/overweightfarming-1.20.1-2.1.0-forge.jar"
+hash-format = "sha512"
+hash = "4685b87e4c58b94008ead1ebf8f0e69460ad30a4190e4866c6c9c4e3dad846338f444efd9a9acde61f90d70b19802b7c2d910c17003403de4b1add24efa5cbf2"
+
+[update]
+[update.modrinth]
+mod-id = "bCxmmxKN"
+version = "cRR55xmK"

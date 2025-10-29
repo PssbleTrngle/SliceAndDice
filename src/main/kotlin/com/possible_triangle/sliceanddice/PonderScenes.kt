@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice
 
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile
+import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.simibubi.create.AllFluids
 import com.simibubi.create.Create.RANDOM
@@ -75,10 +75,10 @@ object PonderScenes : PonderPlugin {
 
             val knife = ItemStack(ModCompat.exampleTool)
             scene.overlay().showControls(VecHelper.getCenterOf(beltSlicer.above()), Pointing.DOWN, 50).withItem(knife)
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 it.heldItem = knife
             }
-            scene.world().modifyBlockEntity(basinSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(basinSlicer, SlicerBlockEntity::class.java) {
                 it.heldItem = knife
             }
 
@@ -97,7 +97,7 @@ object PonderScenes : PonderPlugin {
             scene.world().removeItemsFromBelt(beltOutputPos)
             val slicesInWorld = scene.world().createItemOnBelt(beltOutputPos, Direction.UP, slices)
 
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 it.cuttingBehaviour.makePressingParticleEffect(
                     VecHelper.getCenterOf(beltOutputPos).add(0.0, 0.6, 0.0), slices
                 )
@@ -105,7 +105,7 @@ object PonderScenes : PonderPlugin {
 
             scene.idle(5)
             scene.world().stallBeltItem(slicesInWorld, false)
-            scene.world().modifyBlockEntity(beltSlicer, SlicerTile::class.java) {
+            scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 //it.cuttingBehaviour.running = false
             }
 
@@ -125,7 +125,7 @@ object PonderScenes : PonderPlugin {
             val basinOutputPos = basin.north().below()
             for (i in 0..3) {
                 scene.idleSeconds(2)
-                scene.world().modifyBlockEntity(basinSlicer, SlicerTile::class.java) {
+                scene.world().modifyBlockEntity(basinSlicer, SlicerBlockEntity::class.java) {
                     it.cuttingBehaviour.start(PressingBehaviour.Mode.BASIN)
                 }
                 scene.idleSeconds(1)

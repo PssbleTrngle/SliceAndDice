@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.mixins;
 
-import com.possible_triangle.sliceanddice.block.slicer.SlicerTile;
+import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ public class PressingBehaviourMixin {
     )
     private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos) {
         var self = (PressingBehaviour) (Object) this;
-        if(self.specifics instanceof SlicerTile slicer) {
+        if(self.specifics instanceof SlicerBlockEntity slicer) {
             slicer.playSound(world, new BlockPos(pos), false);
         } else {
             instance.playOnServer(world, pos);
@@ -34,7 +34,7 @@ public class PressingBehaviourMixin {
     )
     private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos, float volume, float pitch) {
         var self = (PressingBehaviour) (Object) this;
-        if(self.specifics instanceof SlicerTile slicer) {
+        if(self.specifics instanceof SlicerBlockEntity slicer) {
             slicer.playSound(world, new BlockPos(pos), true);
         } else {
             instance.playOnServer(world, pos);

@@ -1,0 +1,36 @@
+hash-format = "sha256"
+
+[[files]]
+file = "mods/catalogue.pw.toml"
+hash = "0722da0022c3d9dcf6be08f561828222f61911b62aed7d8c75f71c126e12e1b8"
+metafile = true
+
+[[files]]
+file = "mods/configured.pw.toml"
+hash = "c1bdeff356cd2ac164e2c0e6d0ceeda234db9774c2df44fb9f0e71d3960cc3f1"
+metafile = true
+
+[[files]]
+file = "mods/create-enchantment-industry.pw.toml"
+hash = "c670ae9055f10dafb61fe340583c361f4c41ed45671c9440bae1f0696b47252a"
+metafile = true
+
+[[files]]
+file = "mods/farmers-delight.pw.toml"
+hash = "9f2ffb0d4c65fcb2a96878287a7119459b9d0637c395e5097d691416690d6563"
+metafile = true
+
+[[files]]
+file = "mods/overweight-farming.pw.toml"
+hash = "ca54ccd33453cf0b9a2572f54017119aa95e62d55dce68d610899afd213419fb"
+metafile = true
+
+[[files]]
+file = "mods/recipe-modification.pw.toml"
+hash = "7ffb5ab61ee52b7e48ed96c049f3e9fdd254d760363829aa47b151bff0c8bdf8"
+metafile = true
+
+[[files]]
+file = "mods/vegan-delight.pw.toml"
+hash = "c632dca1da0883fe8a8bcad30fea8bfc013c41d999584c7f5915fb23c699a0cf"
+metafile = true
