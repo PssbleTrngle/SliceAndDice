@@ -83,11 +83,8 @@ dependencies {
     modCompileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${mc_version}:${flywheel_version}")
     modRuntimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
 
-    // TODO modImplementation("maven.modrinth:farmers-delight:${farmers_delight_version}")
-    // TODO modCompileOnly("maven.modrinth:create-enchantment-industry:${create_enchantment_industry_version}")
     modImplementation(pack.modrinth.farmers.delight)
-    modImplementation(pack.modrinth.create.dragons.plus)
-    modImplementation(pack.modrinth.create.enchantment.industry)
+    modCompileOnly(pack.modrinth.create.enchantment.industry)
     //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
 
     if (!env.isCI) {
