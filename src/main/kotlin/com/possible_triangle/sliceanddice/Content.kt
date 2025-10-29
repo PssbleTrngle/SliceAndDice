@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
 import com.possible_triangle.sliceanddice.SliceAndDice.REGISTRATE
+import com.possible_triangle.sliceanddice.SliceAndDice.modLoc
 import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
@@ -21,7 +22,6 @@ import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
 import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
-import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.foundation.data.*
 import com.tterrag.registrate.AbstractRegistrate
@@ -53,13 +53,10 @@ import java.util.function.Supplier
 
 object Content {
 
-    fun modLoc(path: String): ResourceLocation {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
-    }
-
     val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
 
-    val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
+    val SLICER_BLOCK = REGISTRATE.block("slicer", ::SlicerBlock)
+        .initialProperties(SharedProperties::stone)
         .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
         }
@@ -77,7 +74,9 @@ object Content {
 
     val SLICER_BLOCK_ENTITY = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
         .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
-        .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
+        .renderer { NonNullFunction { SlicerRenderer(it) } }
+        .validBlock(SLICER_BLOCK)
+        .register()
 
     private fun <T : Recipe<*>> AbstractRegistrate<*>.recipeType(name: String) =
         generic(name, Registries.RECIPE_TYPE) {
@@ -95,12 +94,13 @@ object Content {
         .register()
 
 
-    val WET_AIR = REGISTRATE.block<WetAir>("wet_air", ::WetAir).initialProperties { Blocks.CAVE_AIR }
+    val WET_AIR = REGISTRATE.block("wet_air", ::WetAir)
+        .initialProperties { Blocks.CAVE_AIR }
         .properties { it.randomTicks() }.blockstate { c, p ->
             p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
         }.register()
 
-    val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
+    val SPRINKLER_BLOCK = REGISTRATE.block("sprinkler", ::SprinklerBlock)
         .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
@@ -139,7 +139,7 @@ object Content {
 
     val SLICER_INTERACTION_POINT =
         REGISTRATE
-            .generic<ArmInteractionPointType, SlicerArmInteractionType>(
+            .generic(
                 "slicer",
                 CreateRegistries.ARM_INTERACTION_POINT_TYPE
             ) { SlicerArmInteractionType }

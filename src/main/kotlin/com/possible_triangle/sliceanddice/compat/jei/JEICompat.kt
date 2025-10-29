@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.compat.jei
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.FarmersDelightCompat
 import com.possible_triangle.sliceanddice.compat.OverweightFarmingCompat
 import com.simibubi.create.AllRecipeTypes
@@ -19,7 +19,7 @@ class JEICompat : IModPlugin {
 
     private val cutting = CuttingProcessingCategory()
 
-    override fun getPluginUid() = Content.modLoc("jei")
+    override fun getPluginUid() = SliceAndDice.modLoc("jei")
 
     override fun registerCategories(registration: IRecipeCategoryRegistration) {
         registration.addRecipeCategories(cutting)

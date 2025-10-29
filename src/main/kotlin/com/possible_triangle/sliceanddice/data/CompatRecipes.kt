@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.data
 
 import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllItems
@@ -24,7 +25,7 @@ import vectorwing.farmersdelight.common.registry.ModItems
 object CompatRecipes {
 
     fun generate(output: RegistrateRecipeProvider) {
-        StandardProcessingRecipe.Builder(::FillingRecipe, Content.modLoc("hot_cocoa_from_fluid"))
+        StandardProcessingRecipe.Builder(::FillingRecipe, SliceAndDice.modLoc("hot_cocoa_from_fluid"))
             .require(Items.GLASS_BOTTLE)
             .require(AllFluids.CHOCOLATE.get(), 250)
             .output(ModItems.HOT_COCOA.get())
@@ -45,7 +46,7 @@ object CompatRecipes {
             .withCondition(ModLoadedCondition("thermal_foundation"))
             .build(output)
 
-        StandardProcessingRecipe.Builder(::FillingRecipe, Content.modLoc("rich_soil"))
+        StandardProcessingRecipe.Builder(::FillingRecipe, SliceAndDice.modLoc("rich_soil"))
             .require(ModBlocks.ORGANIC_COMPOST.get())
             .require(Content.FERTILIZER.get(), 500)
             .output(ModBlocks.RICH_SOIL.get())
@@ -61,7 +62,7 @@ object CompatRecipes {
     }
 
     private fun fertilizerMixing(amount: Int, id: String): StandardProcessingRecipe.Builder<MixingRecipe> {
-        return StandardProcessingRecipe.Builder(::MixingRecipe, Content.modLoc("fertilizer/from_$id"))
+        return StandardProcessingRecipe.Builder(::MixingRecipe, SliceAndDice.modLoc("fertilizer/from_$id"))
             .require(Fluids.WATER, amount)
             .output(Content.FERTILIZER.get(), amount)
     }

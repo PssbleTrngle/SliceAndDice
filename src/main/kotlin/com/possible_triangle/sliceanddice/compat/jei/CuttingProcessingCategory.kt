@@ -24,7 +24,7 @@ import java.util.function.Supplier
 class CuttingProcessingCategory() :
     CreateRecipeCategory<CuttingProcessingRecipe>(
         Info(
-            RecipeType.createRecipeHolderType(Content.modLoc("slicer")),
+            RecipeType.createRecipeHolderType(SliceAndDice.modLoc("slicer")),
             Component.translatable("${SliceAndDice.MOD_ID}.recipe.slicer"),
             EmptyBackground(177, 85),
             ItemIcon(SLICER),

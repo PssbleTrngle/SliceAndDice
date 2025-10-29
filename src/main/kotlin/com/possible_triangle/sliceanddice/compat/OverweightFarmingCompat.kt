@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.ModCompat.OVERWEIGHT_FARMING
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe
@@ -36,7 +36,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         val recipes = MiscEvents.PEELABLES.get().map { (from, to) ->
             val fromId = from.builtInRegistryHolder().key().location()
             val toId = to.builtInRegistryHolder().key().location()
-            val id = Content.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
+            val id = SliceAndDice.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
             ItemApplicationRecipe.Builder(::ManualApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)
@@ -56,7 +56,7 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
         MiscEvents.WAXABLES.get().forEach { (from, to) ->
             val fromId = from.builtInRegistryHolder().key().location()
             val toId = to.builtInRegistryHolder().key().location()
-            val id = Content.modLoc("$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}")
+            val id = SliceAndDice.modLoc("$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}")
             val recipe = ItemApplicationRecipe.Builder(::DeployerApplicationRecipe, id).let {
                 it.output(to)
                 it.require(from)
