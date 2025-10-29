@@ -1,0 +1,36 @@
+hash-format = "sha256"
+
+[[files]]
+file = "mods/catalogue.pw.toml"
+hash = "98db626859ef290e5f7be9084d9f8a4b93ef441a8762ff08cebcf36308b36225"
+metafile = true
+
+[[files]]
+file = "mods/configured.pw.toml"
+hash = "74705ad5043cf5866d0b558e9cded4b78eaf12afc2f78ab12c0863cc2d4c54d0"
+metafile = true
+
+[[files]]
+file = "mods/create-dragons-plus.pw.toml"
+hash = "485c1d97761536a52331e5d50055ecd514086e2f23937f259e33e06cc638ca91"
+metafile = true
+
+[[files]]
+file = "mods/create-enchantment-industry.pw.toml"
+hash = "05995b86a58ee09106d8e34458a4eb7561ad5bf3e25d89f491519c18010afe8e"
+metafile = true
+
+[[files]]
+file = "mods/farmers-delight.pw.toml"
+hash = "44abae510395f12f9ea97b8296b2f72e25f18b9f3f2cc0ee42c0d9afd73fe0b3"
+metafile = true
+
+[[files]]
+file = "mods/recipe-modification.pw.toml"
+hash = "cca32fd0725a5d5b5e1fae4e7fbde652e070febf16192c0a74c2f13aacf97897"
+metafile = true
+
+[[files]]
+file = "mods/vegan-delight.pw.toml"
+hash = "c644f5fb62910aa37d4fdbd8baa7276e442a11f1676862e8ae50e307974fa8d1"
+metafile = true

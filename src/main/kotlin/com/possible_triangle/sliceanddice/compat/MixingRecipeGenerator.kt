@@ -9,10 +9,10 @@ import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.material.FlowingFluid
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -116,17 +116,11 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
     fun createRecipe(id: ResourceLocation, cookTime: Int, output: ItemStack): MixingRecipe {
         val builder = StandardProcessingRecipe.Builder(::MixingRecipe, id)
             .withItemIngredients(*items.toTypedArray())
+            .withFluidIngredients(*fluids.map(SizedFluidIngredient::of).toTypedArray())
             .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
             .duration(cookTime)
             .withSingleItemOutput(output)
-        
-        fluids.forEach { fluidStack ->
-            val fluid = fluidStack.fluid
-            if (fluid is FlowingFluid) {
-                builder.require(fluid, fluidStack.amount)
-            }
-        }
-        
+
         return builder.build()
     }
 

@@ -1,0 +1,13 @@
+name = "Recipe Modification library"
+filename = "recipe_modification-neoforge-1.21.1-0.1.1.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/fRIu3HNp/versions/m5wdxl1u/recipe_modification-neoforge-1.21.1-0.1.1.jar"
+hash-format = "sha512"
+hash = "20e20aecaa48b852a0726653d52946bd5f8b6704abf52c43cc33d9c2139a6d999ee354e552de9a9ca5049b4a55fca6345730065e4ca99de62be8de449348ecd7"
+
+[update]
+[update.modrinth]
+mod-id = "fRIu3HNp"
+version = "m5wdxl1u"

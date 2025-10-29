@@ -8,8 +8,9 @@ modId = "${mod_id}"
 version = "${mod_version}"
 displayName = "${mod_name}"
 authors = "${mod_author}"
+logoFile = "assets/${mod_id}/icon.png"
 description = '''Making automation for Farmers Delight more sensible'''
-updateJSONURL="https://api.modrinth.com/updates/slice-and-dice/forge_updates.json"
+updateJSONURL="https://api.modrinth.com/updates/slice-and-dice/forge_updates.json?neoforge=only"
 
 [[dependencies.${mod_id}]]
     modId = "neoforge"
@@ -33,7 +34,7 @@ updateJSONURL="https://api.modrinth.com/updates/slice-and-dice/forge_updates.jso
 
 [[dependencies.${mod_id}]]
     modId = "create"
-    versionRange = "[6.0.6,7.0.0)"
+    versionRange = "[6.0.7,7.0.0)"
     ordering = "AFTER"
     side = "BOTH"
 
