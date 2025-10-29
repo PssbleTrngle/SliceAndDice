@@ -20,6 +20,8 @@ build
 # other
 eclipse
 run
+runs
+.kotlin
 
 # Files from Forge MDK
 forge*changelog.txt

@@ -66,7 +66,8 @@ object Content {
 
     val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
 
-    val SLICER_BLOCK = REGISTRATE.block<SlicerBlock>("slicer", ::SlicerBlock).initialProperties(SharedProperties::stone)
+    val SLICER_BLOCK = REGISTRATE.block("slicer", ::SlicerBlock)
+        .initialProperties(SharedProperties::stone)
         .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
             p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
         }
@@ -84,7 +85,9 @@ object Content {
 
     val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
         .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
-        .renderer { NonNullFunction { SlicerRenderer(it) } }.validBlock(SLICER_BLOCK).register()
+        .renderer { NonNullFunction { SlicerRenderer(it) } }
+        .validBlock(SLICER_BLOCK)
+        .register()
 
     private fun <T : Recipe<*>> createRecipeType(id: ResourceLocation): RegistryObject<RecipeType<T>> {
         val type = object : RecipeType<T> {
@@ -99,12 +102,13 @@ object Content {
         CuttingProcessingRecipe.Serializer
     }
 
-    val WET_AIR = REGISTRATE.block<WetAir>("wet_air", ::WetAir).initialProperties { Blocks.CAVE_AIR }
+    val WET_AIR = REGISTRATE.block("wet_air", ::WetAir)
+        .initialProperties { Blocks.CAVE_AIR }
         .properties { it.randomTicks() }.blockstate { c, p ->
             p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
         }.register()
 
-    val SPRINKLER_BLOCK = REGISTRATE.block<SprinklerBlock>("sprinkler", ::SprinklerBlock)
+    val SPRINKLER_BLOCK = REGISTRATE.block("sprinkler", ::SprinklerBlock)
         .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
         .addLayer { Supplier { RenderType.cutoutMipped() } }
         .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
@@ -143,7 +147,7 @@ object Content {
 
     val SLICER_INTERACTION_POINT =
         REGISTRATE
-            .generic<ArmInteractionPointType, SlicerArmInteractionType>(
+            .generic(
                 "slicer",
                 CreateRegistries.ARM_INTERACTION_POINT_TYPE
             ) { SlicerArmInteractionType }
