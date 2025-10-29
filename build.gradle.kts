@@ -1,4 +1,3 @@
-val mod_id: String by extra
 val mc_version: String by extra
 val registrate_version: String by extra
 val create_version: String by extra
@@ -17,7 +16,7 @@ neoforge {
 }
 
 base {
-    archivesName = mod.version.map { "$mod_id-forge-$it" }
+    archivesName = "${mod.id.get()}-forge-${mod.version.get()}"
 }
 
 repositories {
