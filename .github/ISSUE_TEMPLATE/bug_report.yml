@@ -1,7 +1,7 @@
 # <meta>
 #    <source>https://github.com/PssbleTrngle/Workflows</source>
 #    <version>0.0.0-dev</version>
-#    <timestamp>2025-10-30T16:10:08.121Z</timestamp>
+#    <timestamp>2025-10-30T16:24:29.344Z</timestamp>
 # </meta>
 
 name: Bug Report
@@ -43,10 +43,11 @@ body:
       label: Minecraft Version
       multiple: false
       options:
-        - "1.18"
-        - "1.19"
-        - "1.20"
         - "1.21"
+        - "1.21"
+        - "1.20"
+        - "1.19"
+        - "1.18"
     validations:
       required: true
 
