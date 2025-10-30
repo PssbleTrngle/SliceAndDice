@@ -1,7 +1,12 @@
+# <meta>
+#    <source>https://github.com/PssbleTrngle/Workflows</source>
+#    <version>0.0.0-dev</version>
+#    <timestamp>2025-10-30T16:10:08.121Z</timestamp>
+# </meta>
+
 name: Bug Report
 description: File a bug report
 labels: ["bug"]
-assignees: [PssbleTrngle]
 
 body:
   - type: textarea
@@ -19,9 +24,9 @@ body:
       label: Loader
       multiple: false
       options:
-        - forge
-        - fabric
-        - neoforge
+        - "neoforge"
+        - "forge"
+        - "fabric"
     validations:
       required: true
 
@@ -38,16 +43,15 @@ body:
       label: Minecraft Version
       multiple: false
       options:
-        - "1.21"
-        - "1.20"
-        - "1.19"
         - "1.18"
+        - "1.19"
+        - "1.20"
+        - "1.21"
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: logs
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: Shell
+      label: log output
+      description: Please copy and paste your log output to https://mclo.gs/ or a similar site and paste the link here.

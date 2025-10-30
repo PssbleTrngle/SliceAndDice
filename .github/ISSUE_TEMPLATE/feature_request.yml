@@ -1,7 +1,12 @@
+# <meta>
+#    <source>https://github.com/PssbleTrngle/Workflows</source>
+#    <version>0.0.0-dev</version>
+#    <timestamp>2025-10-30T16:10:08.120Z</timestamp>
+# </meta>
+
 name: Feature Request
 description: Suggest a feature
-labels: ["enhancement", "feature", "feature-request"]
-assignees: [PssbleTrngle]
+labels: ["enhancement"]
 
 body:
   - type: textarea
@@ -11,11 +16,11 @@ body:
       placeholder: So I was think about...
     validations:
       required: true
-      
+
   - type: textarea
     id: problem-solving
     attributes:
       label: Does this solve a particular problem?
-      placeholder: Yes, it balances... 
+      placeholder: Yes, it balances...
     validations:
       required: false
