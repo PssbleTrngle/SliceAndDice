@@ -1,0 +1,10 @@
+{
+   "$schema": "https://webhooks.new.macarena.ceo/schema/config.json",
+   "type": "minecraft",
+   "sonar": true,
+   "upload": {
+      "nexus": true,
+      "curseforge": true,
+      "modrinth": true
+   }
+}
