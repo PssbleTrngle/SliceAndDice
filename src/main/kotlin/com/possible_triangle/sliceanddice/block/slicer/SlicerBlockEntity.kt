@@ -19,6 +19,7 @@ import net.createmod.catnip.lang.FontHelper
 import net.createmod.catnip.lang.Lang
 import net.createmod.catnip.math.VecHelper
 import net.minecraft.ChatFormatting
+import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -35,7 +36,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeHolder
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
@@ -76,6 +76,8 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
             basinChecker.scheduleUpdate()
             sendData()
         }
+
+    private var playSound = false
 
     override fun updateBasin(): Boolean {
         return !correctDirection || super.updateBasin()
@@ -142,13 +144,29 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
             decoded.orElse(ItemStack.EMPTY)
         }
 
-        if (clientPacket && compound.contains("ParticleItems", 9)) {
-            val particles = compound.getList("ParticleItems", 10)
-            if (particles.isNotEmpty() && behaviour.mode != Mode.BASIN) cuttingParticles()
-            if (particles.isEmpty()) compound.remove("ParticleItems")
+        if (clientPacket) {
+            compound.handleParticles(registries)
+            if (compound.getBoolean("PlaySound")) playSound()
         }
 
         super.read(compound, registries, clientPacket)
+    }
+
+    private fun CompoundTag.handleParticles(registries: HolderLookup.Provider) {
+        if (!contains("ParticleItems", 9)) return
+
+        val particles = getList("ParticleItems", 10)
+        if (particles.isEmpty()) {
+            remove("ParticleItems")
+        } else {
+            if (behaviour.mode != Mode.BASIN) cuttingParticles()
+
+            if (Configs.CLIENT.spawnBloodParticles) {
+                particles.clear()
+                particles.add(ItemStack(Items.REDSTONE).saveOptional(registries))
+                particles.add(ItemStack(Items.RED_DYE).saveOptional(registries))
+            }
+        }
     }
 
     override fun write(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
@@ -157,6 +175,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         if (!_heldItem.isEmpty) {
             val encoded = ItemStack.CODEC.encodeStart(ops, _heldItem).result()
             encoded.ifPresent { compound.put("HeldItem", it) }
+        }
+        if (clientPacket) {
+            compound.putBoolean("PlaySound", playSound)
+            playSound = false
         }
     }
 
@@ -210,12 +232,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     }
 
     private fun addToParticleItems(stack: ItemStack) {
-        if (Configs.CLIENT.spawnBloodParticles) {
-            behaviour.particleItems.add(ItemStack(Items.REDSTONE))
-            behaviour.particleItems.add(ItemStack(Items.RED_DYE))
-        } else {
-            behaviour.particleItems.add(stack)
-        }
+        behaviour.particleItems.add(stack)
     }
 
     override fun tryProcessInBasin(simulate: Boolean): Boolean {
@@ -321,19 +338,25 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         }
     }
 
-    fun playSound(world: Level, pos: BlockPos) {
-        if (Configs.CLIENT.spawnBloodParticles && world.random.nextInt(5) == 0) {
-            world.playSound(null, pos, SoundEvents.GOAT_DEATH, SoundSource.BLOCKS, 0.5F, 1F)
-        }
+    fun playSound() {
+        val world = this.level ?: return
+        if (world.isClientSide) {
+            val player = Minecraft.getInstance().player
+            if (Configs.CLIENT.spawnBloodParticles && world.random.nextInt(5) == 0) {
+                world.playSound(player, worldPosition, SoundEvents.GOAT_DEATH, SoundSource.BLOCKS, 0.5F, 1F)
+            }
 
-        world.playSound(
-            null,
-            pos,
-            ModCompat.cuttingSound,
-            SoundSource.BLOCKS,
-            1F,
-            world.random.nextFloat() * 0.2F + 0.9F
-        )
+            world.playSound(
+                player,
+                worldPosition,
+                ModCompat.cuttingSound,
+                SoundSource.BLOCKS,
+                1F,
+                world.random.nextFloat() * 0.2F + 0.9F
+            )
+        } else {
+            playSound = true
+        }
     }
 
 }

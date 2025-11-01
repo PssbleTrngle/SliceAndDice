@@ -1,43 +1,43 @@
 package com.possible_triangle.sliceanddice.mixins;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = PressingBehaviour.class, remap = false)
 public class PressingBehaviourMixin {
 
-    @Redirect(
+    @WrapOperation(
             require = 0,
             method = "tick()V",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/AllSoundEvents$SoundEntry;playOnServer(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/Vec3i;)V")
     )
-    private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos) {
+    private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos, Operation<Void> original) {
         var self = (PressingBehaviour) (Object) this;
         if(self.specifics instanceof SlicerBlockEntity slicer) {
-            slicer.playSound(world, new BlockPos(pos));
+            slicer.playSound();
         } else {
-            instance.playOnServer(world, pos);
+            original.call(instance, world, pos);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             require = 0,
             method = "tick()V",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/AllSoundEvents$SoundEntry;playOnServer(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/Vec3i;FF)V")
     )
-    private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos, float volume, float pitch) {
+    private void overwriteDefaultItem(AllSoundEvents.SoundEntry instance, Level world, Vec3i pos, float volume, float pitch, Operation<Void> original) {
         var self = (PressingBehaviour) (Object) this;
         if(self.specifics instanceof SlicerBlockEntity slicer) {
-            slicer.playSound(world, new BlockPos(pos));
+            slicer.playSound();
         } else {
-            instance.playOnServer(world, pos);
+            original.call(instance, world, pos, volume, pitch);
         }
     }
 
