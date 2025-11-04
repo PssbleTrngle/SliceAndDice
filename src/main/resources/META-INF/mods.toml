@@ -28,7 +28,7 @@ updateJSONURL = "https://api.modrinth.com/updates/slice-and-dice/forge_updates.j
 [[dependencies.${mod_id}]]
     modId = "create"
     mandatory = true
-    versionRange = "[6.0.0,)"
+    versionRange = "[6.0.7,)"
     ordering = "AFTER"
     side = "BOTH"
 
