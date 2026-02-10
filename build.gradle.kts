@@ -1,10 +1,3 @@
-val mc_version: String by extra
-val registrate_version: String by extra
-val create_version: String by extra
-val ponder_version: String by extra
-val flywheel_version: String by extra
-val jei_version: String by extra
-
 plugins {
     id("com.possible-triangle.neoforge")
 }
@@ -73,28 +66,31 @@ repositories {
 }
 
 dependencies {
-    modCompileOnly("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    modCompileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
-    modRuntimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    modCompileOnly(libs.jei.common.api)
+    modCompileOnly(libs.jei.neoforge.api)
 
-    modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
-    modImplementation("com.simibubi.create:create-${mc_version}:${create_version}:slim") { isTransitive = false }
-    modImplementation("net.createmod.ponder:Ponder-NeoForge-${mc_version}:${ponder_version}")
-    modCompileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${mc_version}:${flywheel_version}")
-    modRuntimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
+    modImplementation(libs.registrate)
+
+    modImplementation(
+        variantOf(libs.create) {
+            classifier("slim")
+        },
+    ) {
+        isTransitive = false
+    }
+
+    modImplementation(libs.ponder)
+    modCompileOnly(libs.flywheel)
 
     modImplementation(pack.modrinth.farmers.delight)
     modCompileOnly(pack.modrinth.create.enchantment.industry)
-    //modImplementation("curse.maven:overweight-farming-591666:${overweight_farming_version}")
+    modCompileOnly(pack.modrinth.overweight.farming)
 
     if (!env.isCI) {
-        //modRuntimeOnly("curse.maven:neapolitan-382016:${neapolitan_version}")
-        //modRuntimeOnly("com.teamabnormals:blueprint:${mc_version}-${blueprint_version}")
+        modRuntimeOnly(libs.jei.neoforge)
 
-        //modRuntimeOnly("curse.maven:cofh-core-69162:${cofh_core_version}")
-        //modRuntimeOnly("curse.maven:thermal-foundation-222880:${thermal_foundation_version}")
-        //modRuntimeOnly("curse.maven:thermal-expansion-69163:${thermal_expansion_version}")
-        //modRuntimeOnly("curse.maven:thermal-cultivation-271835:${thermal_cultivation_version}")
+        modRuntimeOnly(pack.modrinth.blueprint)
+        modRuntimeOnly(pack.modrinth.neapolitan)
 
         modRuntimeOnly(pack.modrinth.recipe.modification)
         modRuntimeOnly(pack.modrinth.vegan.delight)

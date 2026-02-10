@@ -1,6 +1,11 @@
 hash-format = "sha256"
 
 [[files]]
+file = "mods/blueprint.pw.toml"
+hash = "a5122c5ecc0e36da4f60474cc8ecaff590aaeae8be545ffddfe2c25db89816e7"
+metafile = true
+
+[[files]]
 file = "mods/catalogue.pw.toml"
 hash = "98db626859ef290e5f7be9084d9f8a4b93ef441a8762ff08cebcf36308b36225"
 metafile = true
@@ -23,6 +28,16 @@ metafile = true
 [[files]]
 file = "mods/farmers-delight.pw.toml"
 hash = "44abae510395f12f9ea97b8296b2f72e25f18b9f3f2cc0ee42c0d9afd73fe0b3"
+metafile = true
+
+[[files]]
+file = "mods/neapolitan.pw.toml"
+hash = "e68a5fa89a2b2c17a3f807875c8f32b5f69d7c083a8c88e8f29f3832c9bb4385"
+metafile = true
+
+[[files]]
+file = "mods/overweight-farming.pw.toml"
+hash = "836ffb879311a16e620c05796513395a3b9009c7d27d84c5938f03add120bec6"
 metafile = true
 
 [[files]]

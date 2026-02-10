@@ -1,0 +1,13 @@
+name = "Overweight Farming"
+filename = "OverweightFarming-1.21.1-2.2.0-NeoForge.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/bCxmmxKN/versions/9w8TG5JN/OverweightFarming-1.21.1-2.2.0-NeoForge.jar"
+hash-format = "sha512"
+hash = "32aaa8a506019ceefc9e6dfda2617b217911b92e25d11451d5afb7f022c0ad7274045e31230667421f1837193c04bd87dda0a80bf7ab0774c3fa96870f84a97a"
+
+[update]
+[update.modrinth]
+mod-id = "bCxmmxKN"
+version = "9w8TG5JN"

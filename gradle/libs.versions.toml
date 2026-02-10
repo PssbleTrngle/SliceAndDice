@@ -1,0 +1,17 @@
+[versions]
+jei = "19.27.0.340"
+flightlib = "3.2.1"
+
+[libraries]
+create = { group = "com.simibubi.create", name = "create-1.21.1", version = "6.0.10-251" }
+ponder = { group = "net.createmod.ponder", name = "ponder-neoforge", version = "1.0.81+mc1.21.1" }
+registrate = { group = "com.tterrag.registrate", name = "Registrate", version = "MC1.21-1.3.0+67" }
+flywheel = { group = "dev.engine-room.flywheel", name = "flywheel-neoforge-1.21.1", version = "1.0.6" }
+
+flightlib-neoforge-api = { group = "com.possible-triangle", name = "flightlib-neoforge-api", version.ref = "flightlib" }
+flightlib-neoforge = { group = "com.possible-triangle", name = "flightlib-neoforge", version.ref = "flightlib" }
+flightlib-api = { group = "com.possible-triangle", name = "flightlib-api", version.ref = "flightlib" }
+
+jei-common-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.ref = "jei" }
+jei-neoforge-api = { group = "mezz.jei", name = "jei-1.21.1-neoforge-api", version.ref = "jei" }
+jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei" }

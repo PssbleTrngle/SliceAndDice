@@ -214,12 +214,11 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
             stack,
             CuttingProcessingRecipe.getType(),
             CuttingProcessingRecipe::class.java
-        ).asSequence()
-            .map { it.value() }
-            .filter { it.params.tool?.test(_heldItem) == true }
-            .firstOrNull()
+        ) {
+            it.value.params.tool?.test(_heldItem) == true
+        }.firstOrNull()
 
-        if (assemblyRecipe != null) return assemblyRecipe
+        if (assemblyRecipe != null) return assemblyRecipe.value
 
         val recipes = RecipeFinder.get(inWorldCacheKey, level) {
             val recipe = it.value()
