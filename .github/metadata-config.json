@@ -1,15 +1,16 @@
 {
-   "$schema": "https://webhooks.new.macarena.ceo/schema/config.json",
-   "type": "minecraft",
-   "sonar": true,
+   "$schema": "https://workflows.somethingcatchy.net/schema/config.json",
+  "assignee": "PssbleTrngle",
+  "type": "minecraft",
    "loaders": [
       "neoforge",
-      "forge",
-      "fabric"
+      "fabric",
+      "forge"
    ],
    "upload": {
-      "nexus": true,
       "curseforge": true,
-      "modrinth": true
-   }
+      "modrinth": true,
+      "nexus": true
+   },
+   "sonar": true
 }
