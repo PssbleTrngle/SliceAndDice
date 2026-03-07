@@ -1,12 +1,13 @@
 # <meta>
 #    <source>@pssbletrngle/github-meta-generator</source>
 #    <version>0.0.0-dev</version>
-#    <timestamp>2025-10-30T18:39:06.390Z</timestamp>
+#    <timestamp>2026-03-07T18:18:47.552Z</timestamp>
 # </meta>
 
 name: Bug Report
 description: File a bug report
 labels: ["bug"]
+assignees: ["PssbleTrngle"]
 
 body:
   - type: textarea
@@ -25,8 +26,8 @@ body:
       multiple: false
       options:
         - "neoforge"
-        - "forge"
         - "fabric"
+        - "forge"
     validations:
       required: true
 
@@ -43,7 +44,6 @@ body:
       label: Minecraft Version
       multiple: false
       options:
-        - "1.21"
         - "1.21"
         - "1.20"
         - "1.19"
