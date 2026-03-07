@@ -91,6 +91,7 @@ dependencies {
 
         modRuntimeOnly(pack.modrinth.blueprint)
         modRuntimeOnly(pack.modrinth.neapolitan)
+        modRuntimeOnly(pack.modrinth.gallery)
 
         modRuntimeOnly(pack.modrinth.recipe.modification)
         modRuntimeOnly(pack.modrinth.vegan.delight)

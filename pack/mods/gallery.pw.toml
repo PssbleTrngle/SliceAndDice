@@ -1,0 +1,13 @@
+name = "Gallery"
+filename = "gallery-1.21.1-2.0.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/EOA6vv83/versions/ro6SHsF9/gallery-1.21.1-2.0.0.jar"
+hash-format = "sha512"
+hash = "8225b190f77e07cdf57b55b87537334600e29f21a55f2fe5ff0cf8f2e4093b4c1a3f460e963f76f44ef20ce6c515d89116cca6502d6e759a0cb5ecb6ad30a57e"
+
+[update]
+[update.modrinth]
+mod-id = "EOA6vv83"
+version = "ro6SHsF9"
