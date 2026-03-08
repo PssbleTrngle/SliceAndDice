@@ -15,8 +15,6 @@
 
 # Create Slice & Dice <img src="https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
 
-[Looking for the Fabric version?](https://github.com/PssbleTrngle/SliceAndDice-Fabric)
-
 [![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
 [![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
 [![Version](http://cf.way2muchnoise.eu/versions/659674.svg)][DOWNLOAD]
