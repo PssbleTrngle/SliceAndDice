@@ -1,0 +1,13 @@
+name = "Gallery"
+filename = "gallery-1.20.1-1.0.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/EOA6vv83/versions/GXA1WCeg/gallery-1.20.1-1.0.3.jar"
+hash-format = "sha512"
+hash = "aee033d4ab2752c62071d3835aca8878fe7c4486cbbe7416d31a87e5682fb876b8c79de91fc006fda8b10ec52cb91325b09294b66d53e3e522a62399ad7c814f"
+
+[update]
+[update.modrinth]
+mod-id = "EOA6vv83"
+version = "GXA1WCeg"
