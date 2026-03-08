@@ -1,11 +1,13 @@
 {
-  "type": "create:filling",
-  "conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "farmersdelight"
+      "condition": "fabric:any_mod_loaded",
+      "values": [
+        "farmersdelight"
+      ]
     }
   ],
+  "type": "create:filling",
   "ingredients": [
     {
       "item": "farmersdelight:organic_compost"

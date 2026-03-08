@@ -5,14 +5,14 @@
       "item": "create:tree_fertilizer"
     },
     {
-      "amount": 500,
+      "amount": 40500,
       "fluid": "minecraft:water",
       "nbt": {}
     }
   ],
   "results": [
     {
-      "amount": 500,
+      "amount": 40500,
       "fluid": "sliceanddice:fertilizer"
     }
   ]

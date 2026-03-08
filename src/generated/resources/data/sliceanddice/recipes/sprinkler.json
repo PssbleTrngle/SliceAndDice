@@ -9,7 +9,7 @@
       "item": "create:fluid_pipe"
     },
     "S": {
-      "tag": "forge:plates/copper"
+      "tag": "c:plates/copper"
     }
   },
   "pattern": [
