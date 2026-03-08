@@ -133,7 +133,6 @@ object Content {
             .source { SimpleFlowableFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
-            .model(AssetLookup.existingItemModel())
             .lang("Bucket of Liquid Fertilizer")
             .apply { FERTILIZER_BUCKET = register() }
             .parent
