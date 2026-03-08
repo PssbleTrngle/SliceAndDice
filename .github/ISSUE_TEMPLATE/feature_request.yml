@@ -1,0 +1,27 @@
+# <meta>
+#    <source>@pssbletrngle/github-meta-generator</source>
+#    <version>0.0.0-dev</version>
+#    <timestamp>2026-03-08T09:33:55.719Z</timestamp>
+# </meta>
+
+name: Feature Request
+description: Suggest a feature
+labels: ["enhancement"]
+assignees: ["PssbleTrngle"]
+
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Describe the feature you have in mind.
+      placeholder: So I was think about...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: Does this solve a particular problem?
+      placeholder: Yes, it balances...
+    validations:
+      required: false
