@@ -2,11 +2,13 @@
 jei = "15.20.0.129"
 
 [libraries]
-create = { group = "com.simibubi.create", name = "create-1.20.1", version = "6.0.8-291" }
-ponder = { group = "net.createmod.ponder", name = "Ponder-Forge-1.20.1", version = "1.0.91" }
-registrate = { group = "com.tterrag.registrate", name = "Registrate", version = "MC1.20-1.3.3" }
-flywheel = { group = "dev.engine-room.flywheel", name = "flywheel-forge-1.20.1", version = "1.0.5" }
+create = { group = "com.simibubi.create", name = "create-fabric-1.20.1", version = "6.0.7.0+mc1.20.1-build.1716" }
+ponder = { group = "net.createmod.ponder", name = "Ponder-Fabric-1.20.1", version = "1.0.91" }
+registrate = { group = "com.tterrag.registrate_fabric", name = "Registrate", version = "1.3.79-MC1.20.1" }
+flywheel = { group = "dev.engine-room.flywheel", name = "flywheel-fabric-1.20.1", version = "1.0.5" }
 
 jei-common-api = { group = "mezz.jei", name = "jei-1.20.1-common-api", version.ref = "jei" }
-jei-forge-api = { group = "mezz.jei", name = "jei-1.20.1-forge-api", version.ref = "jei" }
-jei-forge = { group = "mezz.jei", name = "jei-1.20.1-forge", version.ref = "jei" }
+jei-fabric-api = { group = "mezz.jei", name = "jei-1.20.1-fabric-api", version.ref = "jei" }
+jei-fabric = { group = "mezz.jei", name = "jei-1.20.1-fabric", version.ref = "jei" }
+
+farmers-delight = { group = "vectorwing", name = "FarmersDelight-Refabricated", version = "1.20.1-2.0.12" }

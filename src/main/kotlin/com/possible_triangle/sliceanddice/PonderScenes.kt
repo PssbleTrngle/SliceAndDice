@@ -10,6 +10,8 @@ import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity
 import com.simibubi.create.content.kinetics.press.PressingBehaviour
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
 import com.tterrag.registrate.util.entry.ItemProviderEntry
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil
 import net.createmod.catnip.math.Pointing
 import net.createmod.catnip.math.VecHelper
 import net.createmod.ponder.api.registration.PonderPlugin
@@ -29,8 +31,6 @@ import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.material.Fluids
-import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction
 
 object PonderScenes : PonderPlugin {
 
@@ -324,10 +324,10 @@ object PonderScenes : PonderPlugin {
         world().modifyBlockEntity(at, FluidTankBlockEntity::class.java) { be ->
             be.tankInventory.apply {
                 fluid.amount.takeIf { it > 0 }?.let {
-                    drain(it, FluidAction.EXECUTE)
+                    TransferUtil.extractFluid(this, fluid.copy().setAmount(it))
                     idle(10)
                 }
-                fill(fluid, FluidAction.EXECUTE)
+                TransferUtil.insertFluid(this, fluid)
             }
         }
     }

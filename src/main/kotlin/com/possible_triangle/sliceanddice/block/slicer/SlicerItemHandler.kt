@@ -1,46 +1,38 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
 import com.possible_triangle.sliceanddice.Content
+import com.simibubi.create.foundation.item.ItemHelper
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
 import net.minecraft.world.item.ItemStack
-import net.minecraftforge.items.IItemHandlerModifiable
 
-class SlicerItemHandler(private val tile: SlicerBlockEntity) : IItemHandlerModifiable {
+class SlicerItemHandler(private val tile: SlicerBlockEntity) : SingleVariantStorage<ItemVariant>() {
 
-    override fun getSlots() = 1
-
-    override fun getStackInSlot(slot: Int): ItemStack = when (slot) {
-        0 -> tile.heldItem
-        else -> ItemStack.EMPTY
+    init {
+        update()
     }
 
-    override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-        if(!isItemValid(slot, stack)) return stack
-        return if (slot == 0 && tile.heldItem.isEmpty) {
-            if (!simulate) tile.heldItem = stack
-            ItemStack.EMPTY
-        } else {
-            stack
-        }
+    fun update() {
+        variant = ItemVariant.of(tile.heldItem)
+        amount = tile.heldItem.count.toLong()
     }
 
-    override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack {
-        return if (slot == 0) {
-            val copy = tile.heldItem.copy()
-            if (!simulate) tile.heldItem = ItemStack.EMPTY
-            copy
-        } else {
-            ItemStack.EMPTY
-        }
+    override fun insert(insertedVariant: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long {
+        if (!isItemValid(insertedVariant.toStack())) return 0L
+        return super.insert(insertedVariant, maxAmount, transaction)
     }
 
-    override fun getSlotLimit(slot: Int) = 1
-
-    override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
+    private fun isItemValid(stack: ItemStack): Boolean {
         return !stack.isEmpty && stack.`is`(Content.ALLOWED_TOOLS)
     }
 
-    override fun setStackInSlot(slot: Int, stack: ItemStack) {
-        if(!isItemValid(slot, stack)) return
-        if (slot == 0) tile.heldItem = stack
+    override fun onFinalCommit() {
+        tile.heldItem = variant.toStack(ItemHelper.truncateLong(amount))
     }
+
+    override fun getCapacity(variant: ItemVariant) = 1L
+
+    override fun getBlankVariant() = ItemVariant.blank()
+
 }

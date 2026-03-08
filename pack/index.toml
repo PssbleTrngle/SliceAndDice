@@ -1,51 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = "mods/blueprint.pw.toml"
-hash = "90fc66d49d29c1b1a5b14c5d571d628c6853f7f0519b04e74e14399c75cd08c6"
-metafile = true
-
-[[files]]
-file = "mods/catalogue.pw.toml"
-hash = "0722da0022c3d9dcf6be08f561828222f61911b62aed7d8c75f71c126e12e1b8"
-metafile = true
-
-[[files]]
-file = "mods/configured.pw.toml"
-hash = "c1bdeff356cd2ac164e2c0e6d0ceeda234db9774c2df44fb9f0e71d3960cc3f1"
-metafile = true
-
-[[files]]
-file = "mods/create-enchantment-industry.pw.toml"
-hash = "c670ae9055f10dafb61fe340583c361f4c41ed45671c9440bae1f0696b47252a"
-metafile = true
-
-[[files]]
-file = "mods/farmers-delight.pw.toml"
-hash = "fd26706fd4da11e5421f19398d4a5e23aeed594b1de41da8e2db7a3c84506f1e"
-metafile = true
-
-[[files]]
-file = "mods/gallery.pw.toml"
-hash = "513dff304eaff520c5b25a5b245518c95053a58b4c3ca58c070a5ffa14e0c7bf"
-metafile = true
-
-[[files]]
-file = "mods/neapolitan.pw.toml"
-hash = "bf2f88caa86cf5f54de608794fa1ca696e873c9021d2fafbfd694df1fbde695d"
-metafile = true
-
-[[files]]
-file = "mods/overweight-farming.pw.toml"
-hash = "ca54ccd33453cf0b9a2572f54017119aa95e62d55dce68d610899afd213419fb"
-metafile = true
-
-[[files]]
-file = "mods/recipe-modification.pw.toml"
-hash = "7ffb5ab61ee52b7e48ed96c049f3e9fdd254d760363829aa47b151bff0c8bdf8"
-metafile = true
-
-[[files]]
-file = "mods/vegan-delight.pw.toml"
-hash = "c632dca1da0883fe8a8bcad30fea8bfc013c41d999584c7f5915fb23c699a0cf"
+file = "mods/farmers-delight-refabricated.pw.toml"
+hash = "e09385ac1a1c0900b8fa619290eb0f0539949ebbc59f7604a7699485784ccc85"
 metafile = true

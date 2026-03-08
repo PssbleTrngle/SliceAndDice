@@ -15,8 +15,6 @@
 
 # Create Slice & Dice <img src="https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
 
-[Looking for the Fabric version?](https://github.com/PssbleTrngle/SliceAndDice-Fabric)
-
 [![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
 [![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
 [![Version](http://cf.way2muchnoise.eu/versions/659674.svg)][DOWNLOAD]
@@ -38,7 +36,7 @@
 This mod enables a variety of features to create better compatibility between mostly [Farmer's Delight][FARMERS_DELIGHT_FORGE] and [Create][CREATE_FORGE].
 While it is designed to work with Farmer's Delight, it does work without it and also adds some compatibility features for other mods.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/slicer.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/fabric/1.20.x/screenshots/slicer.png)
 
 ### Automatic Cutting
 
@@ -46,13 +44,13 @@ The Main feature of the mod is the _Slicer_, a machine similar to the _Mechanica
 It automatically registers all cutting recipes from Farmer's Delight. In that sense, it is an automatic _Cutting Board_.  
 In order to use it, the correct tool has to be placed into the machine, using `Right-Click`.
 By default, only knives and axes are allowed, but this behaviour can be overwritten by modifying the `sliceanddice:allowed_tools` item tag.
-An example datapack which adds shears to this tag can be found [here](https://github.com/PssbleTrngle/SliceAndDice/raw/1.20.x/example_datapack.zip)
+An example datapack which adds shears to this tag can be found [here](https://github.com/PssbleTrngle/SliceAndDice/raw/fabric/1.20.x/example_datapack.zip)
 
 ### Automatic Cooking
 
 All recipes from Farmer's delight requiring the Cooking Pot are added as heated mixing recipes.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/cooking.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/fabric/1.20.x/screenshots/cooking.png)
 
 ### Sprinkler
 
@@ -66,7 +64,7 @@ Different fluids can have different effects.
 
 The latter is meant to enable growing of _Banana Fonds_ from [Neapolitan][NEAPOLITAN] without being dependent on the weather, but it could possibly have other effects on other mods too.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/sprinkler.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/fabric/1.20.x/screenshots/sprinkler.png)
 
 ### Overweight Farming
 
@@ -74,11 +72,11 @@ If present, some compatibility features for [Overweight Farming][OVERWEIGHT_FARM
 This includes waxing recipes using the deployer,
 as well as showing the axe-stripping of overweight crops in JEI.
 
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/strip.png)
-![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.20.x/screenshots/wax.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/fabric/1.20.x/screenshots/strip.png)
+![](https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/fabric/1.20.x/screenshots/wax.png)
 
 ### Custom Recipes
 
 If you want to add custom recipes using a datapack, this can now be done for the newest 1.20 release.
 It works for both single recipes and steps of a sequences assembly recipe.
-Examples for these can be found in the [example datapack](https://github.com/PssbleTrngle/SliceAndDice/raw/1.20.x/example_datapack.zip).
+Examples for these can be found in the [example datapack](https://github.com/PssbleTrngle/SliceAndDice/raw/fabric/1.20.x/example_datapack.zip).

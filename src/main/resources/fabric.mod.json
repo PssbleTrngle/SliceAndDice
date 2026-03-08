@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "Making automation for Farmers Delight more sensible",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "sources": "https://github.com/${repository}",
+    "issues": "https://github.com/${repository}/issues"
+  },
+  "license": "CC0-1.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.possible_triangle.sliceanddice.SliceAndDice"
+    ],
+    "client": [
+      "com.possible_triangle.sliceanddice.SliceAndDice"
+    ],
+    "rei_client": [
+      "com.possible_triangle.sliceanddice.compat.REICompat"
+    ],
+    "fabric-datagen": [
+      "com.possible_triangle.sliceanddice.SliceAndDice"
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-language-kotlin": "^1.9.0",
+    "create": ">=6.0.7.0"
+  },
+  "recommends": {
+    "farmersdelight": "*"
+  },
+  "breaks": {
+    "farmersdelight": "<1.20.1-2.0.0"
+  }
+}

@@ -1,12 +1,12 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.alchemy.PotionUtils
-import net.minecraftforge.fluids.FluidStack
 import kotlin.math.max
 
 object PotionBehaviour : SprinkleBehaviour {

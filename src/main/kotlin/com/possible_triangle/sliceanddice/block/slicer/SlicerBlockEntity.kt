@@ -15,9 +15,13 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.TooltipHelper
 import com.simibubi.create.foundation.recipe.RecipeApplier
 import com.simibubi.create.foundation.recipe.RecipeFinder
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper
 import net.createmod.catnip.lang.FontHelper
 import net.createmod.catnip.lang.Lang
 import net.createmod.catnip.math.VecHelper
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.language.I18n
@@ -35,18 +39,13 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
-import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.items.ItemHandlerHelper
 import kotlin.streams.asSequence
 
-
 class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
+    BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics, SidedStorageBlockEntity {
 
     companion object {
         private val inWorldCacheKey = Any()
@@ -67,21 +66,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         set(value) {
             _heldItem = value
             basinChecker.scheduleUpdate()
+            itemHandler.update()
             sendData()
         }
-
-    private var invHandler: LazyOptional<SlicerItemHandler>? = null
-
-    override fun initialize() {
-        super.initialize()
-        initHandler()
-    }
-
-    private fun initHandler() {
-        if (invHandler == null) {
-            invHandler = LazyOptional.of { SlicerItemHandler(this) }
-        }
-    }
+    private val itemHandler = SlicerItemHandler(this)
 
     private var playSound = false
 
@@ -241,7 +229,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
         basin.ifPresent {
             val inputs = it.getInputInventory()
-            for (slot in 0 until inputs.slots) {
+            for (slot in 0 until inputs.slotCount) {
                 val stackInSlot = inputs.getItem(slot)
                 if (stackInSlot.isEmpty) continue
                 addToParticleItems(stackInSlot)
@@ -266,7 +254,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
         val world = this.level ?: return false
-        val outputs = RecipeApplier.applyRecipeOn(world, toProcess, recipe, true)
+        val outputs = RecipeApplier.applyRecipeOn(world, toProcess, recipe)
         outputList?.addAll(outputs)
         consumeDurability()
         return true
@@ -338,13 +326,8 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         }
     }
 
-    override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {
-        return if (isItemHandlerCap(cap)) {
-            if (this.invHandler == null) this.initHandler()
-            this.invHandler!!.cast()
-        } else {
-            super.getCapability(cap, side)
-        }
+    override fun getItemStorage(side: Direction?): Storage<ItemVariant> {
+        return itemHandler
     }
 
     fun playSound() {

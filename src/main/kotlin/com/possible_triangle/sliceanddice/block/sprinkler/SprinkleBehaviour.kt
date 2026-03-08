@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.config.Configs
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
@@ -12,7 +13,6 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
-import net.minecraftforge.fluids.FluidStack
 import kotlin.math.ceil
 import kotlin.math.floor
 

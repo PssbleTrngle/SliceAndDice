@@ -7,17 +7,14 @@ import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
 import com.simibubi.create.foundation.fluid.FluidIngredient
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraftforge.common.capabilities.ForgeCapabilities
-import net.minecraftforge.fluids.FluidStack
-import net.minecraftforge.fluids.capability.IFluidHandler
 import kotlin.jvm.optionals.getOrNull
 
 
 class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingRecipe>) {
-
 
     private fun getFromEmptying(stack: ItemStack) = emptyingRecipes
         .filter { it.ingredients.isNotEmpty() }
@@ -26,13 +23,8 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
             required.test(stack)
         }?.resultingFluid
 
-    private fun getFromFluidHandler(stack: ItemStack): FluidStack? =
-        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
-            .resolve().getOrNull()
-            ?.drain(1000, IFluidHandler.FluidAction.SIMULATE)
-
     private fun resolveIngredient(stack: ItemStack): Either<FluidStack, ItemStack> {
-        val fluid = getFromEmptying(stack) ?: getFromFluidHandler(stack)
+        val fluid = getFromEmptying(stack)
         return fluid
             ?.takeUnless { it.isEmpty }
             ?.let { Either.left(fluid) }
@@ -128,4 +120,4 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
 
 }
 
-fun FluidStack.copyWithAmount(amount: Int) = FluidStack(fluid, amount, tag)
+fun FluidStack.copyWithAmount(amount: Long) = FluidStack(fluid, amount, tag)

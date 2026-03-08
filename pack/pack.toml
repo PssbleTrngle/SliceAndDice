@@ -1,11 +1,11 @@
-name = "slice-and-dice"
+name = "slice-and-dice-fabric"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "874cdee7098d616086532cd5e78a831c5c6344105e88eedf53f1398e7956de0b"
+hash = "07a0cd3bd62819c1d96c0f62c210998f0540c4ac5e2df8a945c3bdbf05937394"
 
 [versions]
-forge = "47.3.10"
+fabric = "0.17.2"
 minecraft = "1.20.1"

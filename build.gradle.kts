@@ -1,97 +1,94 @@
 plugins {
-    id("com.possible-triangle.forge")
+    id("com.possible-triangle.fabric")
 }
 
 withKotlin()
 
-forge {
-    enableMixins()
+fabric {
     dataGen()
 }
 
 base {
-    archivesName = "${mod.id.get()}-forge-${mod.version.get()}"
+    archivesName = "${mod.id.get()}-fabric-${mod.version.get()}"
 }
 
 repositories {
     maven {
-        url = uri("https://maven.saps.dev/minecraft")
+        url = uri("https://mvn.devos.one/snapshots/")
         content {
-            includeGroup("dev.latvian.mods")
+            includeGroup("com.simibubi.create")
+            includeGroup("io.github.tropheusj")
+            includeGroup("com.tterrag.registrate_fabric")
         }
     }
+
+    maven {
+        url = uri("https://maven.createmod.net")
+        content {
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+
+    maven {
+        url = uri("https://mvn.devos.one/releases/")
+        content {
+            includeGroup("io.github.fabricators_of_create.Porting-Lib")
+        }
+    }
+
+    maven {
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release")
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    maven {
+        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+        content {
+            includeGroup("net.minecraftforge")
+            includeGroup("fuzs.forgeconfigapiport")
+        }
+    }
+
     maven {
         url = uri("https://maven.blamejared.com/")
         content {
             includeGroup("mezz.jei")
         }
     }
+
     maven {
-        url = uri("https://maven.tterrag.com/")
+        url = uri("https://maven.greenhouse.lgbt/releases/")
         content {
-            includeGroup("com.tterrag.registrate")
+            includeGroup("vectorwing")
         }
     }
-    maven {
-        url = uri("https://maven.createmod.net")
+
+    nexus("jitpack") {
         content {
-            includeGroup("com.simibubi.create")
-            includeGroup("net.createmod.ponder")
-            includeGroup("dev.engine-room.flywheel")
-        }
-    }
-    maven {
-        url = uri("https://maven.jaackson.me")
-        content {
-            includeGroup("com.teamabnormals")
-        }
-    }
-    maven {
-        url = uri("https://maven.architectury.dev/")
-        content {
-            includeGroup("dev.architectury")
-        }
-    }
-    maven {
-        url = uri("https://maven.latvian.dev/releases")
-        content {
-            includeGroup("dev.latvian.mods")
+            includeGroup("com.github.Chocohead")
         }
     }
 }
 
 dependencies {
     modCompileOnly(libs.jei.common.api)
-    modCompileOnly(libs.jei.forge.api)
+    modCompileOnly(libs.jei.fabric.api)
 
     modImplementation(libs.registrate)
 
-    modImplementation(
-        variantOf(libs.create) {
-            classifier("slim")
-        },
-    ) {
-        isTransitive = false
+    modImplementation(libs.create) {
+        // exclude("com.jozufozu.flywheel")
     }
 
-    modImplementation(libs.ponder)
-    modImplementation(libs.flywheel)
-
-    modImplementation(pack.modrinth.overweight.farming)
-    modImplementation(pack.modrinth.farmers.delight)
-    modCompileOnly(pack.modrinth.create.enchantment.industry)
+    modImplementation(libs.farmers.delight) {
+        exclude(group = "net.fabricmc")
+    }
 
     if (!env.isCI) {
-        modRuntimeOnly(libs.jei.forge)
-
-        modRuntimeOnly(pack.modrinth.blueprint)
-        modRuntimeOnly(pack.modrinth.neapolitan)
-        modRuntimeOnly(pack.modrinth.gallery)
-
-        modRuntimeOnly(pack.modrinth.recipe.modification)
-        modRuntimeOnly(pack.modrinth.vegan.delight)
-        modRuntimeOnly(pack.curseforge.catalogue)
-        modRuntimeOnly(pack.curseforge.configured)
+        modRuntimeOnly(libs.jei.fabric)
     }
 }
 
@@ -105,24 +102,11 @@ upload {
         nexus()
     }
 
-    curseforge {
+    forEach {
         dependencies {
             required("create")
-            optional("farmers-delight")
-            optional("create-enchantment-industry")
-            optional("overweight-farming")
+            optional("farmers-delight-refabricated")
         }
-    }
-
-    modrinth {
-        dependencies {
-            required("LNytGWDc")
-            optional("R2OftAxM")
-            optional("JWGBpFUP")
-            optional("bCxmmxKN")
-        }
-
-        syncBodyFromReadme()
     }
 }
 

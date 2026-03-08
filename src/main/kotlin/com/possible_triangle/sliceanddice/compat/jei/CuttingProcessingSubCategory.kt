@@ -2,14 +2,14 @@ package com.possible_triangle.sliceanddice.compat.jei
 
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory
-import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory
+import com.simibubi.create.compat.jei.category.sequencedAssembly.JeiSequencedAssemblySubCategory
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.recipe.IFocusGroup
 import mezz.jei.api.recipe.RecipeIngredientRole
 import net.minecraft.client.gui.GuiGraphics
 
-class CuttingProcessingSubCategory : SequencedAssemblySubCategory(25) {
+class CuttingProcessingSubCategory : JeiSequencedAssemblySubCategory(25) {
 
     val slicer = AnimatedSlicer(false)
 

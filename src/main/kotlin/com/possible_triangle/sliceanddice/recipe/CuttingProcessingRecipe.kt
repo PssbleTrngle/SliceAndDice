@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.jei.CuttingProcessingSubCategory
-import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory
+import com.simibubi.create.compat.recipeViewerCommon.SequencedAssemblySubCategoryType
 import com.simibubi.create.content.processing.basin.BasinRecipe
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer
@@ -50,8 +50,13 @@ data class CuttingProcessingRecipe(
         // Nothing to do here
     }
 
-    override fun getJEISubCategory(): Supplier<Supplier<SequencedAssemblySubCategory>> {
-        return Supplier { Supplier { CuttingProcessingSubCategory() } }
+    override fun getJEISubCategory(): SequencedAssemblySubCategoryType {
+        return SequencedAssemblySubCategoryType(
+            Supplier { Supplier(::CuttingProcessingSubCategory) },
+            // TODO fabric-port
+            null,
+            null,
+        )
     }
 
     override fun getMaxInputCount() = 1
