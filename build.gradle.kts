@@ -75,7 +75,7 @@ dependencies {
     }
 
     modImplementation(libs.ponder)
-    modCompileOnly(libs.flywheel)
+    modImplementation(libs.flywheel)
 
     modImplementation(pack.modrinth.overweight.farming)
     modImplementation(pack.modrinth.farmers.delight)

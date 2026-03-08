@@ -3,7 +3,6 @@
   "package": "com.possible_triangle.sliceanddice.mixins",
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.8",
-  "refmap": "${mod_id}.refmap.json",
   "mixins": [
     "EntityMixin",
     "HarvesterMovementBehaviourMixin",
