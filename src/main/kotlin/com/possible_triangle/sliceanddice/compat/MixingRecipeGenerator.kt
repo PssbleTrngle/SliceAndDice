@@ -29,11 +29,13 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
     private fun getFromFluidHandler(stack: ItemStack): FluidStack? =
         stack.getCapability(Capabilities.FluidHandler.ITEM)
             ?.drain(1000, IFluidHandler.FluidAction.SIMULATE)
-            ?.takeUnless { it.isEmpty }
 
     private fun resolveIngredient(stack: ItemStack): Either<FluidStack, ItemStack> {
         val fluid = getFromEmptying(stack) ?: getFromFluidHandler(stack)
-        return fluid?.let { Either.left(fluid) } ?: Either.right(stack)
+        return fluid
+            ?.takeUnless { it.isEmpty }
+            ?.let { Either.left(fluid) }
+            ?: Either.right(stack)
     }
 
     private fun findFluids(
