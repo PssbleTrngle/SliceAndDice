@@ -69,7 +69,8 @@ object Content {
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry).pattern("A").pattern("B").pattern("C")
                 .define('A', AllBlocks.COGWHEEL.get()).define('B', AllBlocks.ANDESITE_CASING.get())
                 .define('C', AllBlocks.TURNTABLE.get()).unlockedBy("has_tool", has(ALLOWED_TOOLS))
-                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get())).save(p)
+                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
+                .save(p)
         }.register()
 
     val SLICER_BLOCK_ENTITY = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
