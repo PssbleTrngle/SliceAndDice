@@ -8,8 +8,8 @@ fabric {
     dataGen()
 }
 
+val rawVersion = mod.version.get().replace("-fabric", "")
 base {
-    val rawVersion = mod.version.get().replace("-fabric", "")
     archivesName = "${mod.id.get()}-fabric-${rawVersion}"
 }
 
@@ -104,6 +104,7 @@ upload {
     }
 
     forEach {
+        versionName = "Fabric $rawVersion"
         dependencies {
             required("create-fabric")
             optional("farmers-delight-refabricated")
