@@ -1,7 +1,7 @@
 # <meta>
 #    <source>@pssbletrngle/github-meta-generator</source>
 #    <version>0.0.0-dev</version>
-#    <timestamp>2026-03-08T09:33:55.719Z</timestamp>
+#    <timestamp>2026-03-10T20:23:58.657Z</timestamp>
 # </meta>
 
 name: Test
@@ -46,6 +46,7 @@ jobs:
         run: ./gradlew build check
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.upload }}
         with:
           name: build
           path: "**/build/libs/*.jar"
