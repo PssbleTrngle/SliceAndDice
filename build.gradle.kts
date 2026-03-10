@@ -10,7 +10,7 @@ fabric {
 
 val rawVersion = mod.version.get().replace("-fabric", "")
 base {
-    archivesName = "${mod.id.get()}-fabric-${rawVersion}"
+    archivesName = "${mod.id.get()}-fabric-$rawVersion"
 }
 
 repositories {
