@@ -9,7 +9,8 @@ fabric {
 }
 
 base {
-    archivesName = "${mod.id.get()}-fabric-${mod.version.get()}"
+    val rawVersion = mod.version.get().replace("-fabric", "")
+    archivesName = "${mod.id.get()}-fabric-${rawVersion}"
 }
 
 repositories {
@@ -104,7 +105,7 @@ upload {
 
     forEach {
         dependencies {
-            required("create")
+            required("create-fabric")
             optional("farmers-delight-refabricated")
         }
     }
