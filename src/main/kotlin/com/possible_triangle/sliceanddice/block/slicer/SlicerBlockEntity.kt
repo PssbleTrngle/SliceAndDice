@@ -254,7 +254,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
         val toProcess = if (canProcessInBulk()) input.stack else ItemHandlerHelper.copyStackWithSize(input.stack, 1)
         val world = this.level ?: return false
-        val outputs = RecipeApplier.applyRecipeOn(world, toProcess, recipe)
+        val outputs = RecipeApplier.applyRecipeOn(world, toProcess, recipe, true)
         outputList?.addAll(outputs)
         consumeDurability()
         return true

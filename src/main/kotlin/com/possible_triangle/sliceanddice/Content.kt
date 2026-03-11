@@ -21,7 +21,7 @@ import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.foundation.data.*
-import com.tterrag.registrate.builders.AbstractBuilder
+import com.simibubi.create.infrastructure.fabric.SimpleBlockEntityVisualFactory
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.fabric.SimpleFlowableFluid
 import com.tterrag.registrate.providers.ProviderType
@@ -29,7 +29,6 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import com.tterrag.registrate.util.entry.ItemEntry
 import com.tterrag.registrate.util.entry.RegistryEntry
 import com.tterrag.registrate.util.nullness.NonNullFunction
-import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper
 import net.createmod.ponder.foundation.PonderIndex
@@ -77,7 +76,7 @@ object Content {
         }.register()
 
     val SLICER_TILE = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
-        .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
+        .visual { SimpleBlockEntityVisualFactory(::SlicerVisual) }
         .renderer { NonNullFunction { SlicerRenderer(it) } }
         .validBlock(SLICER_BLOCK)
         .register()

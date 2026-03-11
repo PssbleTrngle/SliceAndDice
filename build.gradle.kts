@@ -79,10 +79,7 @@ dependencies {
     modCompileOnly(libs.jei.fabric.api)
 
     modImplementation(libs.registrate)
-
-    modImplementation(libs.create) {
-        // exclude("com.jozufozu.flywheel")
-    }
+    modImplementation(libs.create)
 
     modImplementation(libs.farmers.delight) {
         exclude(group = "net.fabricmc")
