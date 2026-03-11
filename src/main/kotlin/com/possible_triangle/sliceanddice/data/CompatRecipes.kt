@@ -55,8 +55,7 @@ object CompatRecipes {
             .withCondition(anyModLoaded(ModCompat.FARMERS_DELIGHT))
             .build(output)
 
-        // TODO fabric-port
-        val doughTag = TagKey.create(Registries.ITEM, ResourceLocation("forge", "dough"))
+        val doughTag = TagKey.create(Registries.ITEM, ResourceLocation("c", "foods/doughs"))
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
             .requires(doughTag)
             .requires(DyeColor.LIME.tag)

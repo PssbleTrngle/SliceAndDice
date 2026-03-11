@@ -160,16 +160,7 @@ object Content {
         ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, Configs.SERVER_SPEC)
         ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.CLIENT, Configs.CLIENT_SPEC)
 
-        // TODO fabric-port
-        // DistExecutor.unsafeCallWhenOn(Dist.CLIENT) {
-        //     SafeCallable {
-        //         SlicerPartials.load()
-        //         PonderScenes.setup()
-        //     }
-        // }
-
         REGISTRATE.addDataGenerator(ProviderType.LANG) { provider ->
-            PonderScenes.setup()
             PonderIndex.getLangAccess().provideLang(MOD_ID, provider::add)
         }
 

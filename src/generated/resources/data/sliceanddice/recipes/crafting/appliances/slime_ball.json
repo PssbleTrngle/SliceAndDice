@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forge:dough"
+      "tag": "c:foods/doughs"
     },
     {
       "tag": "c:lime_dyes"
