@@ -6,6 +6,8 @@ import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder
+import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
+import me.shedaniel.rei.api.common.util.EntryStacks
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -14,6 +16,7 @@ import net.minecraft.world.item.crafting.Recipe
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe
 import vectorwing.farmersdelight.integration.jei.FDRecipeTypes
+import vectorwing.farmersdelight.integration.rei.REICategoryIdentifiers
 import java.util.function.BiConsumer
 
 private fun CuttingBoardRecipe.toBasin(id: ResourceLocation): CuttingProcessingRecipe {
@@ -37,6 +40,10 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
     fun addCatalysts(registration: IRecipeCatalystRegistration) {
         registration.addRecipeCatalyst(ItemStack(Content.SLICER_BLOCK.get()), FDRecipeTypes.CUTTING)
+    }
+
+    fun addCatalysts(registration: CategoryRegistry) {
+        registration.addWorkstations(REICategoryIdentifiers.CUTTING, EntryStacks.of(Content.SLICER_BLOCK.get()))
     }
 
     override fun injectRecipes(

@@ -52,7 +52,7 @@ data class CuttingProcessingRecipe(
 
     override fun getJEISubCategory(): SequencedAssemblySubCategoryType {
         return SequencedAssemblySubCategoryType(
-            Supplier { Supplier(::CuttingProcessingSubCategory) },
+            { Supplier(::CuttingProcessingSubCategory) },
             // TODO fabric-port
             null,
             null,

@@ -67,6 +67,14 @@ repositories {
         }
     }
 
+    maven {
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroupAndSubgroups("me.shedaniel")
+            includeGroup("dev.architectury")
+        }
+    }
+
     nexus("jitpack") {
         content {
             includeGroup("com.github.Chocohead")
@@ -77,6 +85,7 @@ repositories {
 dependencies {
     modCompileOnly(libs.jei.common.api)
     modCompileOnly(libs.jei.fabric.api)
+    modCompileOnly(libs.rei.fabric.api)
 
     modImplementation(libs.registrate)
     modImplementation(libs.create)
@@ -87,6 +96,7 @@ dependencies {
 
     if (!env.isCI) {
         modRuntimeOnly(libs.jei.fabric)
+        modRuntimeOnly(libs.rei.fabric)
     }
 }
 
