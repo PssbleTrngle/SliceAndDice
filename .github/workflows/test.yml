@@ -1,8 +1,8 @@
 # <meta>
 #    <source>@pssbletrngle/github-meta-generator</source>
-#    <version>1.0.29</version>
-#    <timestamp>2026-03-23T20:58:18.807Z</timestamp>
-#    <hash>a0605bb8c03832b4</hash>
+#    <version>1.0.30</version>
+#    <timestamp>2026-03-23T21:09:34.991Z</timestamp>
+#    <hash>f14bde545df6c0b2</hash>
 # </meta>
 
 name: Test
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
