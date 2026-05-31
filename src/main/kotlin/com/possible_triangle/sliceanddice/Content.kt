@@ -3,22 +3,23 @@ package com.possible_triangle.sliceanddice
 import com.possible_triangle.sliceanddice.SliceAndDice.MOD_ID
 import com.possible_triangle.sliceanddice.SliceAndDice.REGISTRATE
 import com.possible_triangle.sliceanddice.SliceAndDice.modLoc
+import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.slicer.*
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import com.possible_triangle.sliceanddice.block.sprinkler.WetAir
-import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningBehaviour
-import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerBehaviour
-import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistBehaviour
-import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningAction
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerAction
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistAction
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.PotionAction
 import com.possible_triangle.sliceanddice.compat.CreateEnchantmentIndustryCompat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.data.CompatRecipes
+import com.possible_triangle.sliceanddice.data.registerSprinklers
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
-import com.simibubi.create.AllFluids
 import com.simibubi.create.AllTags
 import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
@@ -50,6 +51,9 @@ import net.neoforged.fml.config.ModConfig
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.fluids.BaseFlowingFluid
+import net.neoforged.neoforge.registries.DataPackRegistryEvent
+import net.neoforged.neoforge.registries.NewRegistryEvent
+import net.neoforged.neoforge.registries.RegistryBuilder
 import java.util.function.Supplier
 
 object Content {
@@ -146,9 +150,9 @@ object Content {
             .validBlock(SPRINKLER_BLOCK)
             .register()
 
-    private val WET_FLUIDS = TagKey.create(Registries.FLUID, modLoc("moisturizing"))
-    private val HOT_FLUIDS = TagKey.create(Registries.FLUID, modLoc("burning"))
-    private val FERTILIZERS = TagKey.create(Registries.FLUID, modLoc("fertilizer"))
+    val WET_FLUIDS = TagKey.create(Registries.FLUID, modLoc("moisturizing"))
+    val HOT_FLUIDS = TagKey.create(Registries.FLUID, modLoc("burning"))
+    val FERTILIZER_FLUIDS = TagKey.create(Registries.FLUID, modLoc("fertilizer"))
 
     val FERTILIZER_BLACKLIST = TagKey.create(Registries.BLOCK, modLoc("fertilizer_blacklist"))
 
@@ -157,7 +161,7 @@ object Content {
         REGISTRATE
             .fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
             .lang("Liquid Fertilizer")
-            .tag(FERTILIZERS)
+            .tag(FERTILIZER_FLUIDS)
             .source { BaseFlowingFluid.Source(it) }
             .bucket()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
@@ -174,6 +178,26 @@ object Content {
                 "slicer",
                 CreateRegistries.ARM_INTERACTION_POINT_TYPE,
             ) { SlicerArmInteractionType }
+            .register()
+
+    val MOIST_ACTION =
+        REGISTRATE
+            .generic("moist", ModRegistries.SPRINKLER_ACTIONS) { MoistAction }
+            .register()
+
+    val BURNING_ACTION =
+        REGISTRATE
+            .generic("burning", ModRegistries.SPRINKLER_ACTIONS) { BurningAction }
+            .register()
+
+    val FERTILIZER_ACTION =
+        REGISTRATE
+            .generic("fertilizer", ModRegistries.SPRINKLER_ACTIONS) { FertilizerAction }
+            .register()
+
+    val POTION_ACTION =
+        REGISTRATE
+            .generic("potion", ModRegistries.SPRINKLER_ACTIONS) { PotionAction }
             .register()
 
     fun register(
@@ -199,17 +223,22 @@ object Content {
 
         REGISTRATE.addDataGenerator(ProviderType.RECIPE, CompatRecipes::generate)
 
-        SprinkleBehaviour.register(WET_FLUIDS, MoistBehaviour)
-        SprinkleBehaviour.register(HOT_FLUIDS, BurningBehaviour)
-        SprinkleBehaviour.register(FERTILIZERS, FertilizerBehaviour)
-        SprinkleBehaviour.register({ AllFluids.POTION.`is`(it.fluid) }, PotionBehaviour)
+        REGISTRATE.registerSprinklers()
+
+        CreateEnchantmentIndustryCompat.ifLoaded { REGISTRATE.registerSprinkleBehaviour() }
 
         modBus.addListener { event: RegisterCapabilitiesEvent ->
             SprinklerBlockEntity.registerCapabilities(event)
             SlicerBlockEntity.registerCapabilities(event)
         }
 
-        CreateEnchantmentIndustryCompat.ifLoaded { registerSprinkleBehaviour() }
+        modBus.addListener { event: DataPackRegistryEvent.NewRegistry ->
+            event.dataPackRegistry(ModRegistries.SPRINKLERS, Sprinkler.CODEC)
+        }
+
+        modBus.addListener { event: NewRegistryEvent ->
+            ModRegistries.SPRINKLER_ACTIONS_REGISTRY = event.create(RegistryBuilder(ModRegistries.SPRINKLER_ACTIONS))
+        }
     }
 
     fun clientInit() {

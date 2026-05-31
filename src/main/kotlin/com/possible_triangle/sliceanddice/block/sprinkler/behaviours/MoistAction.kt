@@ -5,7 +5,7 @@ import com.possible_triangle.atmosphere.api.v1.ProviderHeartbeat
 import com.possible_triangle.atmosphere.api.v1.WeatherAPI
 import com.possible_triangle.atmosphere.api.v1.WeatherCondition
 import com.possible_triangle.sliceanddice.SliceAndDice
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -13,14 +13,14 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 
-object MoistBehaviour : SprinkleBehaviour {
-    private fun SprinkleBehaviour.Range.createId() =
+object MoistAction : SprinkleAction {
+    private fun SprinkleAction.Range.createId() =
         with(origin) {
             SliceAndDice.modLoc("sprinkler_${x}_${y}_$z")
         }
 
     override fun start(
-        range: SprinkleBehaviour.Range,
+        range: SprinkleAction.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,
@@ -30,7 +30,7 @@ object MoistBehaviour : SprinkleBehaviour {
     }
 
     override fun stop(
-        range: SprinkleBehaviour.Range,
+        range: SprinkleAction.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,

@@ -1,13 +1,16 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
+import com.mojang.serialization.Codec
+import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.entity.EntityTypeTest
-import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -15,13 +18,49 @@ import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.ceil
 import kotlin.math.floor
 
-data class RegisteredBehaviour(
-    val predicate: (FluidStack) -> Boolean,
-    val behaviour: SprinkleBehaviour,
-    val rangeBonus: Int,
-)
+interface SprinkleAction {
+    companion object {
+        val CODEC: Codec<Holder<SprinkleAction>> =
+            Codec.lazyInitialized {
+                ModRegistries.SPRINKLER_ACTIONS_REGISTRY.holderByNameCodec()
+            }
 
-interface SprinkleBehaviour {
+        fun findMatching(
+            registries: RegistryAccess,
+            fluid: FluidStack,
+        ): Collection<Holder<Sprinkler>> {
+            val sprinklers = registries.lookupOrThrow(ModRegistries.SPRINKLERS)
+            return sprinklers
+                .listElements()
+                .filter { it.value().fluid.test(fluid) }
+                .toList()
+        }
+    }
+
+    fun act(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+    }
+
+    fun start(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+    }
+
+    fun stop(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+    }
+
     class Range(
         size: Vec3i,
         val origin: BlockPos,
@@ -91,51 +130,5 @@ interface SprinkleBehaviour {
                 }
             }
         }
-    }
-
-    fun act(
-        range: Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-    }
-
-    fun start(
-        range: Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-    }
-
-    fun stop(
-        range: Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-    }
-
-    companion object {
-        private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
-
-        fun register(
-            tag: TagKey<Fluid>,
-            behaviour: SprinkleBehaviour,
-            rangeBonus: Int = 0,
-        ) {
-            register({ it.fluid.`is`(tag) }, behaviour, rangeBonus)
-        }
-
-        fun register(
-            predicate: (FluidStack) -> Boolean,
-            behaviour: SprinkleBehaviour,
-            rangeBonus: Int = 0,
-        ) {
-            BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, rangeBonus))
-        }
-
-        fun findMatching(fluid: FluidStack): Collection<RegisteredBehaviour> = BEHAVIOURS.filter { it.predicate(fluid) }
     }
 }

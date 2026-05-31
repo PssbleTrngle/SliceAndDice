@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour.Range
+import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction.Range
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.fluids.FluidFX
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
@@ -10,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import net.createmod.catnip.math.VecHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
@@ -43,24 +45,24 @@ class SprinklerBehaviour(
         }
     }
 
-    private var running: Collection<RegisteredBehaviour> = emptyList()
+    private var running: Collection<Holder<Sprinkler>> = emptyList()
     private var processingTicks = -1
 
     override fun getType() = TYPE
 
-    private fun recheck() {
-        val matches = SprinkleBehaviour.findMatching(tank.primaryHandler.fluid)
+    private fun recheck(level: Level) {
+        val matches = SprinkleAction.findMatching(level.registryAccess(), tank.primaryHandler.fluid)
         val stopped = running.filterNot { matches.contains(it) }
         val started = matches.filterNot { running.contains(it) }
 
-        stopped.actEach(SprinkleBehaviour::stop)
-        started.actEach(SprinkleBehaviour::start)
+        stopped.actEach(SprinkleAction::stop)
+        started.actEach(SprinkleAction::start)
 
         running = matches
     }
 
-    private fun Collection<RegisteredBehaviour>.actEach(
-        block: SprinkleBehaviour.(range: Range, level: ServerLevel, fluid: FluidStack, random: RandomSource) -> Unit,
+    private fun Collection<Holder<Sprinkler>>.actEach(
+        block: SprinkleAction.(range: Range, level: ServerLevel, fluid: FluidStack, random: RandomSource) -> Unit,
     ) {
         val level = blockEntity.level ?: return
         if (level !is ServerLevel) return
@@ -68,10 +70,10 @@ class SprinklerBehaviour(
         val radius = Configs.SERVER.sprinklerRange.get()
         val fluid = tank.primaryHandler.fluid
 
-        forEach {
+        map { it.value() }.forEach {
             val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
             val range = Range(area, pos, level)
-            it.behaviour.block(range, level, fluid, level.random)
+            it.action.value().block(range, level, fluid, level.random)
         }
     }
 
@@ -85,7 +87,9 @@ class SprinklerBehaviour(
         if (processingTicks >= 0) {
             processingTicks--
         } else {
-            recheck()
+            if (!level.isClientSide) {
+                recheck(level)
+            }
 
             val used = Configs.SERVER.sprinklerUsage.get()
             val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
@@ -99,7 +103,7 @@ class SprinklerBehaviour(
             spawnProcessingParticles(tank.primaryTank.renderedFluid, level, pos)
         }
 
-        running.actEach(SprinkleBehaviour::act)
+        running.actEach(SprinkleAction::act)
     }
 
     override fun write(

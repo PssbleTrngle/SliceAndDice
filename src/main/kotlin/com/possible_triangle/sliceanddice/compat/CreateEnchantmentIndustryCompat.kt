@@ -1,17 +1,21 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.data.register
+import com.tterrag.registrate.AbstractRegistrate
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.ExperienceOrb
 import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient
 import plus.dragons.createenchantmentindustry.common.fluids.experience.ExperienceHelper
 import plus.dragons.createenchantmentindustry.common.registry.CEIFluids
 
-class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour {
+class CreateEnchantmentIndustryCompat private constructor() : SprinkleAction {
     companion object {
         private val INSTANCE = CreateEnchantmentIndustryCompat()
 
@@ -23,7 +27,7 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
     }
 
     override fun act(
-        range: SprinkleBehaviour.Range,
+        range: SprinkleAction.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,
@@ -62,9 +66,16 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
         }
     }
 
-    fun registerSprinkleBehaviour() {
-        SprinkleBehaviour.register({
-            it.fluid.fluidType == CEIFluids.EXPERIENCE.type
-        }, INSTANCE)
+    fun AbstractRegistrate<*>.registerSprinkleBehaviour() {
+        val action =
+            generic("experience", ModRegistries.SPRINKLER_ACTIONS) { INSTANCE }
+                .register()
+
+        dataGenInitializer.add(ModRegistries.SPRINKLERS) {
+            it.register(
+                FluidIngredient.of(CEIFluids.EXPERIENCE.get()),
+                action,
+            )
+        }
     }
 }

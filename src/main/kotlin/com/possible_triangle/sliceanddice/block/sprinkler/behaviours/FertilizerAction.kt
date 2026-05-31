@@ -1,15 +1,15 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.BonemealableBlock
 import net.neoforged.neoforge.fluids.FluidStack
 
-object FertilizerBehaviour : SprinkleBehaviour {
+object FertilizerAction : SprinkleAction {
     override fun act(
-        range: SprinkleBehaviour.Range,
+        range: SprinkleAction.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,
