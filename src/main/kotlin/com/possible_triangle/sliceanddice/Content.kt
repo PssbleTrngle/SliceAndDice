@@ -48,6 +48,7 @@ import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.config.ModConfig
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
+import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.fluids.BaseFlowingFluid
 import java.util.function.Supplier
 
@@ -158,6 +159,7 @@ object Content {
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .model(AssetLookup.existingItemModel())
             .lang("Bucket of Liquid Fertilizer")
+            .tag(Tags.Items.BUCKETS)
             .apply { FERTILIZER_BUCKET = register() }
             .parent
             .register()
