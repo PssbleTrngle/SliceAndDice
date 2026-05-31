@@ -25,7 +25,7 @@ private data class RegisteredBehaviour(
 fun interface SprinkleBehaviour {
     class Range(
         size: Vec3i,
-        origin: BlockPos,
+        val origin: BlockPos,
         private val world: ServerLevel,
     ) {
         val aabb =

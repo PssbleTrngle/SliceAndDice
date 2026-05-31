@@ -1,9 +1,18 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.atmosphere.api.v1.AbstractWeatherProvider
+import com.possible_triangle.atmosphere.api.v1.ProviderHeartbeat
+import com.possible_triangle.atmosphere.api.v1.WeatherAPI
+import com.possible_triangle.atmosphere.api.v1.WeatherCondition
+import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
+import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleOptions
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 
 object MoistBehaviour : SprinkleBehaviour {
@@ -13,13 +22,28 @@ object MoistBehaviour : SprinkleBehaviour {
         fluidStack: FluidStack,
         random: RandomSource,
     ) {
-        val wetAir = Content.WET_AIR.defaultState
-        range.forEachBlock { pos ->
-            val state = world.getBlockState(pos)
-            if (state.isAir) {
-                world.setBlockAndUpdate(pos, wetAir)
-                world.scheduleTick(pos, Content.WET_AIR.get(), random.nextInt(60, 120))
+        val id =
+            with(range.origin) {
+                SliceAndDice.modLoc("sprinkler_${x}_${y}_$z")
             }
+
+        val weather = WeatherAPI.INSTANCE.getWeather(world)
+        weather.addLocal(id, SprinkleProvider(), range.aabb, SprinklerHeartbeat(range.origin))
+    }
+
+    private class SprinkleProvider : AbstractWeatherProvider() {
+        override fun conditionKeyAt(
+            level: Level,
+            pos: BlockPos,
+        ) = WeatherCondition.RAIN
+    }
+
+    private class SprinklerHeartbeat(
+        val pos: BlockPos,
+    ) : ProviderHeartbeat {
+        override fun validate(level: ServerLevel): Boolean {
+            val be = level.getBlockEntity(pos)
+            return be is SprinklerBlockEntity
         }
     }
 }

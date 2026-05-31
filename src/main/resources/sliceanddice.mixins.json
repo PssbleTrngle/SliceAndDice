@@ -4,9 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.8",
   "mixins": [
-    "EntityMixin",
     "HarvesterMovementBehaviourMixin",
-    "LevelMixin",
     "PressingBehaviourMixin",
     "RecipeManagerAccessor",
     "ReloadableServerResourcesMixin"

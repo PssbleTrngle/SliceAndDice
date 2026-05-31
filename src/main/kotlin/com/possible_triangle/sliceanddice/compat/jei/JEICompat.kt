@@ -27,7 +27,7 @@ class JEICompat : IModPlugin {
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
         cutting.registerCatalysts(registration)
 
-        FarmersDelightCompat.Companion.ifLoaded {
+        FarmersDelightCompat.ifLoaded {
             addCatalysts(registration)
         }
     }

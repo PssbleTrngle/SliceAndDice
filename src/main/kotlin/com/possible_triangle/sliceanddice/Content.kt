@@ -108,6 +108,7 @@ object Content {
             .generic(Registries.RECIPE_SERIALIZER) { CuttingProcessingRecipe.Serializer }
             .register()
 
+    @Deprecated("uses new atmosphere system")
     val WET_AIR =
         REGISTRATE
             .block("wet_air", ::WetAir)
@@ -140,7 +141,10 @@ object Content {
             }.register()
 
     val SPRINKLER_BLOCK_ENTITY =
-        REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity)).validBlock(SPRINKLER_BLOCK).register()
+        REGISTRATE
+            .blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity))
+            .validBlock(SPRINKLER_BLOCK)
+            .register()
 
     private val WET_FLUIDS = TagKey.create(Registries.FLUID, modLoc("moisturizing"))
     private val HOT_FLUIDS = TagKey.create(Registries.FLUID, modLoc("burning"))
