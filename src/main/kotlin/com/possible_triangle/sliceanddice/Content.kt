@@ -32,7 +32,6 @@ import com.tterrag.registrate.util.entry.ItemEntry
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.createmod.ponder.foundation.PonderIndex
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder
@@ -52,7 +51,6 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid
 import net.neoforged.neoforge.registries.DataPackRegistryEvent
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
-import java.util.function.Supplier
 
 object Content {
     val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
@@ -65,8 +63,7 @@ object Content {
             .transform(TagGen.axeOrPickaxe())
             .blockstate { c, p ->
                 p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
-            }.addLayer { Supplier { RenderType.cutoutMipped() } }
-            .onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
+            }.onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
             .item(::AssemblyOperatorBlockItem)
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .transform(ModelGen.customItemModel())
@@ -125,7 +122,6 @@ object Content {
             .block("sprinkler", ::SprinklerBlock)
             .initialProperties { SharedProperties.copperMetal() }
             .transform(TagGen.pickaxeOnly())
-            .addLayer { Supplier { RenderType.cutoutMipped() } }
             .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
             .item()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)

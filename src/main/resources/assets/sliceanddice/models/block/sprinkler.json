@@ -1,5 +1,6 @@
 {
   "parent": "block/block",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "particle": "#top",
     "top": "sliceanddice:block/sprinkler_top",
@@ -214,5 +215,24 @@
         }
       }
     }
-  ]
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -3,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    }
+  }
 }
