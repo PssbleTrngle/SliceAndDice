@@ -8,27 +8,35 @@ import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleBehaviour
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import net.minecraft.core.BlockPos
-import net.minecraft.core.particles.ParticleOptions
-import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 
 object MoistBehaviour : SprinkleBehaviour {
-    override fun act(
+    private fun SprinkleBehaviour.Range.createId() =
+        with(origin) {
+            SliceAndDice.modLoc("sprinkler_${x}_${y}_$z")
+        }
+
+    override fun start(
         range: SprinkleBehaviour.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,
     ) {
-        val id =
-            with(range.origin) {
-                SliceAndDice.modLoc("sprinkler_${x}_${y}_$z")
-            }
-
         val weather = WeatherAPI.INSTANCE.getWeather(world)
-        weather.addLocal(id, SprinkleProvider(), range.aabb, SprinklerHeartbeat(range.origin))
+        weather.addLocal(range.createId(), SprinkleProvider(), range.aabb, SprinklerHeartbeat(range.origin))
+    }
+
+    override fun stop(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+        val weather = WeatherAPI.INSTANCE.getWeather(world)
+        weather.removeLocal(range.createId())
     }
 
     private class SprinkleProvider : AbstractWeatherProvider() {

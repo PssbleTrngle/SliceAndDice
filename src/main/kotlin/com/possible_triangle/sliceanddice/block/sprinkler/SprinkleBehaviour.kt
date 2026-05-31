@@ -1,6 +1,5 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
-import com.possible_triangle.sliceanddice.config.Configs
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
@@ -16,13 +15,13 @@ import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.ceil
 import kotlin.math.floor
 
-private data class RegisteredBehaviour(
+data class RegisteredBehaviour(
     val predicate: (FluidStack) -> Boolean,
     val behaviour: SprinkleBehaviour,
     val rangeBonus: Int,
 )
 
-fun interface SprinkleBehaviour {
+interface SprinkleBehaviour {
     class Range(
         size: Vec3i,
         val origin: BlockPos,
@@ -99,7 +98,24 @@ fun interface SprinkleBehaviour {
         world: ServerLevel,
         fluidStack: FluidStack,
         random: RandomSource,
-    )
+    ) {
+    }
+
+    fun start(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+    }
+
+    fun stop(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+    }
 
     companion object {
         private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
@@ -120,18 +136,6 @@ fun interface SprinkleBehaviour {
             BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, rangeBonus))
         }
 
-        fun actAt(
-            pos: BlockPos,
-            world: ServerLevel,
-            fluid: FluidStack,
-            random: RandomSource,
-        ) {
-            BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
-                val radius = Configs.SERVER.sprinklerRange.get()
-                val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
-                val range = Range(area, pos, world)
-                it.behaviour.act(range, world, fluid, random)
-            }
-        }
+        fun findMatching(fluid: FluidStack): Collection<RegisteredBehaviour> = BEHAVIOURS.filter { it.predicate(fluid) }
     }
 }
