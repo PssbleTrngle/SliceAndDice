@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
+import com.mojang.serialization.Codec
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction.Range
 import com.possible_triangle.sliceanddice.config.Configs
@@ -15,6 +16,8 @@ import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
+import net.minecraft.resources.RegistryOps
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
@@ -46,19 +49,22 @@ class SprinklerBehaviour(
     }
 
     private var running: Collection<Holder<Sprinkler>> = emptyList()
+        set(value) {
+            val stopped = running.filterNot { value.contains(it) }
+            val started = value.filterNot { running.contains(it) }
+
+            stopped.actEach(SprinkleAction::stop)
+            started.actEach(SprinkleAction::start)
+
+            field = value
+        }
+
     private var processingTicks = -1
 
     override fun getType() = TYPE
 
     private fun recheck(level: Level) {
-        val matches = SprinkleAction.findMatching(level.registryAccess(), tank.primaryHandler.fluid)
-        val stopped = running.filterNot { matches.contains(it) }
-        val started = matches.filterNot { running.contains(it) }
-
-        stopped.actEach(SprinkleAction::stop)
-        started.actEach(SprinkleAction::start)
-
-        running = matches
+        running = SprinkleAction.findMatching(level.registryAccess(), tank.primaryHandler.fluid)
     }
 
     private fun Collection<Holder<Sprinkler>>.actEach(
@@ -113,6 +119,18 @@ class SprinklerBehaviour(
     ) {
         super.write(nbt, registries, clientPacket)
         nbt.putInt("ProcessingTicks", processingTicks)
+
+        if (!clientPacket) {
+            val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
+            val encodedSprinklers =
+                Codec.list(Sprinkler.HOLDER_CODEC).encodeStart(
+                    ops,
+                    running.toList(),
+                )
+            encodedSprinklers.ifSuccess {
+                nbt.put("RunningSprinklers", it)
+            }
+        }
     }
 
     override fun read(
@@ -121,5 +139,14 @@ class SprinklerBehaviour(
         clientPacket: Boolean,
     ) {
         processingTicks = nbt.getInt("ProcessingTicks")
+
+        if (!clientPacket && nbt.contains("RunningSprinklers")) {
+            val tag = nbt.get("RunningSprinklers")
+            val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
+            val decodedSprinklers = Codec.list(Sprinkler.HOLDER_CODEC).parse(ops, tag)
+            decodedSprinklers.ifSuccess {
+                running = it
+            }
+        }
     }
 }

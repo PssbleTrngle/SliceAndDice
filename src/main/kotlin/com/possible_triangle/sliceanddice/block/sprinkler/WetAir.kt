@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.AirBlock
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 
+@Deprecated("uses atmosphere system now")
 class WetAir(
     properties: Properties,
 ) : AirBlock(properties) {

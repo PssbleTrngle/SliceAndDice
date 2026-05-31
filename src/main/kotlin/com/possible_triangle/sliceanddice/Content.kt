@@ -20,7 +20,6 @@ import com.possible_triangle.sliceanddice.data.registerSprinklers
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
-import com.simibubi.create.AllTags
 import com.simibubi.create.api.registry.CreateRegistries
 import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
@@ -34,11 +33,10 @@ import com.tterrag.registrate.util.nullness.NonNullFunction
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.createmod.ponder.foundation.PonderIndex
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.BucketItem
 import net.minecraft.world.item.crafting.Recipe
@@ -97,7 +95,7 @@ object Content {
     private fun <T : Recipe<*>> AbstractRegistrate<*>.recipeType(name: String) =
         generic(name, Registries.RECIPE_TYPE) {
             object : RecipeType<T> {
-                override fun toString() = ResourceLocation.fromNamespaceAndPath(modid, name).toString()
+                override fun toString() = fromNamespaceAndPath(modid, name).toString()
             }
         }
 
@@ -137,7 +135,7 @@ object Content {
                     .shaped(RecipeCategory.MISC, c.entry, 3)
                     .pattern("SPS")
                     .pattern("SBS")
-                    .define('S', AllTags.commonTag(BuiltInRegistries.ITEM, "plates/copper"))
+                    .define('S', TagKey.create(Registries.ITEM, fromNamespaceAndPath("c", "plates/copper")))
                     .define('B', Blocks.IRON_BARS)
                     .define('P', AllBlocks.FLUID_PIPE.get())
                     .unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get()))

@@ -20,6 +20,7 @@ import kotlin.math.floor
 
 interface SprinkleAction {
     companion object {
+        @JvmField
         val CODEC: Codec<Holder<SprinkleAction>> =
             Codec.lazyInitialized {
                 ModRegistries.SPRINKLER_ACTIONS_REGISTRY.holderByNameCodec()
