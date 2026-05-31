@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Blocks
 import java.util.function.BiConsumer
 import java.util.function.Supplier
 
-
 class OverweightFarmingCompat private constructor() : IRecipeInjector {
     private object MiscEvents {
         val PEELABLES = Supplier { emptyMap<Block, Block>() }
@@ -33,18 +32,19 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
 
     fun registerRecipes(register: (List<ManualApplicationRecipe>) -> Unit) {
         val axe = Ingredient.of(Items.IRON_AXE)
-        val recipes = MiscEvents.PEELABLES.get().map { (from, to) ->
-            val fromId = from.builtInRegistryHolder().key().location()
-            val toId = to.builtInRegistryHolder().key().location()
-            val id = SliceAndDice.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
-            ItemApplicationRecipe.Builder(::ManualApplicationRecipe, id).let {
-                it.output(to)
-                it.require(from)
-                it.require(axe)
-                it.toolNotConsumed()
-                it.build()
+        val recipes =
+            MiscEvents.PEELABLES.get().map { (from, to) ->
+                val fromId = from.builtInRegistryHolder().key().location()
+                val toId = to.builtInRegistryHolder().key().location()
+                val id = SliceAndDice.modLoc("$OVERWEIGHT_FARMING/peeling/from_${fromId.path}_to_${toId.path}")
+                ItemApplicationRecipe.Builder(::ManualApplicationRecipe, id).let {
+                    it.output(to)
+                    it.require(from)
+                    it.require(axe)
+                    it.toolNotConsumed()
+                    it.build()
+                }
             }
-        }
 
         register(recipes)
     }
@@ -57,13 +57,14 @@ class OverweightFarmingCompat private constructor() : IRecipeInjector {
             val fromId = from.builtInRegistryHolder().key().location()
             val toId = to.builtInRegistryHolder().key().location()
             val id = SliceAndDice.modLoc("$OVERWEIGHT_FARMING/waxing/from_${fromId.path}_to_${toId.path}")
-            val recipe = ItemApplicationRecipe.Builder(::DeployerApplicationRecipe, id).let {
-                it.output(to)
-                it.require(from)
-                it.require(Blocks.HONEYCOMB_BLOCK)
-                it.toolNotConsumed()
-                it.build()
-            }
+            val recipe =
+                ItemApplicationRecipe.Builder(::DeployerApplicationRecipe, id).let {
+                    it.output(to)
+                    it.require(from)
+                    it.require(Blocks.HONEYCOMB_BLOCK)
+                    it.toolNotConsumed()
+                    it.build()
+                }
             add.accept(id, recipe)
         }
     }

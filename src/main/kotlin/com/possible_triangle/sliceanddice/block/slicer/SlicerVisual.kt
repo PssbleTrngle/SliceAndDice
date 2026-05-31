@@ -12,19 +12,26 @@ import dev.engine_room.flywheel.lib.model.Models
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual
 import java.util.function.Consumer
 
-class SlicerVisual(context: VisualizationContext, private val mixer: SlicerBlockEntity, partialTick: Float) :
-    SingleAxisRotatingVisual<SlicerBlockEntity>(
-        context, mixer, partialTick,
-        Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL)
-    ), SimpleDynamicVisual {
+class SlicerVisual(
+    context: VisualizationContext,
+    private val mixer: SlicerBlockEntity,
+    partialTick: Float,
+) : SingleAxisRotatingVisual<SlicerBlockEntity>(
+        context,
+        mixer,
+        partialTick,
+        Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL),
+    ),
+    SimpleDynamicVisual {
+    private val mixerPole =
+        instancerProvider()
+            .instancer(InstanceTypes.ORIENTED, Models.partial(AllPartialModels.MECHANICAL_MIXER_POLE))
+            .createInstance()
 
-    private val mixerPole = instancerProvider()
-        .instancer(InstanceTypes.ORIENTED, Models.partial(AllPartialModels.MECHANICAL_MIXER_POLE))
-        .createInstance()
-
-    private val mixerHead = instancerProvider()
-        .instancer(AllInstanceTypes.ROTATING, Models.partial(SlicerPartials.SLICER_HEAD))
-        .createInstance()
+    private val mixerHead =
+        instancerProvider()
+            .instancer(AllInstanceTypes.ROTATING, Models.partial(SlicerPartials.SLICER_HEAD))
+            .createInstance()
 
     init {
         animate(partialTick)
@@ -42,12 +49,16 @@ class SlicerVisual(context: VisualizationContext, private val mixer: SlicerBlock
 
     private fun transformHead(renderedHeadOffset: Float) {
         val speed = mixer.getRenderedHeadRotationSpeed()
-        mixerHead.setPosition(visualPosition).nudge(0.0f, -renderedHeadOffset, 0.0f)
-            .setRotationalSpeed(speed * 2.0f * 6.0f).setChanged()
+        mixerHead
+            .setPosition(visualPosition)
+            .nudge(0.0f, -renderedHeadOffset, 0.0f)
+            .setRotationalSpeed(speed * 2.0f * 6.0f)
+            .setChanged()
     }
 
     private fun transformPole(renderedHeadOffset: Float) {
-        mixerPole.position(visualPosition)
+        mixerPole
+            .position(visualPosition)
             .translatePosition(0.0f, -renderedHeadOffset, 0.0f)
             .setChanged()
     }
@@ -69,5 +80,4 @@ class SlicerVisual(context: VisualizationContext, private val mixer: SlicerBlock
         consumer.accept(this.mixerHead)
         consumer.accept(this.mixerPole)
     }
-
 }

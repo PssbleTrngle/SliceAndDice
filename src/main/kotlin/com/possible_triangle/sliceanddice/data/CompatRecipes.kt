@@ -23,9 +23,9 @@ import vectorwing.farmersdelight.common.registry.ModBlocks
 import vectorwing.farmersdelight.common.registry.ModItems
 
 object CompatRecipes {
-
     fun generate(output: RegistrateRecipeProvider) {
-        StandardProcessingRecipe.Builder(::FillingRecipe, SliceAndDice.modLoc("hot_cocoa_from_fluid"))
+        StandardProcessingRecipe
+            .Builder(::FillingRecipe, SliceAndDice.modLoc("hot_cocoa_from_fluid"))
             .require(Items.GLASS_BOTTLE)
             .require(AllFluids.CHOCOLATE.get(), 250)
             .output(ModItems.HOT_COCOA.get())
@@ -46,7 +46,8 @@ object CompatRecipes {
             .withCondition(ModLoadedCondition("thermal_foundation"))
             .build(output)
 
-        StandardProcessingRecipe.Builder(::FillingRecipe, SliceAndDice.modLoc("rich_soil"))
+        StandardProcessingRecipe
+            .Builder(::FillingRecipe, SliceAndDice.modLoc("rich_soil"))
             .require(ModBlocks.ORGANIC_COMPOST.get())
             .require(Content.FERTILIZER.get(), 500)
             .output(ModBlocks.RICH_SOIL.get())
@@ -54,17 +55,20 @@ object CompatRecipes {
             .build(output)
 
         val doughTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "foods/dough"))
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
+        ShapelessRecipeBuilder
+            .shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
             .requires(doughTag)
             .requires(DyeColor.LIME.tag)
             .unlockedBy("has_item", RegistrateRecipeProvider.has(doughTag))
             .save(output, ResourceLocation.fromNamespaceAndPath("create", "crafting/appliances/slime_ball"))
     }
 
-    private fun fertilizerMixing(amount: Int, id: String): StandardProcessingRecipe.Builder<MixingRecipe> {
-        return StandardProcessingRecipe.Builder(::MixingRecipe, SliceAndDice.modLoc("fertilizer/from_$id"))
+    private fun fertilizerMixing(
+        amount: Int,
+        id: String,
+    ): StandardProcessingRecipe.Builder<MixingRecipe> =
+        StandardProcessingRecipe
+            .Builder(::MixingRecipe, SliceAndDice.modLoc("fertilizer/from_$id"))
             .require(Fluids.WATER, amount)
             .output(Content.FERTILIZER.get(), amount)
-    }
-
 }

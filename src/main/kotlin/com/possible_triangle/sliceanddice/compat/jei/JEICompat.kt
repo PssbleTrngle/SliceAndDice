@@ -16,7 +16,6 @@ import mezz.jei.api.runtime.IJeiRuntime
 @JeiPlugin
 @Suppress("unused")
 class JEICompat : IModPlugin {
-
     private val cutting = CuttingProcessingCategory()
 
     override fun getPluginUid() = SliceAndDice.modLoc("jei")
@@ -38,9 +37,14 @@ class JEICompat : IModPlugin {
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {
-        val itemApplication = jeiRuntime.recipeManager.createRecipeCategoryLookup().get().filter {
-            it.recipeType.uid == AllRecipeTypes.ITEM_APPLICATION.id
-        }.findFirst().map { it.recipeType as RecipeType<ItemApplicationRecipe> }
+        val itemApplication =
+            jeiRuntime.recipeManager
+                .createRecipeCategoryLookup()
+                .get()
+                .filter {
+                    it.recipeType.uid == AllRecipeTypes.ITEM_APPLICATION.id
+                }.findFirst()
+                .map { it.recipeType as RecipeType<ItemApplicationRecipe> }
 
         itemApplication.ifPresent { category ->
             OverweightFarmingCompat.Companion.ifLoaded {
@@ -50,5 +54,4 @@ class JEICompat : IModPlugin {
             }
         }
     }
-
 }

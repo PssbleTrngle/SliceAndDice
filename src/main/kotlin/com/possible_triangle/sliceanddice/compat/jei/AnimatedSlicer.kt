@@ -16,18 +16,26 @@ import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 
-class AnimatedSlicer(private val basin: Boolean) : AnimatedKinetics() {
-
+class AnimatedSlicer(
+    private val basin: Boolean,
+) : AnimatedKinetics() {
     private var held: ItemStack = ItemStack.EMPTY
 
-    fun setRecipe(recipe: ProcessingRecipe<*,*>) {
+    fun setRecipe(recipe: ProcessingRecipe<*, *>) {
         if (recipe is CuttingProcessingRecipe) {
-            val stack = recipe.params.tool?.items?.firstOrNull()
+            val stack =
+                recipe.params.tool
+                    ?.items
+                    ?.firstOrNull()
             held = stack ?: ItemStack.EMPTY
         }
     }
 
-    override fun draw(graphics: GuiGraphics, x: Int, y: Int) {
+    override fun draw(
+        graphics: GuiGraphics,
+        x: Int,
+        y: Int,
+    ) {
         val matrixStack = graphics.pose()
         matrixStack.pushPose()
         matrixStack.translate(x.toFloat(), y.toFloat(), 200.0f)
@@ -36,9 +44,14 @@ class AnimatedSlicer(private val basin: Boolean) : AnimatedKinetics() {
 
         val scale = if (basin) 23 else 24
 
-        blockElement(cogwheel()).rotateBlock(0.0, (getCurrentAngle() * 2.0f).toDouble(), 0.0)
-            .atLocal(0.0, 0.0, 0.0).scale(scale.toDouble()).render(graphics)
-        blockElement(Content.SLICER_BLOCK.defaultState).atLocal(0.0, 0.0, 0.0).scale(scale.toDouble())
+        blockElement(cogwheel())
+            .rotateBlock(0.0, (getCurrentAngle() * 2.0f).toDouble(), 0.0)
+            .atLocal(0.0, 0.0, 0.0)
+            .scale(scale.toDouble())
+            .render(graphics)
+        blockElement(Content.SLICER_BLOCK.defaultState)
+            .atLocal(0.0, 0.0, 0.0)
+            .scale(scale.toDouble())
             .render(graphics)
 
         val animation = (Mth.sin(AnimationTickHolder.getRenderTime() / 4.0f) + 1.0f) / 5.0f + 0.5f
@@ -57,7 +70,9 @@ class AnimatedSlicer(private val basin: Boolean) : AnimatedKinetics() {
             .render(graphics)
 
         if (basin) {
-            blockElement(AllBlocks.BASIN.defaultState).atLocal(0.0, 1.65, 0.0).scale(scale.toDouble())
+            blockElement(AllBlocks.BASIN.defaultState)
+                .atLocal(0.0, 1.65, 0.0)
+                .scale(scale.toDouble())
                 .render(graphics)
         }
 
@@ -93,5 +108,4 @@ class AnimatedSlicer(private val basin: Boolean) : AnimatedKinetics() {
 
         matrixStack.popPose()
     }
-
 }

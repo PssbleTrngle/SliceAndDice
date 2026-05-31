@@ -10,8 +10,12 @@ import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.max
 
 object PotionBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
         val effects = fluidStack.get(DataComponents.POTION_CONTENTS)?.allEffects ?: return
         range.getEntities(LivingEntity::class.java).forEach { entity ->
             effects.forEach {
@@ -25,8 +29,8 @@ object PotionBehaviour : SprinkleBehaviour {
                             it.amplifier,
                             it.isAmbient,
                             it.isVisible,
-                            it.showIcon()
-                        )
+                            it.showIcon(),
+                        ),
                     )
                 }
             }

@@ -16,13 +16,18 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
 
-class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBlockEntityRenderer<SlicerBlockEntity>(context) {
-
+class SlicerRenderer(
+    context: BlockEntityRendererProvider.Context,
+) : KineticBlockEntityRenderer<SlicerBlockEntity>(context) {
     override fun shouldRenderOffScreen(te: SlicerBlockEntity) = true
 
     private fun renderTool(
-        tile: SlicerBlockEntity, partialTicks: Float, ms: PoseStack, buffer: MultiBufferSource,
-        light: Int, overlay: Int,
+        tile: SlicerBlockEntity,
+        partialTicks: Float,
+        ms: PoseStack,
+        buffer: MultiBufferSource,
+        light: Int,
+        overlay: Int,
     ) {
         if (tile.heldItem.isEmpty) return
         ms.pushPose()
@@ -78,15 +83,16 @@ class SlicerRenderer(context: BlockEntityRendererProvider.Context) : KineticBloc
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         val poleRender = CachedBuffers.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)
-        poleRender.translate(0.0, -renderedHeadOffset.toDouble(), 0.0)
+        poleRender
+            .translate(0.0, -renderedHeadOffset.toDouble(), 0.0)
             .light<SuperByteBuffer>(light)
             .renderInto(ms, vb)
 
         val headRender = CachedBuffers.partial(SlicerPartials.SLICER_HEAD, blockState)
-        headRender.rotateCentered(angle, Direction.UP)
+        headRender
+            .rotateCentered(angle, Direction.UP)
             .translate(0.0, -renderedHeadOffset.toDouble(), 0.0)
             .light<SuperByteBuffer>(light)
             .renderInto(ms, vb)
     }
-
 }

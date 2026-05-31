@@ -9,7 +9,6 @@ import net.minecraft.world.item.crafting.RecipeHolder
 import net.minecraft.world.item.crafting.RecipeType
 
 object RecipeInjection {
-
     fun injectRecipes(manager: RecipeManagerAccessor) {
         val byNameBuilder = ImmutableMap.builder<ResourceLocation, RecipeHolder<*>>()
         byNameBuilder.putAll(manager.byName)

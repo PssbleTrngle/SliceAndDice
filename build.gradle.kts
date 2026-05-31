@@ -63,15 +63,23 @@ repositories {
             includeGroup("fuzs.forgeconfigapiport")
         }
     }
+    maven {
+        url = uri("https://maven.ryanhcode.dev/releases")
+        content {
+            includeGroupAndSubgroups("dev.eriksonn")
+            includeGroupAndSubgroups("dev.ryanhcode")
+            includeGroupAndSubgroups("dev.simulated_team")
+        }
+    }
 }
 
 dependencies {
     modCompileOnly(libs.jei.common.api)
     modCompileOnly(libs.jei.neoforge.api)
 
-    modImplementation(libs.registrate)
+    modApi(libs.registrate)
 
-    modImplementation(
+    modApi(
         variantOf(libs.create) {
             classifier("slim")
         },
@@ -79,12 +87,16 @@ dependencies {
         isTransitive = false
     }
 
-    modImplementation(libs.ponder)
-    modCompileOnly(libs.flywheel)
+    modApi(libs.ponder)
+    modCompileOnlyApi(libs.flywheel)
 
     modImplementation(pack.modrinth.farmers.delight)
     modCompileOnly(pack.modrinth.create.enchantment.industry)
     modCompileOnly(pack.modrinth.overweight.farming)
+
+    // modRuntimeOnly(libs.sable) { isTransitive = false }
+    modCompileOnly(libs.create.simulated) { isTransitive = false }
+    modCompileOnly(libs.create.aeronautics) { isTransitive = false }
 
     if (!env.isCI) {
         modRuntimeOnly(libs.jei.neoforge)

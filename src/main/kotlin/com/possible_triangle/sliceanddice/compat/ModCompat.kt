@@ -14,20 +14,26 @@ import vectorwing.farmersdelight.common.registry.ModSounds
 import java.util.function.BiConsumer
 
 interface IRecipeInjector {
-    fun injectRecipes(existing: Map<ResourceLocation, Recipe<*>>, add: BiConsumer<ResourceLocation, Recipe<*>>)
+    fun injectRecipes(
+        existing: Map<ResourceLocation, Recipe<*>>,
+        add: BiConsumer<ResourceLocation, Recipe<*>>,
+    )
 }
 
 object ModCompat : IRecipeInjector {
-
     const val FARMERS_DELIGHT = "farmersdelight"
     const val CREATE_ENCHANTMENT_INDUSTRY = "create_enchantment_industry"
     const val OVERWEIGHT_FARMING = "overweight_farming"
 
-    fun <T> ifLoaded(mod: String, runnable: () -> T): T? {
-        return if (ModList.get().isLoaded(mod)) {
+    fun <T> ifLoaded(
+        mod: String,
+        runnable: () -> T,
+    ): T? =
+        if (ModList.get().isLoaded(mod)) {
             runnable()
-        } else null
-    }
+        } else {
+            null
+        }
 
     override fun injectRecipes(
         existing: Map<ResourceLocation, Recipe<*>>,
@@ -62,5 +68,4 @@ object ModCompat : IRecipeInjector {
         get(): ItemLike {
             return ifLoaded(FARMERS_DELIGHT) { ModItems.CAKE_SLICE.get() } ?: Items.STRIPPED_BIRCH_LOG
         }
-
 }

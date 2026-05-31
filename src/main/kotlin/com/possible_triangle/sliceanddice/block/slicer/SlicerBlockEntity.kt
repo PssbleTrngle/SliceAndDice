@@ -41,12 +41,13 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
-import kotlin.streams.asSequence
 
-
-class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics {
-
+class SlicerBlockEntity(
+    type: BlockEntityType<*>,
+    pos: BlockPos,
+    state: BlockState,
+) : BasinOperatingBlockEntity(type, pos, state),
+    PressingBehaviourSpecifics {
     companion object {
         private val inWorldCacheKey = Any()
         private val basinCacheKey = Any()
@@ -60,7 +61,7 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
     override fun getRecipeCacheKey() = basinCacheKey
 
-    val correctDirection get() = Configs.SERVER.IGNORE_ROTATION.get() || getSpeed() < 0
+    val correctDirection get() = Configs.SERVER.ignoreRotation.get() || getSpeed() < 0
     val canProcess get() = correctDirection && isSpeedRequirementFulfilled
 
     private lateinit var behaviour: PressingBehaviour
@@ -79,20 +80,24 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
     private var playSound = false
 
-    override fun updateBasin(): Boolean {
-        return !correctDirection || super.updateBasin()
-    }
+    override fun updateBasin(): Boolean = !correctDirection || super.updateBasin()
 
-    override fun addToTooltip(tooltip: MutableList<Component>, isPlayerSneaking: Boolean): Boolean {
+    override fun addToTooltip(
+        tooltip: MutableList<Component>,
+        isPlayerSneaking: Boolean,
+    ): Boolean {
         if (super.addToTooltip(tooltip, isPlayerSneaking)) return true
         if (!correctDirection && speed != 0F) {
-            Lang.builder(SliceAndDice.MOD_ID)
+            Lang
+                .builder(SliceAndDice.MOD_ID)
                 .translate("tooltip.rotationDirection")
                 .style(ChatFormatting.GOLD)
                 .forGoggles(tooltip)
-            val hint = Lang.builder(SliceAndDice.MOD_ID)
-                .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
-                .component()
+            val hint =
+                Lang
+                    .builder(SliceAndDice.MOD_ID)
+                    .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
+                    .component()
             val cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY)
             for (i in cutString.indices) {
                 Lang.builder(SliceAndDice.MOD_ID).add(cutString[i].copy()).forGoggles(tooltip)
@@ -111,14 +116,15 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
         if (!_heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
         val recipes = super.getMatchingRecipes()
-        return recipes.mapNotNull {
-            it.takeIf { hasRequiredTool(it) }
-        }.toMutableList()
+        return recipes
+            .mapNotNull {
+                it.takeIf { hasRequiredTool(it) }
+            }.toMutableList()
     }
 
     private fun consumeDurability() {
         val world = level ?: return
-        if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
+        if (world is ServerLevel && Configs.SERVER.consumeDurability.get()) {
             _heldItem.hurtAndBreak(1, world, null) {
                 _heldItem = ItemStack.EMPTY
                 sendData()
@@ -134,15 +140,20 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     override fun matchStaticFilters(holder: RecipeHolder<out Recipe<*>>): Boolean {
         val recipe = holder.value()
         if (recipe !is CuttingProcessingRecipe) return false
-        return recipe.params.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
+        return recipe.params.tool != null // && recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
     }
 
-    override fun read(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
+    override fun read(
+        compound: CompoundTag,
+        registries: HolderLookup.Provider,
+        clientPacket: Boolean,
+    ) {
         val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
-        _heldItem = compound.get("HeldItem").let {
-            val decoded = ItemStack.CODEC.parse(ops, it).result()
-            decoded.orElse(ItemStack.EMPTY)
-        }
+        _heldItem =
+            compound.get("HeldItem").let {
+                val decoded = ItemStack.CODEC.parse(ops, it).result()
+                decoded.orElse(ItemStack.EMPTY)
+            }
 
         if (clientPacket) {
             compound.handleParticles(registries)
@@ -169,7 +180,11 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         }
     }
 
-    override fun write(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
+    override fun write(
+        compound: CompoundTag,
+        registries: HolderLookup.Provider,
+        clientPacket: Boolean,
+    ) {
         super.write(compound, registries, clientPacket)
         val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
         if (!_heldItem.isEmpty) {
@@ -198,35 +213,44 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     }
 
     fun getRenderedHeadOffset(partialTicks: Float): Float {
-        val modeOffset = when (behaviour.mode) {
-            Mode.BASIN -> 0.8F
-            Mode.BELT -> 0.4F
-            else -> 1.0F
-        }
+        val modeOffset =
+            when (behaviour.mode) {
+                Mode.BASIN -> 0.8F
+                Mode.BELT -> 0.4F
+                else -> 1.0F
+            }
         val base = behaviour.getRenderedHeadOffset(partialTicks)
         return base * modeOffset + 0.4F
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
-        val assemblyRecipe = SequencedAssemblyRecipe.getRecipes(
-            level,
-            stack,
-            CuttingProcessingRecipe.getType(),
-            CuttingProcessingRecipe::class.java
-        ) {
-            it.value.params.tool?.test(_heldItem) == true
-        }.firstOrNull()
+        val assemblyRecipe =
+            SequencedAssemblyRecipe
+                .getRecipes(
+                    level,
+                    stack,
+                    CuttingProcessingRecipe.getType(),
+                    CuttingProcessingRecipe::class.java,
+                ) {
+                    it.value.params.tool
+                        ?.test(_heldItem) == true
+                }.firstOrNull()
 
         if (assemblyRecipe != null) return assemblyRecipe.value
 
-        val recipes = RecipeFinder.get(inWorldCacheKey, level) {
-            val recipe = it.value()
-            if (recipe !is CuttingProcessingRecipe) false
-            else recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.params.tool != null
-        }.map {
-            it.value() as CuttingProcessingRecipe
-        }
+        val recipes =
+            RecipeFinder
+                .get(inWorldCacheKey, level) {
+                    val recipe = it.value()
+                    if (recipe !is CuttingProcessingRecipe) {
+                        false
+                    } else {
+                        recipe.ingredients.size == 1 && recipe.fluidIngredients.isEmpty() && recipe.params.tool != null
+                    }
+                }.map {
+                    it.value() as CuttingProcessingRecipe
+                }
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.params.tool!!.test(_heldItem) }
     }
 
@@ -271,9 +295,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         return true
     }
 
-    override fun tryProcessInWorld(itemEntity: ItemEntity, simulate: Boolean): Boolean {
-        return false
-    }
+    override fun tryProcessInWorld(
+        itemEntity: ItemEntity,
+        simulate: Boolean,
+    ): Boolean = false
 
     override fun canProcessInBulk() = false
 
@@ -281,20 +306,18 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         behaviour.start(Mode.BASIN)
     }
 
-    private fun hasRequiredTool(recipe: Recipe<*>): Boolean {
-        return recipe !is CuttingProcessingRecipe || recipe.params.tool?.test(_heldItem) == true
-    }
+    private fun hasRequiredTool(recipe: Recipe<*>): Boolean =
+        recipe !is CuttingProcessingRecipe || recipe.params.tool?.test(_heldItem) == true
 
-    private fun tryContinueWithPreviousRecipe(): Boolean {
-        return if (behaviour.onBasin()
-            && matchBasinRecipe(currentRecipe)
-            && basin.filter { it.canContinueProcessing() }.isPresent
+    private fun tryContinueWithPreviousRecipe(): Boolean =
+        if (behaviour.onBasin() &&
+            matchBasinRecipe(currentRecipe) &&
+            basin.filter { it.canContinueProcessing() }.isPresent
         ) {
             continueWithPreviousRecipe()
         } else {
             false
         }
-    }
 
     override fun continueWithPreviousRecipe(): Boolean {
         val canContinue = hasRequiredTool(currentRecipe)
@@ -308,10 +331,12 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         basinChecker.scheduleUpdate()
     }
 
-    override fun getParticleAmount(): Int {
-        return if (Configs.CLIENT.spawnBloodParticles) 20
-        else 10
-    }
+    override fun getParticleAmount(): Int =
+        if (Configs.CLIENT.spawnBloodParticles) {
+            20
+        } else {
+            10
+        }
 
     override fun getKineticSpeed() = getSpeed()
 
@@ -322,16 +347,16 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         sendData()
     }
 
-    override fun isRunning(): Boolean {
-        return behaviour.running
-    }
+    override fun isRunning(): Boolean = behaviour.running
 
     fun getRenderedHeadRotationSpeed(): Float {
         val speed = getSpeed()
         return if (isRunning) {
             if (behaviour.runningTicks <= 20) {
                 speed * 2
-            } else speed
+            } else {
+                speed
+            }
         } else {
             speed / 2
         }
@@ -351,11 +376,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
                 ModCompat.cuttingSound,
                 SoundSource.BLOCKS,
                 1F,
-                world.random.nextFloat() * 0.2F + 0.9F
+                world.random.nextFloat() * 0.2F + 0.9F,
             )
         } else {
             playSound = true
         }
     }
-
 }

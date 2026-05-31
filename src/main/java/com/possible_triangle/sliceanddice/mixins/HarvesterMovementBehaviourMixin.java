@@ -23,7 +23,7 @@ public class HarvesterMovementBehaviourMixin {
             at = @At(value = "STORE", ordinal = 0)
     )
     private ItemStack overwriteDefaultItem(ItemStack stack) {
-        if(Configs.INSTANCE.getSERVER().getHARVESTER_USES_KNIFE().get()) {
+        if(Configs.getSERVER().harvesterUsesKnife.get()) {
             return sliceanddice$TOOL.get();
         } else {
             return stack;

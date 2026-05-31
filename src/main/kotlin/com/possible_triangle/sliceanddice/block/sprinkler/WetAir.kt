@@ -10,20 +10,24 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CropBlock
 import net.minecraft.world.level.block.state.BlockState
 
-class WetAir(properties: Properties) : AirBlock(properties) {
-
+class WetAir(
+    properties: Properties,
+) : AirBlock(properties) {
     companion object {
         @JvmStatic
-        fun check(level: Level, pos: BlockPos): Boolean {
+        fun check(
+            level: Level,
+            pos: BlockPos,
+        ): Boolean {
             val mutable = pos.mutable()
             var above = 1
-            while(true) {
+            while (true) {
                 mutable.y = pos.y + above
                 val state = level.getBlockState(mutable)
 
-                if(state.`is`(WET_AIR.get())) return true
+                if (state.`is`(WET_AIR.get())) return true
 
-                if(above > 2 && state.block !is CropBlock) break
+                if (above > 2 && state.block !is CropBlock) break
                 above++
             }
 
@@ -32,13 +36,20 @@ class WetAir(properties: Properties) : AirBlock(properties) {
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun tick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
+    override fun tick(
+        state: BlockState,
+        world: ServerLevel,
+        pos: BlockPos,
+        random: RandomSource,
+    ) {
         dry(world, pos)
     }
 
-    private fun dry(world: Level, pos: BlockPos) {
+    private fun dry(
+        world: Level,
+        pos: BlockPos,
+    ) {
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState())
         world.neighborChanged(pos, Blocks.AIR, pos)
     }
-
 }

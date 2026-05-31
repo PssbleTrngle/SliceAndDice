@@ -8,8 +8,12 @@ import net.minecraft.world.level.block.BonemealableBlock
 import net.neoforged.neoforge.fluids.FluidStack
 
 object FertilizerBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
         range.forEachBlock { pos ->
             val state = world.getBlockState(pos)
             if (state.`is`(Content.FERTILIZER_BLACKLIST)) return@forEachBlock

@@ -20,9 +20,10 @@ import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import java.util.function.Supplier
 
-data class CuttingProcessingRecipe(val params: Params) :
-    ProcessingRecipe<RecipeInput, Params>(CuttingProcessingRecipe, params), IAssemblyRecipe {
-
+data class CuttingProcessingRecipe(
+    val params: Params,
+) : ProcessingRecipe<RecipeInput, Params>(CuttingProcessingRecipe, params),
+    IAssemblyRecipe {
     companion object : IRecipeTypeInfo {
         override fun getId() = Content.CUTTING_RECIPE_TYPE.key!!.location()
 
@@ -31,11 +32,12 @@ data class CuttingProcessingRecipe(val params: Params) :
         override fun <I : RecipeInput, R : Recipe<I>> getType() = Content.CUTTING_RECIPE_TYPE.get() as RecipeType<R>
     }
 
-    override fun matches(inv: RecipeInput, world: Level) = true
+    override fun matches(
+        inv: RecipeInput,
+        world: Level,
+    ) = true
 
-    override fun getDescriptionForAssembly(): Component {
-        return Component.translatable("${SliceAndDice.MOD_ID}.recipe.assembly.slicer")
-    }
+    override fun getDescriptionForAssembly(): Component = Component.translatable("${SliceAndDice.MOD_ID}.recipe.assembly.slicer")
 
     override fun addRequiredMachines(machines: MutableSet<ItemLike>) {
         machines.add(Content.SLICER_BLOCK)
@@ -45,28 +47,31 @@ data class CuttingProcessingRecipe(val params: Params) :
         // Nothing to do here
     }
 
-    override fun getJEISubCategory(): Supplier<Supplier<SequencedAssemblySubCategory>> {
-        return Supplier { Supplier { CuttingProcessingSubCategory() } }
-    }
+    override fun getJEISubCategory(): Supplier<Supplier<SequencedAssemblySubCategory>> =
+        Supplier {
+            Supplier { CuttingProcessingSubCategory() }
+        }
 
     override fun getMaxInputCount() = 1
 
     override fun getMaxOutputCount() = 1
 
-    class Params() : ProcessingRecipeParams() {
+    class Params : ProcessingRecipeParams() {
         var tool: Ingredient? = null
         var converted: Boolean = false
 
         companion object {
-            val CODEC: MapCodec<Params> = RecordCodecBuilder.mapCodec { builder ->
-                builder.group(
-                    codec(::Params).forGetter { it },
-                    Ingredient.CODEC.fieldOf("tool").forGetter { it.tool }
-                ).apply(builder) { params, tool ->
-                    params.tool = tool
-                    params
+            val CODEC: MapCodec<Params> =
+                RecordCodecBuilder.mapCodec { builder ->
+                    builder
+                        .group(
+                            codec(::Params).forGetter { it },
+                            Ingredient.CODEC.fieldOf("tool").forGetter { it.tool },
+                        ).apply(builder) { params, tool ->
+                            params.tool = tool
+                            params
+                        }
                 }
-            }
 
             val STREAM_CODEC = streamCodec(::Params)
         }
@@ -90,14 +95,12 @@ data class CuttingProcessingRecipe(val params: Params) :
     }
 
     object Serializer : RecipeSerializer<CuttingProcessingRecipe> {
-
         private val CODEC = codec(::CuttingProcessingRecipe, Params.CODEC)
         private val STREAM_CODEC = streamCodec(::CuttingProcessingRecipe, Params.STREAM_CODEC)
 
         override fun codec() = CODEC
 
         override fun streamCodec() = STREAM_CODEC
-
     }
 
     override fun validate(): List<String> {
@@ -108,21 +111,21 @@ data class CuttingProcessingRecipe(val params: Params) :
         return errors
     }
 
-    class Builder(recipeId: ResourceLocation) :
-        ProcessingRecipeBuilder<Params, CuttingProcessingRecipe, Builder>(::CuttingProcessingRecipe, recipeId) {
-
+    class Builder(
+        recipeId: ResourceLocation,
+    ) : ProcessingRecipeBuilder<Params, CuttingProcessingRecipe, Builder>(::CuttingProcessingRecipe, recipeId) {
         override fun createParams() = Params()
 
         override fun self() = this
 
-        fun tool(tool: Ingredient) = apply {
-            params.tool = tool
-        }
+        fun tool(tool: Ingredient) =
+            apply {
+                params.tool = tool
+            }
 
-        fun converted() = apply {
-            params.converted = true
-        }
-
+        fun converted() =
+            apply {
+                params.converted = true
+            }
     }
-
 }

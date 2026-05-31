@@ -10,20 +10,20 @@ import mezz.jei.api.recipe.RecipeIngredientRole
 import net.minecraft.client.gui.GuiGraphics
 
 class CuttingProcessingSubCategory : SequencedAssemblySubCategory(25) {
-
     val slicer = AnimatedSlicer(false)
 
     override fun setRecipe(
         builder: IRecipeLayoutBuilder,
         sequencedRecipe: SequencedRecipe<*>,
         focuses: IFocusGroup?,
-        x: Int
+        x: Int,
     ) {
         val recipe = sequencedRecipe.asAssemblyRecipe
         if (recipe !is CuttingProcessingRecipe) return
-        val tool = recipe.params.tool ?: return;
+        val tool = recipe.params.tool ?: return
 
-        builder.addSlot(RecipeIngredientRole.INPUT, x + 4, 15)
+        builder
+            .addSlot(RecipeIngredientRole.INPUT, x + 4, 15)
             .setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
             .addIngredients(tool)
     }
@@ -33,7 +33,7 @@ class CuttingProcessingSubCategory : SequencedAssemblySubCategory(25) {
         graphics: GuiGraphics,
         x: Double,
         y: Double,
-        index: Int
+        index: Int,
     ) {
         val ms = graphics.pose()
 

@@ -7,8 +7,12 @@ import net.minecraft.util.RandomSource
 import net.neoforged.neoforge.fluids.FluidStack
 
 object MoistBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
         val wetAir = Content.WET_AIR.defaultState
         range.forEachBlock { pos ->
             val state = world.getBlockState(pos)
@@ -18,5 +22,4 @@ object MoistBehaviour : SprinkleBehaviour {
             }
         }
     }
-
 }

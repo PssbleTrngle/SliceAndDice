@@ -21,10 +21,12 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
 
-class SprinklerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    SmartBlockEntity(type, pos, state),
+class SprinklerBlockEntity(
+    type: BlockEntityType<*>,
+    pos: BlockPos,
+    state: BlockState,
+) : SmartBlockEntity(type, pos, state),
     IHaveGoggleInformation {
-
     companion object {
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {
             event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, Content.SPRINKLER_BLOCK_ENTITY.get(), { it, _ ->
@@ -39,10 +41,10 @@ class SprinklerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Block
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         behaviours.add(
             SmartFluidTankBehaviour
-                .single(this, Configs.SERVER.SPRINKLER_CAPACITY.get())
+                .single(this, Configs.SERVER.sprinklerCapacity.get())
                 .allowInsertion()
                 .whenFluidUpdates(::notifyUpdate)
-                .also { tank = it }
+                .also { tank = it },
         )
     }
 
@@ -56,20 +58,27 @@ class SprinklerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Block
 
         if (processingTicks >= 0) {
             processingTicks--
-        } else run {
-            val used = Configs.SERVER.SPRINKLER_USAGE.get()
-            val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
-            if (fluid.amount >= used) {
-                tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
-                processingTicks = 20
+        } else {
+            run {
+                val used = Configs.SERVER.sprinklerUsage.get()
+                val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
+                if (fluid.amount >= used) {
+                    tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
+                    processingTicks = 20
+                }
             }
         }
 
         if (processingTicks >= 8) {
             if (world.isClientSide && !isVirtual) spawnProcessingParticles(tank.primaryTank.renderedFluid)
-            if (world is ServerLevel) SprinkleBehaviour.actAt(
-                blockPos, world, tank.primaryHandler.fluid, world.random,
-            )
+            if (world is ServerLevel) {
+                SprinkleBehaviour.actAt(
+                    blockPos,
+                    world,
+                    tank.primaryHandler.fluid,
+                    world.random,
+                )
+            }
         }
     }
 
@@ -86,23 +95,34 @@ class SprinklerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: Block
         world.addParticle(particle, vec.x, vec.y, vec.z, x * 0.2, -0.1, z * 0.2)
     }
 
-    override fun writeSafe(tag: CompoundTag, registries: HolderLookup.Provider) {
+    override fun writeSafe(
+        tag: CompoundTag,
+        registries: HolderLookup.Provider,
+    ) {
         super.writeSafe(tag, registries)
         tag.putInt("ProcessingTicks", processingTicks)
     }
 
-    override fun read(tag: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
+    override fun read(
+        tag: CompoundTag,
+        registries: HolderLookup.Provider,
+        clientPacket: Boolean,
+    ) {
         super.read(tag, registries, clientPacket)
         processingTicks = tag.getInt("ProcessingTicks")
     }
 
-    override fun write(compound: CompoundTag, registries: HolderLookup.Provider, client: Boolean) {
+    override fun write(
+        compound: CompoundTag,
+        registries: HolderLookup.Provider,
+        client: Boolean,
+    ) {
         super.write(compound, registries, client)
         compound.putInt("ProcessingTicks", processingTicks)
     }
 
-    override fun addToGoggleTooltip(tooltip: MutableList<Component>, sneaking: Boolean): Boolean {
-        return containedFluidTooltip(tooltip, sneaking, tank.capability)
-    }
-
+    override fun addToGoggleTooltip(
+        tooltip: MutableList<Component>,
+        sneaking: Boolean,
+    ): Boolean = containedFluidTooltip(tooltip, sneaking, tank.capability)
 }

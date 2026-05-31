@@ -26,7 +26,7 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
         range: SprinkleBehaviour.Range,
         world: ServerLevel,
         fluidStack: FluidStack,
-        random: RandomSource
+        random: RandomSource,
     ) {
         // The following code is evil!!!
         // This is an implementation detail of SprinkleTile.kt
@@ -35,7 +35,7 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
         // This effectively means this function executes for 13 consecutive ticks
         // and then doesn't for 9 ticks
         // We keep this into account to calculate the amount of fluid used each update
-        val fluidUsed = Configs.SERVER.SPRINKLER_USAGE.get()
+        val fluidUsed = Configs.SERVER.sprinklerUsage.get()
         val actingTicks = 13.toFloat()
         val players = range.getEntities(Player::class.java)
 
@@ -44,8 +44,8 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
         if (players.isEmpty()) {
             val blocks = ArrayList<BlockPos>()
             range.forEachGroundBlock { pos ->
-                if(random.nextFloat() <= 0.25) {
-                    blocks.add(pos);
+                if (random.nextFloat() <= 0.25) {
+                    blocks.add(pos)
                 }
             }
             val xp = (totalAmount / actingTicks) / blocks.size.toFloat()
@@ -60,13 +60,11 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleBehaviour 
                 ExperienceOrb.award(world, player.position(), xp.toInt())
             }
         }
-
     }
 
     fun registerSprinkleBehaviour() {
         SprinkleBehaviour.register({
             it.fluid.fluidType == CEIFluids.EXPERIENCE.type
-       }, INSTANCE)
+        }, INSTANCE)
     }
-
 }

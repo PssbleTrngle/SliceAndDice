@@ -2,16 +2,18 @@ package com.possible_triangle.sliceanddice.config
 
 import net.neoforged.neoforge.common.ModConfigSpec
 
+@Suppress("ktlint:standard:property-naming")
 object Configs {
-
-    var SERVER_SPEC: ModConfigSpec
-        private set
+    @JvmStatic
     var SERVER: ServerConfig
         private set
-
-    var CLIENT_SPEC: ModConfigSpec
+    var SERVER_SPEC: ModConfigSpec
         private set
+
+    @JvmStatic
     var CLIENT: ClientConfig
+        private set
+    var CLIENT_SPEC: ModConfigSpec
         private set
 
     init {
@@ -25,5 +27,4 @@ object Configs {
             CLIENT_SPEC = right
         }
     }
-
 }

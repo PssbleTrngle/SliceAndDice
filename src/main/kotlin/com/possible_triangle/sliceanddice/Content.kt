@@ -52,32 +52,42 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid
 import java.util.function.Supplier
 
 object Content {
-
     val ALLOWED_TOOLS = TagKey.create(Registries.ITEM, modLoc("allowed_tools"))
 
-    val SLICER_BLOCK = REGISTRATE.block("slicer", ::SlicerBlock)
-        .initialProperties(SharedProperties::stone)
-        .properties(BlockBehaviour.Properties::noOcclusion).transform(TagGen.axeOrPickaxe()).blockstate { c, p ->
-            p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
-        }
-        .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
-        .item(::AssemblyOperatorBlockItem)
-        .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
-        .transform(ModelGen.customItemModel())
-        .recipe { c, p ->
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry).pattern("A").pattern("B").pattern("C")
-                .define('A', AllBlocks.COGWHEEL.get()).define('B', AllBlocks.ANDESITE_CASING.get())
-                .define('C', AllBlocks.TURNTABLE.get()).unlockedBy("has_tool", has(ALLOWED_TOOLS))
-                .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
-                .save(p)
-        }.register()
+    val SLICER_BLOCK =
+        REGISTRATE
+            .block("slicer", ::SlicerBlock)
+            .initialProperties(SharedProperties::stone)
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate { c, p ->
+                p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
+            }.addLayer { Supplier { RenderType.cutoutMipped() } }
+            .onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
+            .item(::AssemblyOperatorBlockItem)
+            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
+            .transform(ModelGen.customItemModel())
+            .recipe { c, p ->
+                ShapedRecipeBuilder
+                    .shaped(RecipeCategory.MISC, c.entry)
+                    .pattern("A")
+                    .pattern("B")
+                    .pattern("C")
+                    .define('A', AllBlocks.COGWHEEL.get())
+                    .define('B', AllBlocks.ANDESITE_CASING.get())
+                    .define('C', AllBlocks.TURNTABLE.get())
+                    .unlockedBy("has_tool", has(ALLOWED_TOOLS))
+                    .unlockedBy("has_mixer", has(AllBlocks.MECHANICAL_MIXER.get()))
+                    .save(p)
+            }.register()
 
-    val SLICER_BLOCK_ENTITY = REGISTRATE.blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
-        .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
-        .renderer { NonNullFunction { SlicerRenderer(it) } }
-        .validBlock(SLICER_BLOCK)
-        .register()
+    val SLICER_BLOCK_ENTITY =
+        REGISTRATE
+            .blockEntity("slicer", BlockEntityFactory(::SlicerBlockEntity))
+            .visual { SimpleBlockEntityVisualizer.Factory(::SlicerVisual) }
+            .renderer { NonNullFunction { SlicerRenderer(it) } }
+            .validBlock(SLICER_BLOCK)
+            .register()
 
     private fun <T : Recipe<*>> AbstractRegistrate<*>.recipeType(name: String) =
         generic(name, Registries.RECIPE_TYPE) {
@@ -86,34 +96,47 @@ object Content {
             }
         }
 
-    val CUTTING_RECIPE_TYPE = REGISTRATE
-        .recipeType<CuttingProcessingRecipe>("cutting")
-        .register()
+    val CUTTING_RECIPE_TYPE =
+        REGISTRATE
+            .recipeType<CuttingProcessingRecipe>("cutting")
+            .register()
 
-    val CUTTING_SERIALIZER = REGISTRATE.`object`("cutting")
-        .generic(Registries.RECIPE_SERIALIZER) { CuttingProcessingRecipe.Serializer }
-        .register()
+    val CUTTING_SERIALIZER =
+        REGISTRATE
+            .`object`("cutting")
+            .generic(Registries.RECIPE_SERIALIZER) { CuttingProcessingRecipe.Serializer }
+            .register()
 
+    val WET_AIR =
+        REGISTRATE
+            .block("wet_air", ::WetAir)
+            .initialProperties { Blocks.CAVE_AIR }
+            .properties { it.randomTicks() }
+            .blockstate { c, p ->
+                p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
+            }.register()
 
-    val WET_AIR = REGISTRATE.block("wet_air", ::WetAir)
-        .initialProperties { Blocks.CAVE_AIR }
-        .properties { it.randomTicks() }.blockstate { c, p ->
-            p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
-        }.register()
-
-    val SPRINKLER_BLOCK = REGISTRATE.block("sprinkler", ::SprinklerBlock)
-        .initialProperties { SharedProperties.copperMetal() }.transform(TagGen.pickaxeOnly())
-        .addLayer { Supplier { RenderType.cutoutMipped() } }
-        .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
-        .item()
-        .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
-        .transform(ModelGen.customItemModel("_"))
-        .recipe { c, p ->
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, c.entry, 3).pattern("SPS").pattern("SBS")
-                .define('S', AllTags.commonTag(BuiltInRegistries.ITEM, "plates/copper")).define('B', Blocks.IRON_BARS)
-                .define('P', AllBlocks.FLUID_PIPE.get()).unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get())).save(p)
-        }
-        .register()
+    val SPRINKLER_BLOCK =
+        REGISTRATE
+            .block("sprinkler", ::SprinklerBlock)
+            .initialProperties { SharedProperties.copperMetal() }
+            .transform(TagGen.pickaxeOnly())
+            .addLayer { Supplier { RenderType.cutoutMipped() } }
+            .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
+            .item()
+            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
+            .transform(ModelGen.customItemModel("_"))
+            .recipe { c, p ->
+                ShapedRecipeBuilder
+                    .shaped(RecipeCategory.MISC, c.entry, 3)
+                    .pattern("SPS")
+                    .pattern("SBS")
+                    .define('S', AllTags.commonTag(BuiltInRegistries.ITEM, "plates/copper"))
+                    .define('B', Blocks.IRON_BARS)
+                    .define('P', AllBlocks.FLUID_PIPE.get())
+                    .unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get()))
+                    .save(p)
+            }.register()
 
     val SPRINKLER_BLOCK_ENTITY =
         REGISTRATE.blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity)).validBlock(SPRINKLER_BLOCK).register()
@@ -126,7 +149,8 @@ object Content {
 
     val FERTILIZER_BUCKET: ItemEntry<BucketItem>
     val FERTILIZER =
-        REGISTRATE.fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
+        REGISTRATE
+            .fluid("fertilizer", modLoc("block/fluid/fertilizer_still"), modLoc("block/fluid/fertilizer_flowing"))
             .lang("Liquid Fertilizer")
             .tag(FERTILIZERS)
             .source { BaseFlowingFluid.Source(it) }
@@ -142,15 +166,18 @@ object Content {
         REGISTRATE
             .generic(
                 "slicer",
-                CreateRegistries.ARM_INTERACTION_POINT_TYPE
+                CreateRegistries.ARM_INTERACTION_POINT_TYPE,
             ) { SlicerArmInteractionType }
             .register()
 
-    fun register(container: ModContainer, modBus: IEventBus) {
+    fun register(
+        container: ModContainer,
+        modBus: IEventBus,
+    ) {
         REGISTRATE.addRawLang("sliceanddice.tooltip.rotationDirection", "Rotation Direction")
         REGISTRATE.addRawLang(
             "sliceanddice.gui.contraptions.wrong_direction",
-            "It appears that this %s is rotating in the _wrong direction_."
+            "It appears that this %s is rotating in the _wrong direction_.",
         )
 
         REGISTRATE.addRawLang("$MOD_ID.recipe.assembly.slicer", "Cut with Slicer")
@@ -183,5 +210,4 @@ object Content {
         SlicerPartials.load()
         PonderScenes.setup()
     }
-
 }
