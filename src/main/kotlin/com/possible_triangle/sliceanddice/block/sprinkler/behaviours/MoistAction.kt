@@ -1,16 +1,16 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
-import com.possible_triangle.atmosphere.api.v1.AbstractWeatherProvider
+import com.possible_triangle.atmosphere.api.v1.ConstantWeatherProvider
 import com.possible_triangle.atmosphere.api.v1.ProviderHeartbeat
 import com.possible_triangle.atmosphere.api.v1.WeatherAPI
 import com.possible_triangle.atmosphere.api.v1.WeatherCondition
+import com.possible_triangle.atmosphere.api.v1.area.Box
 import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
-import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 
 object MoistAction : SprinkleAction {
@@ -26,7 +26,11 @@ object MoistAction : SprinkleAction {
         random: RandomSource,
     ) {
         val weather = WeatherAPI.INSTANCE.getWeather(world)
-        weather.addLocal(range.createId(), SprinkleProvider(), range.aabb, SprinklerHeartbeat(range.origin))
+        weather.addLocal(
+            range.createId(),
+            ConstantWeatherProvider(WeatherCondition.RAIN), Box.from(range.aabb),
+            SprinklerHeartbeat(range.origin)
+        )
     }
 
     override fun stop(
@@ -37,13 +41,6 @@ object MoistAction : SprinkleAction {
     ) {
         val weather = WeatherAPI.INSTANCE.getWeather(world)
         weather.removeLocal(range.createId())
-    }
-
-    private class SprinkleProvider : AbstractWeatherProvider() {
-        override fun conditionKeyAt(
-            level: Level,
-            pos: BlockPos,
-        ) = WeatherCondition.RAIN
     }
 
     private class SprinklerHeartbeat(

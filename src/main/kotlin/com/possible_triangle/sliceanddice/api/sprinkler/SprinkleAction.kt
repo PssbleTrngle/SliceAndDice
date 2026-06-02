@@ -12,6 +12,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.neoforged.neoforge.fluids.FluidStack
@@ -67,15 +68,16 @@ interface SprinkleAction {
         val origin: BlockPos,
         private val world: ServerLevel,
     ) {
-        val aabb =
+        val aabb = Vec3.atBottomCenterOf(origin).let {
             AABB(
-                origin.x - size.x / 2.0,
-                origin.y - size.y.toDouble(),
-                origin.z - size.z / 2.0,
-                origin.x + size.x / 2.0,
-                origin.y - 1.0,
-                origin.z + size.z / 2.0,
+                it.x - size.x / 2.0,
+                it.y - size.y.toDouble(),
+                it.z - size.z / 2.0,
+                it.x + size.x / 2.0,
+                it.y - 1.0,
+                it.z + size.z / 2.0,
             )
+        }
 
         fun <T : Entity> getEntities(
             clazz: Class<T>,

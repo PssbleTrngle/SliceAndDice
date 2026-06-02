@@ -71,6 +71,11 @@ repositories {
             includeGroupAndSubgroups("dev.simulated_team")
         }
     }
+    nexus {
+        content {
+            includeGroup("com.possible-triangle")
+        }
+    }
 }
 
 dependencies {
