@@ -21,13 +21,7 @@ class SprinklerBlockEntity(
     IHaveGoggleInformation {
     val type
         get() =
-            blockState.block.let {
-                if (it is SprinklerBlock) {
-                    it.type
-                } else {
-                    SprinklerBlock.Type.CEILING
-                }
-            }
+            blockState.getOptionalValue(SprinklerBlock.TYPE).orElse(SprinklerBlock.Type.CEILING)
 
     companion object {
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {

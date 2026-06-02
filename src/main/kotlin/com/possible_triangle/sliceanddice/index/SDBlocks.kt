@@ -11,18 +11,16 @@ import com.simibubi.create.foundation.data.AssetLookup
 import com.simibubi.create.foundation.data.ModelGen
 import com.simibubi.create.foundation.data.SharedProperties
 import com.simibubi.create.foundation.data.TagGen
-import com.tterrag.registrate.builders.BlockBuilder
 import com.tterrag.registrate.providers.RegistrateRecipeProvider.has
 import net.minecraft.core.registries.Registries
-import net.minecraft.data.recipes.RecipeBuilder
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapedRecipeBuilder.shaped
 import net.minecraft.data.recipes.ShapelessRecipeBuilder.shapeless
 import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import net.minecraft.tags.TagKey
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 
 object SDBlocks {
     val SLICER =
@@ -52,8 +50,25 @@ object SDBlocks {
 
     val SPRINKLER =
         REGISTRATE
-            .block("sprinkler", SprinklerBlock::ceiling)
-            .sprinklerTransforms()
+            .block("sprinkler", ::SprinklerBlock)
+            .initialProperties { SharedProperties.copperMetal() }
+            .transform(TagGen.pickaxeOnly())
+            .blockstate { c, p ->
+                val ceiling = p.models().getExistingFile(c.id)
+                val floor = p.models().getExistingFile(c.id.withPrefix("floor_"))
+
+                p.getVariantBuilder(c.get()).forAllStates { state ->
+                    val type = state.getValue(SprinklerBlock.TYPE)
+                    val model = if (type == SprinklerBlock.Type.FLOOR) floor else ceiling
+
+                    ConfiguredModel
+                        .builder()
+                        .modelFile(model)
+                        .build()
+                }
+            }.item()
+            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
+            .transform(ModelGen.customItemModel("_"))
             .recipe { c, p ->
                 shaped(RecipeCategory.MISC, c.entry, 3)
                     .pattern("SPS")
@@ -63,32 +78,10 @@ object SDBlocks {
                     .define('P', AllBlocks.FLUID_PIPE.get())
                     .unlockedByPipe()
                     .save(p)
-            }.register()
 
-    val FLOOR_SPRINKLER =
-        REGISTRATE
-            .block("floor_sprinkler", SprinklerBlock::floor)
-            .sprinklerTransforms()
-            .recipe { c, p ->
                 shapeless(RecipeCategory.MISC, c.entry)
-                    .requires(SPRINKLER)
+                    .requires(SDItems.FLOOR_SPRINKLER)
                     .unlockedByPipe()
                     .save(p, "sprinkler_conversion_0")
-
-                shapeless(RecipeCategory.MISC, SPRINKLER)
-                    .requires(c.entry)
-                    .unlockedByPipe()
-                    .save(p, "sprinkler_conversion_1")
             }.register()
-
-    private fun <T : Block, P> BlockBuilder<T, P>.sprinklerTransforms() =
-        initialProperties { SharedProperties.copperMetal() }
-            .lang("e")
-            .transform(TagGen.pickaxeOnly())
-            .blockstate { c, p -> p.simpleBlock(c.entry, AssetLookup.standardModel(c, p)) }
-            .item()
-            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
-            .transform(ModelGen.customItemModel("_"))
-
-    private fun RecipeBuilder.unlockedByPipe() = unlockedBy("has_pipe", has(AllBlocks.FLUID_PIPE.get()))
 }

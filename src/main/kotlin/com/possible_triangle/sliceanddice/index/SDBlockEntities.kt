@@ -21,6 +21,6 @@ object SDBlockEntities {
     val SPRINKLER =
         REGISTRATE
             .blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity))
-            .validBlocks(SDBlocks.SPRINKLER, SDBlocks.FLOOR_SPRINKLER)
+            .validBlock(SDBlocks.SPRINKLER)
             .register()
 }

@@ -3,11 +3,11 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "sliceanddice:sprinkler"
+      "item": "sliceanddice:floor_sprinkler"
     }
   ],
   "result": {
     "count": 1,
-    "id": "sliceanddice:floor_sprinkler"
+    "id": "sliceanddice:sprinkler"
   }
 }

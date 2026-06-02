@@ -48,23 +48,28 @@ class SprinklerBehaviour(
         }
     }
 
+    private var startedAfterLoad = false
     private var running: Collection<Holder<Sprinkler>> = emptyList()
-        set(value) {
-            val stopped = running.filterNot { value.contains(it) }
-            val started = value.filterNot { running.contains(it) }
-
-            stopped.actEach(SprinkleAction::stop)
-            started.actEach(SprinkleAction::start)
-
-            field = value
-        }
 
     private var processingTicks = -1
 
     override fun getType() = TYPE
 
     private fun recheck(level: Level) {
-        running = SprinkleAction.findMatching(level.registryAccess(), tank.primaryHandler.fluid)
+        val matches = SprinkleAction.findMatching(level.registryAccess(), tank.primaryHandler.fluid)
+        val stopped = running.filterNot { matches.contains(it) }
+        val started =
+            if (startedAfterLoad) {
+                matches.filterNot { running.contains(it) }
+            } else {
+                matches
+            }
+
+        stopped.actEach(SprinkleAction::stop)
+        started.actEach(SprinkleAction::start)
+
+        startedAfterLoad = true
+        running = matches
     }
 
     private fun Collection<Holder<Sprinkler>>.actEach(
