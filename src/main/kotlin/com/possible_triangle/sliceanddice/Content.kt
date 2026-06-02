@@ -8,7 +8,6 @@ import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.slicer.*
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
-import com.possible_triangle.sliceanddice.block.sprinkler.WetAir
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.BurningAction
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.FertilizerAction
 import com.possible_triangle.sliceanddice.block.sprinkler.behaviours.MoistAction
@@ -106,16 +105,6 @@ object Content {
             .`object`("cutting")
             .generic(Registries.RECIPE_SERIALIZER) { CuttingProcessingRecipe.Serializer }
             .register()
-
-    @Deprecated("uses new atmosphere system")
-    val WET_AIR =
-        REGISTRATE
-            .block("wet_air", ::WetAir)
-            .initialProperties { Blocks.CAVE_AIR }
-            .properties { it.randomTicks() }
-            .blockstate { c, p ->
-                p.simpleBlock(c.entry, p.models().withExistingParent(c.name, "block/barrier"))
-            }.register()
 
     val SPRINKLER_BLOCK =
         REGISTRATE
