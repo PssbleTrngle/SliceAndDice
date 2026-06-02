@@ -19,11 +19,28 @@ class SprinklerBlockEntity(
     state: BlockState,
 ) : SmartBlockEntity(type, pos, state),
     IHaveGoggleInformation {
+    val type
+        get() =
+            blockState.block.let {
+                if (it is SprinklerBlock) {
+                    it.type
+                } else {
+                    SprinklerBlock.Type.CEILING
+                }
+            }
+
     companion object {
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {
-            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SDBlockEntities.SPRINKLER.get(), { it, _ ->
-                it.tank.capability
-            })
+            event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                SDBlockEntities.SPRINKLER.get(),
+            ) { it, direction ->
+                if (it.type.input != direction) {
+                    null
+                } else {
+                    it.tank.capability
+                }
+            }
         }
     }
 
@@ -36,7 +53,7 @@ class SprinklerBlockEntity(
                 .allowInsertion()
                 .whenFluidUpdates(::notifyUpdate)
         behaviours.add(tank)
-        behaviours.add(SprinklerBehaviour(this, tank))
+        behaviours.add(SprinklerBehaviour(this, tank, type))
     }
 
     override fun addToGoggleTooltip(

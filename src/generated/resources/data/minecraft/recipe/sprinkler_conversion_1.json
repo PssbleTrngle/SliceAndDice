@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "sliceanddice:floor_sprinkler"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "sliceanddice:sprinkler"
+  }
+}

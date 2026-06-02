@@ -67,15 +67,21 @@ interface SprinkleAction {
         size: Vec3i,
         val origin: BlockPos,
         private val world: ServerLevel,
+        type: SprinklerBlock.Type,
     ) {
         val aabb =
             Vec3.atBottomCenterOf(origin).let {
+                val yFactor =
+                    when (type) {
+                        SprinklerBlock.Type.FLOOR -> -1
+                        SprinklerBlock.Type.CEILING -> 1
+                    }
                 AABB(
                     it.x - size.x / 2.0,
-                    it.y - size.y.toDouble(),
+                    it.y - size.y.toDouble() * yFactor,
                     it.z - size.z / 2.0,
                     it.x + size.x / 2.0,
-                    it.y - 1.0,
+                    it.y,
                     it.z + size.z / 2.0,
                 )
             }

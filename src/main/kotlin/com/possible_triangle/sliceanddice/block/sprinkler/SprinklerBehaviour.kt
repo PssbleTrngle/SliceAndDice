@@ -11,7 +11,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour
 import net.createmod.catnip.math.VecHelper
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Vec3i
@@ -27,6 +26,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler
 class SprinklerBehaviour(
     be: SmartBlockEntity,
     private val tank: SmartFluidTankBehaviour,
+    private val type: SprinklerBlock.Type,
 ) : BlockEntityBehaviour(be) {
     companion object {
         val TYPE = BehaviourType<SprinklerBehaviour>()
@@ -78,7 +78,7 @@ class SprinklerBehaviour(
 
         map { it.value() }.forEach {
             val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
-            val range = Range(area, pos, level)
+            val range = Range(area, pos, level, type)
             it.action.value().block(range, level, fluid, level.random)
         }
     }
@@ -87,8 +87,9 @@ class SprinklerBehaviour(
         val level = blockEntity.level ?: return
         val pos = blockEntity.blockPos
 
-        val below = level.getBlockState(pos.below())
-        if (below.isFaceSturdy(level, pos.below(), Direction.UP)) return
+        val attachedPos = pos.relative(type.input.opposite)
+        val attached = level.getBlockState(attachedPos)
+        if (attached.isFaceSturdy(level, attachedPos, type.input)) return
 
         if (processingTicks >= 0) {
             processingTicks--
