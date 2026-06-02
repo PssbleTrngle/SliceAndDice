@@ -5,9 +5,9 @@ import com.possible_triangle.atmosphere.api.v1.ProviderHeartbeat
 import com.possible_triangle.atmosphere.api.v1.WeatherAPI
 import com.possible_triangle.atmosphere.api.v1.WeatherCondition
 import com.possible_triangle.atmosphere.api.v1.area.Box
-import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
+import com.possible_triangle.sliceanddice.modLoc
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -16,7 +16,7 @@ import net.neoforged.neoforge.fluids.FluidStack
 object MoistAction : SprinkleAction {
     private fun SprinkleAction.Range.createId() =
         with(origin) {
-            SliceAndDice.modLoc("sprinkler_${x}_${y}_$z")
+            modLoc("sprinkler_${x}_${y}_$z")
         }
 
     override fun start(
@@ -28,8 +28,9 @@ object MoistAction : SprinkleAction {
         val weather = WeatherAPI.INSTANCE.getWeather(world)
         weather.addLocal(
             range.createId(),
-            ConstantWeatherProvider(WeatherCondition.RAIN), Box.from(range.aabb),
-            SprinklerHeartbeat(range.origin)
+            ConstantWeatherProvider(WeatherCondition.RAIN),
+            Box.from(range.aabb),
+            SprinklerHeartbeat(range.origin),
         )
     }
 

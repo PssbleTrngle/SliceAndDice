@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.compat
 
 import com.mojang.datafixers.util.Either
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.LOGGER
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe
@@ -88,7 +88,7 @@ class MixingRecipeGenerator(
                 recipe
             }
         } catch (ex: IllegalArgumentException) {
-            SliceAndDice.LOGGER.warn("Unable to convert fluids in recipe $id", ex)
+            LOGGER.warn("Unable to convert fluids in recipe $id", ex)
             listOf(initial.createRecipe(id, cookTime, output))
         }
     }

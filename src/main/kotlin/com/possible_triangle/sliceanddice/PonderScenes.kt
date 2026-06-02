@@ -2,13 +2,14 @@ package com.possible_triangle.sliceanddice
 
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.compat.ModCompat
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.index.SDItems
 import com.simibubi.create.AllFluids
 import com.simibubi.create.content.fluids.FluidFX
 import com.simibubi.create.content.fluids.potion.PotionFluid
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity
 import com.simibubi.create.content.kinetics.press.PressingBehaviour
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder
-import com.tterrag.registrate.util.entry.ItemProviderEntry
 import net.createmod.catnip.math.Pointing
 import net.createmod.catnip.math.VecHelper
 import net.createmod.ponder.api.registration.PonderPlugin
@@ -16,6 +17,7 @@ import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper
 import net.createmod.ponder.foundation.PonderIndex
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleTypes
@@ -40,12 +42,12 @@ object PonderScenes : PonderPlugin {
         PonderIndex.addPlugin(this)
     }
 
-    override fun getModId() = SliceAndDice.MOD_ID
+    override fun getModId() = MOD_ID
 
     override fun registerScenes(byId: PonderSceneRegistrationHelper<ResourceLocation>) {
-        val helper = byId.withKeyFunction<ItemProviderEntry<*, *>> { it.id }
+        val helper = byId.withKeyFunction<Holder<*>> { it.key!!.location() }
 
-        helper.forComponents(Content.SLICER_BLOCK).addStoryBoard("slicer") { builder, util ->
+        helper.forComponents(SDBlocks.SLICER).addStoryBoard("slicer") { builder, util ->
             val scene = CreateSceneBuilder(builder)
             scene.intro("slicer", "Cutting with the slicer", 5)
 
@@ -152,7 +154,7 @@ object PonderScenes : PonderPlugin {
         }
 
         helper
-            .forComponents(Content.SPRINKLER_BLOCK, Content.FERTILIZER_BUCKET)
+            .forComponents(SDBlocks.SPRINKLER, SDItems.FERTILIZER_BUCKET)
             .addStoryBoard("sprinkler/intro") { builder, util ->
                 val scene = CreateSceneBuilder(builder)
                 scene.intro("sprinkler/intro", "Sprinkles on top", 5)

@@ -2,7 +2,7 @@ package com.possible_triangle.sliceanddice.api.sprinkler
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import net.minecraft.core.Holder
 import net.minecraft.resources.RegistryFileCodec
@@ -26,6 +26,6 @@ data class Sprinkler(
             }
 
         @JvmField
-        val HOLDER_CODEC = RegistryFileCodec.create(ModRegistries.SPRINKLERS, CODEC, false)
+        val HOLDER_CODEC = RegistryFileCodec.create(SDRegistries.SPRINKLERS, CODEC, false)
     }
 }

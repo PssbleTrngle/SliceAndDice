@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.mojang.serialization.Codec
-import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -24,14 +24,14 @@ interface SprinkleAction {
         @JvmField
         val CODEC: Codec<Holder<SprinkleAction>> =
             Codec.lazyInitialized {
-                ModRegistries.SPRINKLER_ACTIONS_REGISTRY.holderByNameCodec()
+                SDRegistries.SPRINKLER_ACTIONS_REGISTRY.holderByNameCodec()
             }
 
         fun findMatching(
             registries: RegistryAccess,
             fluid: FluidStack,
         ): Collection<Holder<Sprinkler>> {
-            val sprinklers = registries.lookupOrThrow(ModRegistries.SPRINKLERS)
+            val sprinklers = registries.lookupOrThrow(SDRegistries.SPRINKLERS)
             return sprinklers
                 .listElements()
                 .filter { it.value().fluid.test(fluid) }
@@ -68,16 +68,17 @@ interface SprinkleAction {
         val origin: BlockPos,
         private val world: ServerLevel,
     ) {
-        val aabb = Vec3.atBottomCenterOf(origin).let {
-            AABB(
-                it.x - size.x / 2.0,
-                it.y - size.y.toDouble(),
-                it.z - size.z / 2.0,
-                it.x + size.x / 2.0,
-                it.y - 1.0,
-                it.z + size.z / 2.0,
-            )
-        }
+        val aabb =
+            Vec3.atBottomCenterOf(origin).let {
+                AABB(
+                    it.x - size.x / 2.0,
+                    it.y - size.y.toDouble(),
+                    it.z - size.z / 2.0,
+                    it.x + size.x / 2.0,
+                    it.y - 1.0,
+                    it.z + size.z / 2.0,
+                )
+            }
 
         fun <T : Entity> getEntities(
             clazz: Class<T>,

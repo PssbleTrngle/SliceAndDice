@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
-import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.index.SDTags
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.BonemealableBlock
@@ -16,7 +16,7 @@ object FertilizerAction : SprinkleAction {
     ) {
         range.forEachBlock { pos ->
             val state = world.getBlockState(pos)
-            if (state.`is`(Content.FERTILIZER_BLACKLIST)) return@forEachBlock
+            if (state.`is`(SDTags.FERTILIZER_BLACKLIST)) return@forEachBlock
             val block = state.block
 
             if (block !is BonemealableBlock) return@forEachBlock

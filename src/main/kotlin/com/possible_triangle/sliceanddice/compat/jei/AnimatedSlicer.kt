@@ -1,8 +1,8 @@
 package com.possible_triangle.sliceanddice.compat.jei
 
 import com.mojang.math.Axis
-import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.SlicerPartials
+import com.possible_triangle.sliceanddice.index.SDBlocks
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllPartialModels
@@ -49,7 +49,7 @@ class AnimatedSlicer(
             .atLocal(0.0, 0.0, 0.0)
             .scale(scale.toDouble())
             .render(graphics)
-        blockElement(Content.SLICER_BLOCK.defaultState)
+        blockElement(SDBlocks.SLICER.defaultState)
             .atLocal(0.0, 0.0, 0.0)
             .scale(scale.toDouble())
             .render(graphics)

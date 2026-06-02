@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
-import com.possible_triangle.sliceanddice.Content
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
@@ -21,7 +21,7 @@ class SprinklerBlockEntity(
     IHaveGoggleInformation {
     companion object {
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {
-            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, Content.SPRINKLER_BLOCK_ENTITY.get(), { it, _ ->
+            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SDBlockEntities.SPRINKLER.get(), { it, _ ->
                 it.tank.capability
             })
         }

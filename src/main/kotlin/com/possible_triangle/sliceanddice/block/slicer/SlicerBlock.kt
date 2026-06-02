@@ -1,6 +1,7 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.index.SDBlockEntities
+import com.possible_triangle.sliceanddice.index.SDTags
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllItems
 import com.simibubi.create.AllShapes
@@ -33,7 +34,7 @@ class SlicerBlock(
     ICogWheel {
     override fun getBlockEntityClass() = SlicerBlockEntity::class.java
 
-    override fun getBlockEntityType() = Content.SLICER_BLOCK_ENTITY.get()
+    override fun getBlockEntityType() = SDBlockEntities.SLICER.get()
 
     override fun useItemOn(
         stack: ItemStack,
@@ -48,7 +49,7 @@ class SlicerBlock(
 
         if (held.isEmpty) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
         if (AllItems.WRENCH.isIn(held)) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
-        if (!held.`is`(Content.ALLOWED_TOOLS)) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+        if (!held.`is`(SDTags.ALLOWED_TOOLS)) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
 
         if (!level.isClientSide) {
             withBlockEntityDo(level, pos) {

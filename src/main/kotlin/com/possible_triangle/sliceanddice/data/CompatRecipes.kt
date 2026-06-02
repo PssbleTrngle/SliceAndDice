@@ -1,8 +1,8 @@
 package com.possible_triangle.sliceanddice.data
 
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.compat.ModCompat
+import com.possible_triangle.sliceanddice.index.SDFluids
+import com.possible_triangle.sliceanddice.modLoc
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.fluids.transfer.FillingRecipe
@@ -25,7 +25,7 @@ import vectorwing.farmersdelight.common.registry.ModItems
 object CompatRecipes {
     fun generate(output: RegistrateRecipeProvider) {
         StandardProcessingRecipe
-            .Builder(::FillingRecipe, SliceAndDice.modLoc("hot_cocoa_from_fluid"))
+            .Builder(::FillingRecipe, modLoc("hot_cocoa_from_fluid"))
             .require(Items.GLASS_BOTTLE)
             .require(AllFluids.CHOCOLATE.get(), 250)
             .output(ModItems.HOT_COCOA.get())
@@ -47,9 +47,9 @@ object CompatRecipes {
             .build(output)
 
         StandardProcessingRecipe
-            .Builder(::FillingRecipe, SliceAndDice.modLoc("rich_soil"))
+            .Builder(::FillingRecipe, modLoc("rich_soil"))
             .require(ModBlocks.ORGANIC_COMPOST.get())
-            .require(Content.FERTILIZER.get(), 500)
+            .require(SDFluids.FERTILIZER.get(), 500)
             .output(ModBlocks.RICH_SOIL.get())
             .withCondition(ModLoadedCondition(ModCompat.FARMERS_DELIGHT))
             .build(output)
@@ -68,7 +68,7 @@ object CompatRecipes {
         id: String,
     ): StandardProcessingRecipe.Builder<MixingRecipe> =
         StandardProcessingRecipe
-            .Builder(::MixingRecipe, SliceAndDice.modLoc("fertilizer/from_$id"))
+            .Builder(::MixingRecipe, modLoc("fertilizer/from_$id"))
             .require(Fluids.WATER, amount)
-            .output(Content.FERTILIZER.get(), amount)
+            .output(SDFluids.FERTILIZER.get(), amount)
 }

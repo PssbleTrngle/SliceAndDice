@@ -1,8 +1,10 @@
 package com.possible_triangle.sliceanddice.compat.jei
 
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.index.SDRecipeTypes
+import com.possible_triangle.sliceanddice.modLoc
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.compat.jei.EmptyBackground
 import com.simibubi.create.compat.jei.ItemIcon
@@ -24,8 +26,8 @@ import java.util.function.Supplier
 class CuttingProcessingCategory :
     CreateRecipeCategory<CuttingProcessingRecipe>(
         Info(
-            RecipeType.createRecipeHolderType(SliceAndDice.modLoc("slicer")),
-            Component.translatable("${SliceAndDice.MOD_ID}.recipe.slicer"),
+            RecipeType.createRecipeHolderType(modLoc("slicer")),
+            Component.translatable("${MOD_ID}.recipe.slicer"),
             EmptyBackground(177, 85),
             ItemIcon(SLICER),
             ::loadRecipes,
@@ -35,11 +37,11 @@ class CuttingProcessingCategory :
     private val slicer = AnimatedSlicer(true)
 
     companion object {
-        private val SLICER = Supplier { ItemStack(Content.SLICER_BLOCK) }
+        private val SLICER = Supplier { ItemStack(SDBlocks.SLICER) }
 
         private fun loadRecipes(): List<RecipeHolder<CuttingProcessingRecipe>> {
             val manager = Minecraft.getInstance().connection?.recipeManager ?: return emptyList()
-            val recipes = manager.getAllRecipesFor(Content.CUTTING_RECIPE_TYPE.get())
+            val recipes = manager.getAllRecipesFor(SDRecipeTypes.CUTTING_RECIPE_TYPE.get())
 
             if (Configs.SERVER.showConvertedRecipes.get()) {
                 return recipes

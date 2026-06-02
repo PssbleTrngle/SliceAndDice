@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.data.register
@@ -68,10 +68,10 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleAction {
 
     fun AbstractRegistrate<*>.registerSprinkleBehaviour() {
         val action =
-            generic("experience", ModRegistries.SPRINKLER_ACTIONS) { INSTANCE }
+            generic("experience", SDRegistries.SPRINKLER_ACTIONS) { INSTANCE }
                 .register()
 
-        dataGenInitializer.add(ModRegistries.SPRINKLERS) {
+        dataGenInitializer.add(SDRegistries.SPRINKLERS) {
             it.register(
                 FluidIngredient.of(CEIFluids.EXPERIENCE.get()),
                 action,

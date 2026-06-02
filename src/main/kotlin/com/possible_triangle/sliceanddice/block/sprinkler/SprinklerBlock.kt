@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.simibubi.create.content.equipment.wrench.IWrenchable
 import com.simibubi.create.foundation.block.IBE
 import com.simibubi.create.foundation.blockEntity.ComparatorUtil
@@ -19,7 +19,7 @@ class SprinklerBlock(
     IBE<SprinklerBlockEntity> {
     override fun getBlockEntityClass() = SprinklerBlockEntity::class.java
 
-    override fun getBlockEntityType() = Content.SPRINKLER_BLOCK_ENTITY.get()
+    override fun getBlockEntityType() = SDBlockEntities.SPRINKLER.get()
 
     companion object {
         val SHAPE: VoxelShape = box(2.0, 10.0, 2.0, 14.0, 16.0, 14.0)

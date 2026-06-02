@@ -1,17 +1,17 @@
 package com.possible_triangle.sliceanddice.api
 
-import com.possible_triangle.sliceanddice.SliceAndDice
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.modLoc
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey.createRegistryKey
 
-object ModRegistries {
+object SDRegistries {
     @JvmField
-    val SPRINKLERS = createRegistryKey<Sprinkler>(SliceAndDice.modLoc("sprinkler"))
+    val SPRINKLERS = createRegistryKey<Sprinkler>(modLoc("sprinkler"))
 
     @JvmField
-    val SPRINKLER_ACTIONS = createRegistryKey<SprinkleAction>(SliceAndDice.modLoc("sprinkler_action"))
+    val SPRINKLER_ACTIONS = createRegistryKey<SprinkleAction>(modLoc("sprinkler_action"))
 
     @Suppress("ktlint:standard:property-naming")
     internal lateinit var SPRINKLER_ACTIONS_REGISTRY: Registry<SprinkleAction>

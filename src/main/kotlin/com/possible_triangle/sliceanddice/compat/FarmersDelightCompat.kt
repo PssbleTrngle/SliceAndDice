@@ -1,8 +1,9 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.LOGGER
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.modLoc
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe
 import mezz.jei.api.registration.IRecipeCatalystRegistration
@@ -36,7 +37,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
     }
 
     fun addCatalysts(registration: IRecipeCatalystRegistration) {
-        registration.addRecipeCatalyst(ItemStack(Content.SLICER_BLOCK.get()), FDRecipeTypes.CUTTING)
+        registration.addRecipeCatalyst(ItemStack(SDBlocks.SLICER.get()), FDRecipeTypes.CUTTING)
     }
 
     override fun injectRecipes(
@@ -59,10 +60,10 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
                 .filterValues { it is CuttingBoardRecipe }
                 .mapValues { it.value as CuttingBoardRecipe }
 
-        SliceAndDice.LOGGER.debug("Found {} cutting recipes", cuttingRecipes.size)
+        LOGGER.debug("Found {} cutting recipes", cuttingRecipes.size)
 
         cuttingRecipes.forEach { (originalID, recipe) ->
-            val id = SliceAndDice.modLoc("cutting/${originalID.namespace}/${originalID.path}")
+            val id = modLoc("cutting/${originalID.namespace}/${originalID.path}")
             add.accept(id, recipe.toBasin(id))
         }
     }
@@ -80,11 +81,11 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
                 .filterValues { it is CookingPotRecipe }
                 .mapValues { it.value as CookingPotRecipe }
 
-        SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
+        LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
         val generator = MixingRecipeGenerator(emptyingRecipes)
 
         return cookingRecipes.forEach { (originalID, recipe) ->
-            val id = SliceAndDice.modLoc("cooking/${originalID.namespace}/${originalID.path}")
+            val id = modLoc("cooking/${originalID.namespace}/${originalID.path}")
 
             // Cooking recipes do not use the registryAccess
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")

@@ -7,5 +7,5 @@ object SlicerPartials {
         // Only here so the class gets loaded
     }
 
-    val SLICER_HEAD = PartialModel.of(SliceAndDice.modLoc("block/slicer/head"))
+    val SLICER_HEAD = PartialModel.of(modLoc("block/slicer/head"))
 }

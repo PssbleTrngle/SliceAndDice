@@ -1,11 +1,10 @@
 package com.possible_triangle.sliceanddice.data
 
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.Content.FERTILIZER_FLUIDS
-import com.possible_triangle.sliceanddice.Content.HOT_FLUIDS
-import com.possible_triangle.sliceanddice.api.ModRegistries
+import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.index.SDSprinklerActions
+import com.possible_triangle.sliceanddice.index.SDTags
 import com.simibubi.create.AllFluids
 import com.tterrag.registrate.AbstractRegistrate
 import net.minecraft.core.Holder
@@ -14,11 +13,11 @@ import net.minecraft.resources.ResourceKey
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient
 
 internal fun AbstractRegistrate<*>.registerSprinklers() {
-    dataGenInitializer.add(ModRegistries.SPRINKLERS) {
-        it.register(FluidIngredient.tag(Content.WET_FLUIDS), Content.MOIST_ACTION)
-        it.register(FluidIngredient.tag(HOT_FLUIDS), Content.BURNING_ACTION)
-        it.register(FluidIngredient.tag(FERTILIZER_FLUIDS), Content.FERTILIZER_ACTION)
-        it.register(FluidIngredient.of(AllFluids.POTION.get()), Content.POTION_ACTION)
+    dataGenInitializer.add(SDRegistries.SPRINKLERS) {
+        it.register(FluidIngredient.tag(SDTags.WET_FLUIDS), SDSprinklerActions.MOIST_ACTION)
+        it.register(FluidIngredient.tag(SDTags.HOT_FLUIDS), SDSprinklerActions.BURNING_ACTION)
+        it.register(FluidIngredient.tag(SDTags.FERTILIZER_FLUIDS), SDSprinklerActions.FERTILIZER_ACTION)
+        it.register(FluidIngredient.of(AllFluids.POTION.get()), SDSprinklerActions.POTION_ACTION)
     }
 }
 
@@ -26,6 +25,6 @@ internal fun BootstrapContext<Sprinkler>.register(
     fluid: FluidIngredient,
     action: Holder<SprinkleAction>,
 ) {
-    val key = ResourceKey.create(ModRegistries.SPRINKLERS, action.key!!.location())
+    val key = ResourceKey.create(SDRegistries.SPRINKLERS, action.key!!.location())
     register(key, Sprinkler(fluid, action))
 }

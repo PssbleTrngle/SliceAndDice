@@ -16,7 +16,7 @@ object RecipeInjection {
         val byTypeBuilder = ImmutableMultimap.Builder<RecipeType<*>, RecipeHolder<*>>()
         byTypeBuilder.putAll(manager.byType)
 
-        SliceAndDice.LOGGER.debug("Recipes before: {}", manager.byName.size)
+        LOGGER.debug("Recipes before: {}", manager.byName.size)
 
         injectRecipes(manager.byName.mapValues { it.value.value }) { id, recipe ->
             val holder = RecipeHolder(id, recipe)
@@ -27,6 +27,6 @@ object RecipeInjection {
         manager.byName = byNameBuilder.build()
         manager.byType = byTypeBuilder.build()
 
-        SliceAndDice.LOGGER.debug("Recipes after: {}", manager.byName.size)
+        LOGGER.debug("Recipes after: {}", manager.byName.size)
     }
 }

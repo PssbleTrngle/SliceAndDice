@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.compat
 
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.LOGGER
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -39,7 +39,7 @@ object ModCompat : IRecipeInjector {
         existing: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
-        SliceAndDice.LOGGER.info("Injecting recipes")
+        LOGGER.info("Injecting recipes")
         FarmersDelightCompat.ifLoaded { injectRecipes(existing, add) }
         OverweightFarmingCompat.ifLoaded { injectRecipes(existing, add) }
     }

@@ -1,9 +1,10 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.possible_triangle.sliceanddice.config.Configs
+import com.possible_triangle.sliceanddice.index.SDBlockEntities
+import com.possible_triangle.sliceanddice.index.SDTags
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack
 import com.simibubi.create.content.kinetics.press.PressingBehaviour
@@ -16,7 +17,7 @@ import com.simibubi.create.foundation.item.TooltipHelper
 import com.simibubi.create.foundation.recipe.RecipeApplier
 import com.simibubi.create.foundation.recipe.RecipeFinder
 import net.createmod.catnip.lang.FontHelper
-import net.createmod.catnip.lang.Lang
+import net.createmod.catnip.lang.Lang.builder
 import net.createmod.catnip.math.VecHelper
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
@@ -53,7 +54,7 @@ class SlicerBlockEntity(
         private val basinCacheKey = Any()
 
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, Content.SLICER_BLOCK_ENTITY.get(), { it, _ ->
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SDBlockEntities.SLICER.get(), { it, _ ->
                 it.inventory
             })
         }
@@ -88,19 +89,17 @@ class SlicerBlockEntity(
     ): Boolean {
         if (super.addToTooltip(tooltip, isPlayerSneaking)) return true
         if (!correctDirection && speed != 0F) {
-            Lang
-                .builder(SliceAndDice.MOD_ID)
+            builder(MOD_ID)
                 .translate("tooltip.rotationDirection")
                 .style(ChatFormatting.GOLD)
                 .forGoggles(tooltip)
             val hint =
-                Lang
-                    .builder(SliceAndDice.MOD_ID)
+                builder(MOD_ID)
                     .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
                     .component()
             val cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY)
             for (i in cutString.indices) {
-                Lang.builder(SliceAndDice.MOD_ID).add(cutString[i].copy()).forGoggles(tooltip)
+                builder(MOD_ID).add(cutString[i].copy()).forGoggles(tooltip)
             }
             return true
         }
@@ -114,7 +113,7 @@ class SlicerBlockEntity(
     }
 
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
-        if (!_heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
+        if (!_heldItem.`is`(SDTags.ALLOWED_TOOLS)) return mutableListOf()
         val recipes = super.getMatchingRecipes()
         return recipes
             .mapNotNull {
@@ -140,7 +139,7 @@ class SlicerBlockEntity(
     override fun matchStaticFilters(holder: RecipeHolder<out Recipe<*>>): Boolean {
         val recipe = holder.value()
         if (recipe !is CuttingProcessingRecipe) return false
-        return recipe.params.tool != null // && recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
+        return recipe.params.tool != null // && recipe.tool.items.any { it.`is`(SDTags.ALLOWED_TOOLS) }
     }
 
     override fun read(

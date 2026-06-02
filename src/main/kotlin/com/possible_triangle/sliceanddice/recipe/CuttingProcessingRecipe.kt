@@ -2,9 +2,10 @@ package com.possible_triangle.sliceanddice.recipe
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.SliceAndDice
+import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.compat.jei.CuttingProcessingSubCategory
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.index.SDRecipeTypes
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe.Params
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe
@@ -24,12 +25,13 @@ data class CuttingProcessingRecipe(
     val params: Params,
 ) : ProcessingRecipe<RecipeInput, Params>(CuttingProcessingRecipe, params),
     IAssemblyRecipe {
+    @Suppress("UNCHECKED_CAST")
     companion object : IRecipeTypeInfo {
-        override fun getId() = Content.CUTTING_RECIPE_TYPE.key!!.location()
+        override fun getId() = SDRecipeTypes.CUTTING_RECIPE_TYPE.key!!.location()
 
-        override fun <T : RecipeSerializer<*>> getSerializer() = Content.CUTTING_SERIALIZER.get() as T
+        override fun <T : RecipeSerializer<*>> getSerializer() = SDRecipeTypes.CUTTING_SERIALIZER.get() as T
 
-        override fun <I : RecipeInput, R : Recipe<I>> getType() = Content.CUTTING_RECIPE_TYPE.get() as RecipeType<R>
+        override fun <I : RecipeInput, R : Recipe<I>> getType() = SDRecipeTypes.CUTTING_RECIPE_TYPE.get() as RecipeType<R>
     }
 
     override fun matches(
@@ -37,10 +39,10 @@ data class CuttingProcessingRecipe(
         world: Level,
     ) = true
 
-    override fun getDescriptionForAssembly(): Component = Component.translatable("${SliceAndDice.MOD_ID}.recipe.assembly.slicer")
+    override fun getDescriptionForAssembly(): Component = Component.translatable("${MOD_ID}.recipe.assembly.slicer")
 
     override fun addRequiredMachines(machines: MutableSet<ItemLike>) {
-        machines.add(Content.SLICER_BLOCK)
+        machines.add(SDBlocks.SLICER)
     }
 
     override fun addAssemblyIngredients(ingredients: List<Ingredient>) {

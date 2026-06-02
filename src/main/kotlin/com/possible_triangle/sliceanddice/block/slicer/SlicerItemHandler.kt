@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
-import com.possible_triangle.sliceanddice.Content
+import com.possible_triangle.sliceanddice.index.SDTags
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.items.IItemHandlerModifiable
 
@@ -47,7 +47,7 @@ class SlicerItemHandler(
     override fun isItemValid(
         slot: Int,
         stack: ItemStack,
-    ): Boolean = !stack.isEmpty && stack.`is`(Content.ALLOWED_TOOLS)
+    ): Boolean = !stack.isEmpty && stack.`is`(SDTags.ALLOWED_TOOLS)
 
     override fun setStackInSlot(
         slot: Int,
