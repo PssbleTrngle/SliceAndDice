@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 
 object SDBlocks {
+    @JvmField
     val SLICER =
         REGISTRATE
             .block("slicer", ::SlicerBlock)
@@ -48,10 +49,12 @@ object SDBlocks {
                     .save(p)
             }.register()
 
+    @JvmField
     val SPRINKLER =
         REGISTRATE
             .block("sprinkler", ::SprinklerBlock)
             .initialProperties { SharedProperties.copperMetal() }
+            .properties { it.noOcclusion() }
             .transform(TagGen.pickaxeOnly())
             .blockstate { c, p ->
                 val base = c.id.withPrefix("block/")
@@ -84,7 +87,6 @@ object SDBlocks {
                     .requires(SDItems.FLOOR_SPRINKLER)
                     .unlockedByPipe()
                     .save(p, "sprinkler_conversion_0")
-            }
-            .build()
+            }.build()
             .register()
 }

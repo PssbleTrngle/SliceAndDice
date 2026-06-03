@@ -59,27 +59,27 @@ class SlicerRenderer(
     }
 
     override fun renderSafe(
-        te: SlicerBlockEntity,
+        be: SlicerBlockEntity,
         partialTicks: Float,
         ms: PoseStack,
         buffer: MultiBufferSource,
         light: Int,
         overlay: Int,
     ) {
-        renderTool(te, partialTicks, ms, buffer, light, overlay)
+        renderTool(be, partialTicks, ms, buffer, light, overlay)
 
-        if (VisualizationManager.supportsVisualization(te.level!!)) return
+        if (VisualizationManager.supportsVisualization(be.level!!)) return
 
-        val blockState = te.blockState
+        val blockState = be.blockState
 
         val vb = buffer.getBuffer(RenderType.solid())
 
         val superBuffer = CachedBuffers.partial(AllPartialModels.SHAFTLESS_COGWHEEL, blockState)
-        standardKineticRotationTransform(superBuffer, te, light).renderInto(ms, vb)
+        standardKineticRotationTransform(superBuffer, be, light).renderInto(ms, vb)
 
-        val renderedHeadOffset = te.getRenderedHeadOffset(partialTicks)
-        val speed = te.getRenderedHeadRotationSpeed()
-        val time = AnimationTickHolder.getRenderTime(te.level!!)
+        val renderedHeadOffset = be.getRenderedHeadOffset(partialTicks)
+        val speed = be.getRenderedHeadRotationSpeed()
+        val time = AnimationTickHolder.getRenderTime(be.level!!)
         val angle = time * speed * 6 / 10f % 360 / 180 * Math.PI.toFloat()
 
         val poleRender = CachedBuffers.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState)

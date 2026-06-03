@@ -9,11 +9,13 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 
 object SDRecipeTypes {
+    @JvmField
     val CUTTING_RECIPE_TYPE =
         REGISTRATE
             .recipeType<CuttingProcessingRecipe>("cutting")
             .register()
 
+    @JvmField
     val CUTTING_SERIALIZER =
         REGISTRATE
             .`object`("cutting")

@@ -8,6 +8,7 @@ import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.fluids.BaseFlowingFluid
 
 object SDFluids {
+    @JvmField
     val FERTILIZER =
         REGISTRATE
             .`object`("fertilizer")

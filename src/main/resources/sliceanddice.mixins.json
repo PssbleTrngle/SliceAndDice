@@ -9,6 +9,9 @@
     "RecipeManagerAccessor",
     "ReloadableServerResourcesMixin"
   ],
+  "client": [
+    "FluidTransportBehaviourMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

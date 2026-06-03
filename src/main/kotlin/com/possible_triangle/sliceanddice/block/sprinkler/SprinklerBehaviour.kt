@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction.Range
 import com.possible_triangle.sliceanddice.config.Configs
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour
@@ -21,10 +20,9 @@ import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
 
 class SprinklerBehaviour(
-    be: SmartBlockEntity,
+    private val sprinkler: SprinklerBlockEntity,
     private val tank: SmartFluidTankBehaviour,
-    private val type: SprinklerBlock.Type,
-) : BlockEntityBehaviour(be) {
+) : BlockEntityBehaviour(sprinkler) {
     companion object {
         val TYPE = BehaviourType<SprinklerBehaviour>()
 
@@ -36,12 +34,8 @@ class SprinklerBehaviour(
 
     private var processingTicks = PROGRESS_DURATION
 
-    val progress
-        get() = processingTicks / PROGRESS_DURATION.toFloat()
-
-    var clientActive: Boolean = false
-    val active
-        get() = clientActive || running.isNotEmpty()
+    var active: Boolean = false
+        private set
 
     override fun getType() = TYPE
 
@@ -76,18 +70,17 @@ class SprinklerBehaviour(
 
         map { it.value() }.forEach {
             val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
-            val range = Range(area, pos, level, type)
+            val range = Range(area, pos, level, sprinkler.type)
             it.action.value().block(range, level, fluid, level.random)
         }
     }
 
     override fun tick() {
         val level = blockEntity.level ?: return
-        val pos = blockEntity.blockPos
 
-        val attachedPos = pos.relative(type.input.opposite)
+        val attachedPos = pos.relative(sprinkler.type.input.opposite)
         val attached = level.getBlockState(attachedPos)
-        if (attached.isFaceSturdy(level, attachedPos, type.input)) return
+        if (attached.isFaceSturdy(level, attachedPos, sprinkler.type.input)) return
 
         if (processingTicks > 0) {
             processingTicks--
@@ -98,14 +91,15 @@ class SprinklerBehaviour(
 
             val used = Configs.SERVER.sprinklerUsage.get()
             val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
-            if (fluid.amount >= used) {
+            active = fluid.amount >= used
+            if (active) {
                 tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
                 processingTicks = PROGRESS_DURATION
             }
         }
 
-        if (level.isClientSide && !blockEntity.isVirtual) {
-            spawnSprinklerParticles(tank.primaryTank.renderedFluid, level, pos, type, progress)
+        if (level.isClientSide && !blockEntity.isVirtual && active) {
+            spawnSprinklerParticles(tank.primaryTank.renderedFluid, level, pos, sprinkler.type, sprinkler.rotationSpeed)
         }
 
         running.actEach(SprinkleAction::act)
@@ -119,9 +113,7 @@ class SprinklerBehaviour(
         super.write(nbt, registries, clientPacket)
         nbt.putInt("ProcessingTicks", processingTicks)
 
-        if (clientPacket) {
-            nbt.putBoolean("Active", running.isNotEmpty())
-        } else {
+        if (!clientPacket) {
             val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
             val encodedSprinklers =
                 Codec.list(Sprinkler.HOLDER_CODEC).encodeStart(
@@ -141,9 +133,7 @@ class SprinklerBehaviour(
     ) {
         processingTicks = nbt.getInt("ProcessingTicks")
 
-        if (clientPacket) {
-            clientActive = nbt.getBoolean("Active")
-        } else if (nbt.contains("RunningSprinklers")) {
+        if (!clientPacket && nbt.contains("RunningSprinklers")) {
             val tag = nbt.get("RunningSprinklers")
             val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
             val decodedSprinklers = Codec.list(Sprinkler.HOLDER_CODEC).parse(ops, tag)

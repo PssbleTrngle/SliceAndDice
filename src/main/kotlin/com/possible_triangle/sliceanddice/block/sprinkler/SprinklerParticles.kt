@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.simibubi.create.content.fluids.FluidFX
 import net.createmod.catnip.math.VecHelper
+import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.level.Level
@@ -14,15 +15,22 @@ internal fun spawnSprinklerParticles(
     level: Level,
     pos: BlockPos,
     type: SprinklerBlock.Type,
-    progress: Float,
+    speed: Float,
 ) {
+    val renderer = Minecraft.getInstance().levelRenderer
+    val timer = Minecraft.getInstance().timer
+    val renderTicks = renderer.ticks + timer.getGameTimeDeltaPartialTick(false)
+    val renderSeconds = renderTicks / 20
+    val progress = (renderSeconds * speed * Math.PI) / 180
+    println(progress)
+
     if (fluid.isEmpty) return
 
     val particle = FluidFX.getFluidParticle(fluid)
 
     when (type) {
         SprinklerBlock.Type.CEILING -> sprinkleDown(particle, level, pos)
-        SprinklerBlock.Type.FLOOR -> sprinkleUp(particle, level, pos, progress)
+        SprinklerBlock.Type.FLOOR -> sprinkleUp(particle, level, pos, progress.toFloat())
     }
 }
 
@@ -46,7 +54,7 @@ private fun sprinkleUp(
     progress: Float,
 ) {
     sequenceOf(0F, 0.25F, 0.5F, 0.75F).forEach { offset ->
-        val radians = (progress + offset) * Math.PI * 2
+        val radians = progress + (offset * Math.PI * 2)
         val x = sin(radians)
         val z = cos(radians)
 

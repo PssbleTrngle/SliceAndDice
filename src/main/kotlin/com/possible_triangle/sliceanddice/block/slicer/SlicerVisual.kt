@@ -17,11 +17,11 @@ class SlicerVisual(
     blockEntity: SlicerBlockEntity,
     partialTick: Float,
 ) : SingleAxisRotatingVisual<SlicerBlockEntity>(
-    context,
-    blockEntity,
-    partialTick,
-    Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL),
-),
+        context,
+        blockEntity,
+        partialTick,
+        Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL),
+    ),
     SimpleDynamicVisual {
     private val mixerPole =
         instancerProvider()

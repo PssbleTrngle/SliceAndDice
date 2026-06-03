@@ -3,15 +3,16 @@ package com.possible_triangle.sliceanddice.index
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.item.FloorSprinklerItem
 import com.simibubi.create.foundation.data.AssetLookup
-import com.simibubi.create.foundation.data.ModelGen
 import com.tterrag.registrate.providers.ProviderType
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
 import net.minecraft.data.recipes.ShapelessRecipeBuilder.shapeless
 
 object SDItems {
+    @JvmField
     val FERTILIZER_BUCKET = REGISTRATE.get("fertilizer_bucket", Registries.ITEM)
 
+    @JvmField
     val FLOOR_SPRINKLER =
         REGISTRATE
             .`object`("floor_sprinkler")

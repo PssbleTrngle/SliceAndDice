@@ -2,7 +2,7 @@
   "parent": "block/block",
   "render_type": "minecraft:cutout_mipped",
   "textures": {
-    "particle": "#top",
+    "particle": "minecraft:block/copper_block",
     "top": "sliceanddice:block/sprinkler_top",
     "side": "sliceanddice:block/sprinkler_side",
     "bottom": "sliceanddice:block/sprinkler_bottom",

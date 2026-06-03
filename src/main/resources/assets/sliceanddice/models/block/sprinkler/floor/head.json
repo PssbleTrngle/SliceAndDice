@@ -2,81 +2,14 @@
   "format_version": "1.21.6",
   "credit": "Made with Blockbench",
   "parent": "block/block",
-  "render_type": "minecraft:cutout_mipped",
   "ambientocclusion": false,
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "0": "create:block/pipes",
+    "1": "sliceanddice:block/floor_sprinkler",
     "particle": "create:block/pipes"
   },
   "elements": [
-    {
-      "from": [
-        6,
-        1,
-        6
-      ],
-      "to": [
-        10,
-        13,
-        10
-      ],
-      "rotation": {
-        "angle": 0,
-        "axis": "y",
-        "origin": [
-          0,
-          -8,
-          0
-        ]
-      },
-      "faces": {
-        "north": {
-          "uv": [
-            6,
-            0,
-            8,
-            6
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            6,
-            0,
-            8,
-            6
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            6,
-            0,
-            8,
-            6
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            6,
-            0,
-            8,
-            6
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            13,
-            8,
-            16,
-            11
-          ],
-          "texture": "#0"
-        }
-      }
-    },
     {
       "from": [
         1,
@@ -100,61 +33,61 @@
       "faces": {
         "north": {
           "uv": [
-            6,
-            0.5,
             8,
-            7.5
+            0,
+            12,
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         },
         "east": {
           "uv": [
-            13,
+            4,
+            5,
             8,
-            16,
-            11
+            9
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "south": {
           "uv": [
-            6,
-            0.5,
             8,
-            7.5
+            0,
+            12,
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         },
         "west": {
           "uv": [
-            13,
+            4,
+            5,
             8,
-            16,
-            11
+            9
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "up": {
           "uv": [
-            6,
-            0.5,
+            4,
+            0,
             8,
-            7.5
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         },
         "down": {
           "uv": [
-            6,
-            0.5,
-            8,
-            7.5
+            12,
+            0,
+            16,
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         }
       }
     },
@@ -181,59 +114,59 @@
       "faces": {
         "north": {
           "uv": [
-            13,
+            4,
+            5,
             8,
-            16,
-            11
+            9
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "east": {
           "uv": [
-            6,
-            0.5,
             8,
-            7.5
+            0,
+            12,
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         },
         "south": {
           "uv": [
-            13,
+            4,
+            5,
             8,
-            16,
-            11
+            9
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "west": {
           "uv": [
-            6,
-            0.5,
             8,
-            7.5
+            0,
+            12,
+            14
           ],
           "rotation": 90,
-          "texture": "#0"
+          "texture": "#1"
         },
         "up": {
           "uv": [
-            6,
-            0.5,
+            4,
+            0,
             8,
-            7.5
+            14
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "down": {
           "uv": [
-            6,
-            0.5,
-            8,
-            7.5
+            12,
+            0,
+            16,
+            14
           ],
-          "texture": "#0"
+          "texture": "#1"
         }
       }
     }

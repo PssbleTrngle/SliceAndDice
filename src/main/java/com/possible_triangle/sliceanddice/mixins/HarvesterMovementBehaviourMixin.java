@@ -18,9 +18,10 @@ public class HarvesterMovementBehaviourMixin {
     private static final Supplier<ItemStack> sliceanddice$TOOL = Suppliers.memoize(ModCompat.INSTANCE::getHarvesterTool);
 
     @ModifyVariable(
-            require = 0,
-            method = "visitNewPosition(Lcom/simibubi/create/content/contraptions/behaviour/MovementContext;Lnet/minecraft/core/BlockPos;)V",
-            at = @At(value = "STORE", ordinal = 0)
+        require = 0,
+        method = "visitNewPosition(Lcom/simibubi/create/content/contraptions/behaviour/MovementContext;Lnet/minecraft/core/BlockPos;)V",
+        at = @At(value = "STORE", ordinal = 0),
+        name = "item"
     )
     private ItemStack overwriteDefaultItem(ItemStack stack) {
         if(Configs.getSERVER().harvesterUsesKnife.get()) {

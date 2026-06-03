@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
+import kotlin.jvm.optionals.getOrElse
 
 class SprinklerBlockEntity(
     type: BlockEntityType<*>,
@@ -21,7 +22,7 @@ class SprinklerBlockEntity(
     IHaveGoggleInformation {
     val type
         get() =
-            blockState.getOptionalValue(SprinklerBlock.TYPE).orElse(SprinklerBlock.Type.CEILING)
+            blockState.getOptionalValue(SprinklerBlock.TYPE).getOrElse { SprinklerBlock.Type.CEILING }
 
     companion object {
         fun registerCapabilities(event: RegisterCapabilitiesEvent) {
@@ -38,11 +39,11 @@ class SprinklerBlockEntity(
         }
     }
 
-    private lateinit var tank: SmartFluidTankBehaviour
+    internal lateinit var tank: SmartFluidTankBehaviour
     private lateinit var behaviour: SprinklerBehaviour
 
-    val progress get() = behaviour.progress
     val active get() = behaviour.active
+    val rotationSpeed get() = if (active) 300F else 0F
 
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         tank =
@@ -52,7 +53,7 @@ class SprinklerBlockEntity(
                 .whenFluidUpdates(::notifyUpdate)
                 .also(behaviours::add)
         behaviour =
-            SprinklerBehaviour(this, tank, type)
+            SprinklerBehaviour(this, tank)
                 .also(behaviours::add)
     }
 
