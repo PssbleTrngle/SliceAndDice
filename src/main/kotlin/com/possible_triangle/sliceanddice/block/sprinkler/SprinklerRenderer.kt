@@ -25,17 +25,15 @@ class SprinklerRenderer(
         overlay: Int,
     ) {
         when (be.type) {
-            SprinklerBlock.Type.FLOOR -> be.floorRender(partialTicks, ms, buffer, light, overlay)
-            SprinklerBlock.Type.CEILING -> be.ceilingRender(partialTicks, ms, buffer, light, overlay)
+            SprinklerBlock.Type.FLOOR -> be.floorRender(ms, buffer, light)
+            SprinklerBlock.Type.CEILING -> be.ceilingRender(ms, buffer, light)
         }
     }
 
     private fun SprinklerBlockEntity.floorRender(
-        partialTicks: Float,
         ms: PoseStack,
         buffer: MultiBufferSource,
         light: Int,
-        overlay: Int,
     ) {
         if (VisualizationManager.supportsVisualization(level!!)) return
 
@@ -52,12 +50,12 @@ class SprinklerRenderer(
     }
 
     private fun SprinklerBlockEntity.ceilingRender(
-        partialTicks: Float,
         ms: PoseStack,
         buffer: MultiBufferSource,
         light: Int,
-        overlay: Int,
     ) {
+        if (tank.isEmpty) return
+
         ms.pushPose()
         ms.translate(0f, 0F, 0f)
 
