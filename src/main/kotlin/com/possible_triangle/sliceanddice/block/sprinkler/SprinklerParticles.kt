@@ -45,11 +45,14 @@ private fun sprinkleUp(
     pos: BlockPos,
     progress: Float,
 ) {
-    val radians = progress * Math.PI * 2
-    val x = sin(radians)
-    val z = cos(radians)
+    sequenceOf(0F, 0.25F, 0.5F, 0.75F).forEach { offset ->
+        val radians = (progress + offset) * Math.PI * 2
+        val x = sin(radians)
+        val z = cos(radians)
 
-    val vec = VecHelper.getCenterOf(pos).add(0.0, 2.0 / 16, 0.0).add(x * 0.5, 0.0, z * 0.5)
+        val vec = VecHelper.getCenterOf(pos).add(0.0, 2.0 / 16, 0.0).add(x * 0.5, 0.0, z * 0.5)
 
-    level.addParticle(particle, vec.x, vec.y, vec.z, x * 0.15, 0.2, z * 0.15)
+        val strength = level.random.nextDouble() * 0.05 + 0.15
+        level.addParticle(particle, vec.x, vec.y, vec.z, x * strength, 0.2, z * strength)
+    }
 }

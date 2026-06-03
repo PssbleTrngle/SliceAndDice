@@ -39,6 +39,10 @@ class SprinklerBehaviour(
     val progress
         get() = processingTicks / PROGRESS_DURATION.toFloat()
 
+    var clientActive: Boolean = false
+    val active
+        get() = clientActive || running.isNotEmpty()
+
     override fun getType() = TYPE
 
     private fun recheck(level: Level) {
@@ -56,6 +60,9 @@ class SprinklerBehaviour(
 
         startedAfterLoad = true
         running = matches
+        if (stopped.isNotEmpty() || started.isNotEmpty()) {
+            blockEntity.notifyUpdate()
+        }
     }
 
     private fun Collection<Holder<Sprinkler>>.actEach(
@@ -112,7 +119,9 @@ class SprinklerBehaviour(
         super.write(nbt, registries, clientPacket)
         nbt.putInt("ProcessingTicks", processingTicks)
 
-        if (!clientPacket) {
+        if (clientPacket) {
+            nbt.putBoolean("Active", running.isNotEmpty())
+        } else {
             val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
             val encodedSprinklers =
                 Codec.list(Sprinkler.HOLDER_CODEC).encodeStart(
@@ -132,7 +141,9 @@ class SprinklerBehaviour(
     ) {
         processingTicks = nbt.getInt("ProcessingTicks")
 
-        if (!clientPacket && nbt.contains("RunningSprinklers")) {
+        if (clientPacket) {
+            clientActive = nbt.getBoolean("Active")
+        } else if (nbt.contains("RunningSprinklers")) {
             val tag = nbt.get("RunningSprinklers")
             val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
             val decodedSprinklers = Codec.list(Sprinkler.HOLDER_CODEC).parse(ops, tag)

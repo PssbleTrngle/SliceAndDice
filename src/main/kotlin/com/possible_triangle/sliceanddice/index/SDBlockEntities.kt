@@ -5,6 +5,7 @@ import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.block.slicer.SlicerRenderer
 import com.possible_triangle.sliceanddice.block.slicer.SlicerVisual
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerVisual
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory
 import com.tterrag.registrate.util.nullness.NonNullFunction
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
@@ -21,6 +22,7 @@ object SDBlockEntities {
     val SPRINKLER =
         REGISTRATE
             .blockEntity("sprinkler", BlockEntityFactory(::SprinklerBlockEntity))
+            .visual { SimpleBlockEntityVisualizer.Factory(::SprinklerVisual) }
             .validBlock(SDBlocks.SPRINKLER)
             .register()
 }

@@ -1,6 +1,5 @@
 package com.possible_triangle.sliceanddice
 
-import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.slicer.SlicerArmInteractionType
@@ -12,6 +11,7 @@ import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.possible_triangle.sliceanddice.index.SDBlocks
 import com.possible_triangle.sliceanddice.index.SDFluids
 import com.possible_triangle.sliceanddice.index.SDItems
+import com.possible_triangle.sliceanddice.index.SDPartials
 import com.possible_triangle.sliceanddice.index.SDRecipeTypes
 import com.possible_triangle.sliceanddice.index.SDSprinklerActions
 import com.possible_triangle.sliceanddice.index.load
@@ -78,7 +78,7 @@ class ForgeEntrypoint {
     }
 
     private fun clientInit() {
-        SlicerPartials.load()
+        SDPartials.load()
         PonderScenes.setup()
     }
 }

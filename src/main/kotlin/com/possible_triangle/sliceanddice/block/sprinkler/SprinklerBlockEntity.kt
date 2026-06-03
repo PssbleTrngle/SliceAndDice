@@ -39,6 +39,10 @@ class SprinklerBlockEntity(
     }
 
     private lateinit var tank: SmartFluidTankBehaviour
+    private lateinit var behaviour: SprinklerBehaviour
+
+    val progress get() = behaviour.progress
+    val active get() = behaviour.active
 
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         tank =
@@ -46,8 +50,10 @@ class SprinklerBlockEntity(
                 .single(this, Configs.SERVER.sprinklerCapacity.get())
                 .allowInsertion()
                 .whenFluidUpdates(::notifyUpdate)
-        behaviours.add(tank)
-        behaviours.add(SprinklerBehaviour(this, tank, type))
+                .also(behaviours::add)
+        behaviour =
+            SprinklerBehaviour(this, tank, type)
+                .also(behaviours::add)
     }
 
     override fun addToGoggleTooltip(

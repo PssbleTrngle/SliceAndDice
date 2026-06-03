@@ -1,8 +1,8 @@
 package com.possible_triangle.sliceanddice.compat.jei
 
 import com.mojang.math.Axis
-import com.possible_triangle.sliceanddice.SlicerPartials
 import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.index.SDPartials
 import com.possible_triangle.sliceanddice.recipe.CuttingProcessingRecipe
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllPartialModels
@@ -63,7 +63,7 @@ class AnimatedSlicer(
 
         val angle = getCurrentAngle() * 4.0F
 
-        blockElement(SlicerPartials.SLICER_HEAD)
+        blockElement(SDPartials.SLICER_HEAD)
             .rotateBlock(0.0, angle.toDouble(), 0.0)
             .atLocal(0.0, animation.toDouble(), 0.0)
             .scale(scale.toDouble())

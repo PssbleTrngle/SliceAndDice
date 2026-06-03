@@ -54,8 +54,9 @@ object SDBlocks {
             .initialProperties { SharedProperties.copperMetal() }
             .transform(TagGen.pickaxeOnly())
             .blockstate { c, p ->
-                val ceiling = p.models().getExistingFile(c.id)
-                val floor = p.models().getExistingFile(c.id.withPrefix("floor_"))
+                val base = c.id.withPrefix("block/")
+                val ceiling = p.models().getExistingFile(base.withSuffix("/ceiling"))
+                val floor = p.models().getExistingFile(base.withSuffix("/floor/base"))
 
                 p.getVariantBuilder(c.get()).forAllStates { state ->
                     val type = state.getValue(SprinklerBlock.TYPE)
@@ -68,7 +69,7 @@ object SDBlocks {
                 }
             }.item()
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
-            .transform(ModelGen.customItemModel("_"))
+            .model(AssetLookup.customBlockItemModel("sprinkler", "ceiling"))
             .recipe { c, p ->
                 shaped(RecipeCategory.MISC, c.entry, 3)
                     .pattern("SPS")
@@ -83,5 +84,7 @@ object SDBlocks {
                     .requires(SDItems.FLOOR_SPRINKLER)
                     .unlockedByPipe()
                     .save(p, "sprinkler_conversion_0")
-            }.register()
+            }
+            .build()
+            .register()
 }

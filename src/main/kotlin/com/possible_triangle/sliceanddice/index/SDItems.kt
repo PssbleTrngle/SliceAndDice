@@ -2,6 +2,8 @@ package com.possible_triangle.sliceanddice.index
 
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.item.FloorSprinklerItem
+import com.simibubi.create.foundation.data.AssetLookup
+import com.simibubi.create.foundation.data.ModelGen
 import com.tterrag.registrate.providers.ProviderType
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.recipes.RecipeCategory
@@ -15,7 +17,7 @@ object SDItems {
             .`object`("floor_sprinkler")
             .item(::FloorSprinklerItem)
             .setData(ProviderType.LANG) { _, _ -> }
-            .model { c, p -> p.withExistingParent(c.name, c.id.withPrefix("block/")) }
+            .model(AssetLookup.customBlockItemModel("sprinkler", "floor", "item"))
             .recipe { c, p ->
                 shapeless(RecipeCategory.MISC, c.entry)
                     .requires(c.entry.block)

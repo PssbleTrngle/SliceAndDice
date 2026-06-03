@@ -2,7 +2,7 @@ package com.possible_triangle.sliceanddice.block.slicer
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import com.possible_triangle.sliceanddice.SlicerPartials
+import com.possible_triangle.sliceanddice.index.SDPartials
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer
 import dev.engine_room.flywheel.api.visualization.VisualizationManager
@@ -88,7 +88,7 @@ class SlicerRenderer(
             .light<SuperByteBuffer>(light)
             .renderInto(ms, vb)
 
-        val headRender = CachedBuffers.partial(SlicerPartials.SLICER_HEAD, blockState)
+        val headRender = CachedBuffers.partial(SDPartials.SLICER_HEAD, blockState)
         headRender
             .rotateCentered(angle, Direction.UP)
             .translate(0.0, -renderedHeadOffset.toDouble(), 0.0)

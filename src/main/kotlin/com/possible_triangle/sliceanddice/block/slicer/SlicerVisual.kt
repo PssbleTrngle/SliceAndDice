@@ -1,6 +1,6 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
-import com.possible_triangle.sliceanddice.SlicerPartials
+import com.possible_triangle.sliceanddice.index.SDPartials
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual
 import com.simibubi.create.foundation.render.AllInstanceTypes
@@ -14,14 +14,14 @@ import java.util.function.Consumer
 
 class SlicerVisual(
     context: VisualizationContext,
-    private val mixer: SlicerBlockEntity,
+    blockEntity: SlicerBlockEntity,
     partialTick: Float,
 ) : SingleAxisRotatingVisual<SlicerBlockEntity>(
-        context,
-        mixer,
-        partialTick,
-        Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL),
-    ),
+    context,
+    blockEntity,
+    partialTick,
+    Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL),
+),
     SimpleDynamicVisual {
     private val mixerPole =
         instancerProvider()
@@ -30,7 +30,7 @@ class SlicerVisual(
 
     private val mixerHead =
         instancerProvider()
-            .instancer(AllInstanceTypes.ROTATING, Models.partial(SlicerPartials.SLICER_HEAD))
+            .instancer(AllInstanceTypes.ROTATING, Models.partial(SDPartials.SLICER_HEAD))
             .createInstance()
 
     init {
@@ -42,13 +42,13 @@ class SlicerVisual(
     }
 
     private fun animate(partialTick: Float) {
-        val renderedHeadOffset = mixer.getRenderedHeadOffset(partialTick)
+        val renderedHeadOffset = blockEntity.getRenderedHeadOffset(partialTick)
         transformPole(renderedHeadOffset)
         transformHead(renderedHeadOffset)
     }
 
     private fun transformHead(renderedHeadOffset: Float) {
-        val speed = mixer.getRenderedHeadRotationSpeed()
+        val speed = blockEntity.getRenderedHeadRotationSpeed()
         mixerHead
             .setPosition(visualPosition)
             .nudge(0.0f, -renderedHeadOffset, 0.0f)
@@ -65,7 +65,7 @@ class SlicerVisual(
 
     override fun updateLight(partialTick: Float) {
         super.updateLight(partialTick)
-        relight(this.pos.below(), mixerHead)
+        relight(pos.below(), mixerHead)
         relight(mixerPole)
     }
 
@@ -77,7 +77,7 @@ class SlicerVisual(
 
     override fun collectCrumblingInstances(consumer: Consumer<Instance?>) {
         super.collectCrumblingInstances(consumer)
-        consumer.accept(this.mixerHead)
-        consumer.accept(this.mixerPole)
+        consumer.accept(mixerHead)
+        consumer.accept(mixerPole)
     }
 }
