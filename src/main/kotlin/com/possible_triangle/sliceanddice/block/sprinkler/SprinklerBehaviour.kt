@@ -4,13 +4,10 @@ import com.mojang.serialization.Codec
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction.Range
 import com.possible_triangle.sliceanddice.config.Configs
-import com.simibubi.create.content.fluids.FluidFX
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour
-import net.createmod.catnip.math.VecHelper
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Vec3i
@@ -31,27 +28,16 @@ class SprinklerBehaviour(
     companion object {
         val TYPE = BehaviourType<SprinklerBehaviour>()
 
-        private fun spawnProcessingParticles(
-            fluid: FluidStack,
-            level: Level,
-            pos: BlockPos,
-        ) {
-            if (fluid.isEmpty) return
-
-            val particle = FluidFX.getFluidParticle(fluid)
-            val x = level.random.nextDouble() * 2 - 1
-            val z = level.random.nextDouble() * 2 - 1
-
-            val vec = VecHelper.getCenterOf(pos).add(0.0, 2.0 / 16, 0.0).add(x * 0.3, 0.0, z * 0.3)
-
-            level.addParticle(particle, vec.x, vec.y, vec.z, x * 0.2, -0.1, z * 0.2)
-        }
+        private const val PROGRESS_DURATION = 40
     }
 
     private var startedAfterLoad = false
     private var running: Collection<Holder<Sprinkler>> = emptyList()
 
-    private var processingTicks = -1
+    private var processingTicks = PROGRESS_DURATION
+
+    val progress
+        get() = processingTicks / PROGRESS_DURATION.toFloat()
 
     override fun getType() = TYPE
 
@@ -96,7 +82,7 @@ class SprinklerBehaviour(
         val attached = level.getBlockState(attachedPos)
         if (attached.isFaceSturdy(level, attachedPos, type.input)) return
 
-        if (processingTicks >= 0) {
+        if (processingTicks > 0) {
             processingTicks--
         } else {
             if (!level.isClientSide) {
@@ -107,12 +93,12 @@ class SprinklerBehaviour(
             val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
             if (fluid.amount >= used) {
                 tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
-                processingTicks = 20
+                processingTicks = PROGRESS_DURATION
             }
         }
 
         if (level.isClientSide && !blockEntity.isVirtual) {
-            spawnProcessingParticles(tank.primaryTank.renderedFluid, level, pos)
+            spawnSprinklerParticles(tank.primaryTank.renderedFluid, level, pos, type, progress)
         }
 
         running.actEach(SprinkleAction::act)
