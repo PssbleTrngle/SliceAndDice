@@ -2,6 +2,7 @@ package com.possible_triangle.sliceanddice.index
 
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.item.FloorSprinklerItem
+import com.simibubi.create.AllCreativeModeTabs
 import com.simibubi.create.foundation.data.AssetLookup
 import com.tterrag.registrate.providers.ProviderType
 import net.minecraft.core.registries.Registries
@@ -17,6 +18,7 @@ object SDItems {
         REGISTRATE
             .`object`("floor_sprinkler")
             .item(::FloorSprinklerItem)
+            .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .setData(ProviderType.LANG) { _, _ -> }
             .model(AssetLookup.customBlockItemModel("sprinkler", "floor", "item"))
             .recipe { c, p ->
