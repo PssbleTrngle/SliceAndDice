@@ -96,15 +96,16 @@ dependencies {
     }
 
     modApi(libs.ponder)
-    modCompileOnlyApi(libs.flywheel)
+    modApi(libs.flywheel)
 
     modImplementation(pack.modrinth.farmers.delight)
     modCompileOnly(pack.modrinth.create.enchantment.industry)
     modCompileOnly(pack.modrinth.overweight.farming)
 
-    // modRuntimeOnly(libs.sable) { isTransitive = false }
-    modCompileOnly(libs.create.simulated) { isTransitive = false }
-    modCompileOnly(libs.create.aeronautics) { isTransitive = false }
+    modIncludeCompileOnly(libs.sable.companion)
+    modRuntimeOnly(libs.sable) { isTransitive = false }
+    modImplementation(libs.create.simulated) { isTransitive = false }
+    modImplementation(libs.create.aeronautics) { isTransitive = false }
 
     if (!env.isCI) {
         modRuntimeOnly(libs.jei.neoforge)

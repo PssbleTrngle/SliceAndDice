@@ -3,8 +3,11 @@ package com.possible_triangle.sliceanddice.block.sprinkler
 import com.mojang.serialization.Codec
 import com.possible_triangle.sliceanddice.api.SDRegistries
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
+import dev.ryanhcode.sable.companion.SableCompanion
+import net.createmod.catnip.outliner.Outliner
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.core.Position
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
 import net.minecraft.server.level.ServerLevel
@@ -66,22 +69,24 @@ interface SprinkleAction {
     class Range(
         size: Vec3i,
         val origin: BlockPos,
-        private val world: ServerLevel,
+        private val level: ServerLevel,
         type: SprinklerBlock.Type,
     ) {
+        val subLevel = SableCompanion.INSTANCE.getContaining(level, origin)
+
         val aabb =
             Vec3.atBottomCenterOf(origin).let {
-                val yFactor =
+                val yOffset =
                     when (type) {
-                        SprinklerBlock.Type.FLOOR -> -1
-                        SprinklerBlock.Type.CEILING -> 1
+                        SprinklerBlock.Type.FLOOR -> 3
+                        SprinklerBlock.Type.CEILING -> 0
                     }
                 AABB(
                     it.x - size.x / 2.0,
-                    it.y - size.y.toDouble() * yFactor,
+                    it.y - size.y.toDouble() + yOffset,
                     it.z - size.z / 2.0,
                     it.x + size.x / 2.0,
-                    it.y,
+                    it.y + yOffset,
                     it.z + size.z / 2.0,
                 )
             }
@@ -91,10 +96,27 @@ interface SprinkleAction {
             predicate: (T) -> Boolean = {
                 true
             },
-        ): List<T> = world.getEntities(EntityTypeTest.forClass(clazz), aabb, predicate)
+        ): List<T> = level.getEntities(EntityTypeTest.forClass(clazz), aabb, predicate)
+
+        private fun execute(
+            pos: BlockPos,
+            consumer: (BlockPos) -> Unit,
+        ) {
+            val outside = subLevel?.logicalPose()?.transformPosition(pos.center)?.let(BlockPos::containing) ?: pos
+
+            consumer(outside)
+            Outliner
+                .getInstance()
+                .chaseAABB(this, aabb)
+
+            SableCompanion.INSTANCE.runIncludingSubLevels(level, outside.center as Position, true, subLevel) { _, it ->
+                consumer(it)
+                null
+            }
+        }
 
         fun forEachBlock(consumer: (BlockPos) -> Unit) {
-            for (block in BlockPos.betweenClosed(
+            for (pos in BlockPos.betweenClosed(
                 ceil(aabb.minX).toInt(),
                 ceil(aabb.minY).toInt(),
                 ceil(aabb.minZ).toInt(),
@@ -102,7 +124,7 @@ interface SprinkleAction {
                 floor(aabb.maxY).toInt(),
                 floor(aabb.maxZ).toInt(),
             )) {
-                consumer(block)
+                execute(pos, consumer)
             }
         }
 
@@ -122,18 +144,18 @@ interface SprinkleAction {
                     while (y > minY) {
                         y--
                         val pos = BlockPos(x, y, z)
-                        val state = world.getBlockState(pos)
-                        val shape = state.getCollisionShape(world, pos, CollisionContext.empty())
+                        val state = level.getBlockState(pos)
+                        val shape = state.getCollisionShape(level, pos, CollisionContext.empty())
 
                         if (y == minY) {
-                            consumer(pos)
+                            execute(pos, consumer)
                             continue@horiz
                         }
                         if (state.isAir || shape.isEmpty) {
                             continue@vert
                         }
                         if (shape.equals(Shapes.block())) {
-                            consumer(pos)
+                            execute(pos, consumer)
                             continue@horiz
                         }
                     }

@@ -22,7 +22,6 @@ internal fun spawnSprinklerParticles(
     val renderTicks = renderer.ticks + timer.getGameTimeDeltaPartialTick(false)
     val renderSeconds = renderTicks / 20
     val progress = (renderSeconds * speed * Math.PI) / 180
-    println(progress)
 
     if (fluid.isEmpty) return
 

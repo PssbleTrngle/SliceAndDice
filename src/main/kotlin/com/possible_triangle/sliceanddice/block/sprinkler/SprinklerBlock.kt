@@ -1,6 +1,8 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.index.SDBlockEntities
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.possible_triangle.sliceanddice.index.SDItems
 import com.simibubi.create.content.equipment.wrench.IWrenchable
 import com.simibubi.create.foundation.block.IBE
 import com.simibubi.create.foundation.blockEntity.ComparatorUtil
@@ -8,13 +10,17 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.EnumProperty
+import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -84,5 +90,21 @@ class SprinklerBlock(
             context.level.setBlockAndUpdate(context.clickedPos, state.cycle(TYPE))
         }
         return InteractionResult.SUCCESS
+    }
+
+    override fun getCloneItemStack(
+        state: BlockState,
+        target: HitResult,
+        level: LevelReader,
+        pos: BlockPos,
+        player: Player,
+    ): ItemStack {
+        val block =
+            when (state.getValue(TYPE)) {
+                Type.CEILING -> SDBlocks.SPRINKLER.get()
+                Type.FLOOR -> SDItems.FLOOR_SPRINKLER.get()
+            }
+
+        return ItemStack(block)
     }
 }
