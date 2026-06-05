@@ -1,7 +1,7 @@
 package com.possible_triangle.sliceanddice.api
 
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.modLoc
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey.createRegistryKey

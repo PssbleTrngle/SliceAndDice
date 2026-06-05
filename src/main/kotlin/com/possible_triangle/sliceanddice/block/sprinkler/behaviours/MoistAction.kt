@@ -5,43 +5,26 @@ import com.possible_triangle.atmosphere.api.v1.ProviderHeartbeat
 import com.possible_triangle.atmosphere.api.v1.WeatherAPI
 import com.possible_triangle.atmosphere.api.v1.WeatherCondition
 import com.possible_triangle.atmosphere.api.v1.area.Box
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkeContext
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
-import com.possible_triangle.sliceanddice.modLoc
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.RandomSource
-import net.neoforged.neoforge.fluids.FluidStack
 
 object MoistAction : SprinkleAction {
-    private fun SprinkleAction.Range.createId() =
-        with(origin) {
-            modLoc("sprinkler_${x}_${y}_$z")
-        }
-
-    override fun start(
-        range: SprinkleAction.Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-        val weather = WeatherAPI.INSTANCE.getWeather(world)
+    override fun start(context: SprinkeContext) {
+        val weather = WeatherAPI.INSTANCE.getWeather(context.level)
         weather.addLocal(
-            range.createId(),
+            context.id,
             ConstantWeatherProvider(WeatherCondition.RAIN),
-            Box.from(range.aabb),
-            SprinklerHeartbeat(range.origin),
+            Box.from(context.area),
+            SprinklerHeartbeat(context.origin),
         )
     }
 
-    override fun stop(
-        range: SprinkleAction.Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-        val weather = WeatherAPI.INSTANCE.getWeather(world)
-        weather.removeLocal(range.createId())
+    override fun stop(context: SprinkeContext) {
+        val weather = WeatherAPI.INSTANCE.getWeather(context.level)
+        weather.removeLocal(context.id)
     }
 
     private class SprinklerHeartbeat(

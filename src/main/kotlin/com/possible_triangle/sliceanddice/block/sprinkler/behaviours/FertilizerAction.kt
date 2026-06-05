@@ -1,30 +1,24 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviours
 
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkeContext
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.index.SDTags
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.BonemealableBlock
-import net.neoforged.neoforge.fluids.FluidStack
 
 object FertilizerAction : SprinkleAction {
-    override fun act(
-        range: SprinkleAction.Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
-        range.forEachBlock { pos ->
-            val state = world.getBlockState(pos)
+    override fun tick(context: SprinkeContext) {
+        context.forEachBlock { pos ->
+            val state = context.level.getBlockState(pos)
             if (state.`is`(SDTags.FERTILIZER_BLACKLIST)) return@forEachBlock
             val block = state.block
 
             if (block !is BonemealableBlock) return@forEachBlock
-            if (!block.isValidBonemealTarget(world, pos, state)) return@forEachBlock
-            if (world.gameTime % 20 != 0L || random.nextInt(30) < 26) return@forEachBlock
-            if (!block.isBonemealSuccess(world, random, pos, state)) return@forEachBlock
+            if (!block.isValidBonemealTarget(context.level, pos, state)) return@forEachBlock
+            // TODO move to Sprinkers
+            // if (context.level.gameTime % 20 != 0L || random.nextInt(30) < 26) return@forEachBlock
+            if (!block.isBonemealSuccess(context.level, context.random, pos, state)) return@forEachBlock
 
-            block.performBonemeal(world, random, pos, state)
+            block.performBonemeal(context.level, context.random, pos, state)
         }
     }
 }

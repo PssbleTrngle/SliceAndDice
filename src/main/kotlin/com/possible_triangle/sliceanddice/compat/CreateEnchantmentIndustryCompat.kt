@@ -1,16 +1,14 @@
 package com.possible_triangle.sliceanddice.compat
 
 import com.possible_triangle.sliceanddice.api.SDRegistries
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinkleAction
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkeContext
+import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.data.register
 import com.tterrag.registrate.AbstractRegistrate
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.ExperienceOrb
 import net.minecraft.world.entity.player.Player
-import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient
 import plus.dragons.createenchantmentindustry.common.fluids.experience.ExperienceHelper
 import plus.dragons.createenchantmentindustry.common.registry.CEIFluids
@@ -26,12 +24,7 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleAction {
         }
     }
 
-    override fun act(
-        range: SprinkleAction.Range,
-        world: ServerLevel,
-        fluidStack: FluidStack,
-        random: RandomSource,
-    ) {
+    override fun tick(context: SprinkeContext) {
         // The following code is evil!!!
         // This is an implementation detail of SprinkleTile.kt
         // Everytime some fluid is used by the sprinkler, the processingTicks value is set to 20
@@ -41,27 +34,27 @@ class CreateEnchantmentIndustryCompat private constructor() : SprinkleAction {
         // We keep this into account to calculate the amount of fluid used each update
         val fluidUsed = Configs.SERVER.sprinklerUsage.get()
         val actingTicks = 13.toFloat()
-        val players = range.getEntities(Player::class.java)
+        val players = context.getEntities(Player::class.java)
 
-        val totalAmount = ExperienceHelper.getExperienceFromFluid(fluidStack.copyWithAmount(fluidUsed))
+        val totalAmount = ExperienceHelper.getExperienceFromFluid(context.fluidStack.copyWithAmount(fluidUsed))
 
         if (players.isEmpty()) {
             val blocks = ArrayList<BlockPos>()
-            range.forEachGroundBlock { pos ->
-                if (random.nextFloat() <= 0.25) {
+            context.forEachGroundBlock { pos ->
+                if (context.random.nextFloat() <= 0.25) {
                     blocks.add(pos)
                 }
             }
             val xp = (totalAmount / actingTicks) / blocks.size.toFloat()
             blocks.forEach { pos ->
-                val drop = ExperienceOrb(world, pos.center.x(), pos.center.y(), pos.center.z(), xp.toInt())
+                val drop = ExperienceOrb(context.level, pos.center.x(), pos.center.y(), pos.center.z(), xp.toInt())
                 drop.setPos(pos.center)
-                world.addFreshEntity(drop)
+                context.level.addFreshEntity(drop)
             }
         } else {
             val xp = (totalAmount / actingTicks) / players.size.toFloat()
             players.forEach { player ->
-                ExperienceOrb.award(world, player.position(), xp.toInt())
+                ExperienceOrb.award(context.level, player.position(), xp.toInt())
             }
         }
     }

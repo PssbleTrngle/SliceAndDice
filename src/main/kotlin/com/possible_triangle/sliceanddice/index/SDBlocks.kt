@@ -3,8 +3,10 @@ package com.possible_triangle.sliceanddice.index
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerMovementBehaviour
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour
 import com.simibubi.create.api.stress.BlockStressValues
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem
 import com.simibubi.create.foundation.data.AssetLookup
@@ -30,10 +32,10 @@ object SDBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(BlockBehaviour.Properties::noOcclusion)
             .transform(TagGen.axeOrPickaxe())
+            .onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
             .blockstate { c, p ->
                 p.simpleBlock(c.entry, AssetLookup.partialBaseModel(c, p))
-            }.onRegister { BlockStressValues.IMPACTS.register(it) { 4.0 } }
-            .item(::AssemblyOperatorBlockItem)
+            }.item(::AssemblyOperatorBlockItem)
             .tab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key!!)
             .transform(ModelGen.customItemModel())
             .recipe { c, p ->
@@ -56,6 +58,7 @@ object SDBlocks {
             .initialProperties { SharedProperties.copperMetal() }
             .properties { it.noOcclusion() }
             .transform(TagGen.pickaxeOnly())
+            .onRegister(movementBehaviour(SprinklerMovementBehaviour))
             .blockstate { c, p ->
                 val base = c.id.withPrefix("block/")
                 val ceiling = p.models().getExistingFile(base.withSuffix("/ceiling"))
