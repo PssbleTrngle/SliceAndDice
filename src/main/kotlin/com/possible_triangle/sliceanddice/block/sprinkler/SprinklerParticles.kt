@@ -1,10 +1,7 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.simibubi.create.content.fluids.FluidFX
-import net.createmod.catnip.math.VecHelper
 import net.minecraft.client.Minecraft
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Position
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3

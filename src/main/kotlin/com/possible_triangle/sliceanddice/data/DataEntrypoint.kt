@@ -14,6 +14,8 @@ import net.neoforged.neoforge.data.event.GatherDataEvent
 object DataEntrypoint {
     @SubscribeEvent(priority = EventPriority.HIGH)
     fun gatherData(event: GatherDataEvent) {
+        PonderIndex.registerAll()
+
         REGISTRATE.addRawLang("sliceanddice.tooltip.rotationDirection", "Rotation Direction")
         REGISTRATE.addRawLang(
             "sliceanddice.gui.contraptions.wrong_direction",

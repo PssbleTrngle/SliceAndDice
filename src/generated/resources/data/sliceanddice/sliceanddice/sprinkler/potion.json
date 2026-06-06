@@ -1,5 +1,7 @@
 {
-  "action": "sliceanddice:potion",
+  "action": {
+    "type": "sliceanddice:potion"
+  },
   "fluid": {
     "fluid": "create:flowing_potion"
   }

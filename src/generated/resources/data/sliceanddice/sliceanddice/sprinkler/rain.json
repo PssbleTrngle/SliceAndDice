@@ -1,0 +1,9 @@
+{
+  "action": {
+    "type": "sliceanddice:weather",
+    "condition": "minecraft:rain"
+  },
+  "fluid": {
+    "tag": "sliceanddice:moisturizing"
+  }
+}

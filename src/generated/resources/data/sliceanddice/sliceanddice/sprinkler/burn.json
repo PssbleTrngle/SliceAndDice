@@ -1,0 +1,9 @@
+{
+  "action": {
+    "type": "sliceanddice:damage",
+    "amount": 0.5
+  },
+  "fluid": {
+    "tag": "sliceanddice:burning"
+  }
+}

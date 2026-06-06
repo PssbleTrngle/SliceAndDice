@@ -5,7 +5,6 @@ import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.slicer.SlicerArmInteractionType
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
-import com.possible_triangle.sliceanddice.compat.CreateEnchantmentIndustryCompat
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.possible_triangle.sliceanddice.index.SDBlocks
@@ -36,18 +35,17 @@ class ForgeEntrypoint {
             CreateRegistrate
                 .create(MOD_ID)
                 .defaultCreativeTab(null as ResourceKey<CreativeModeTab>?)
-
-        val SLICER_INTERACTION_POINT =
-            REGISTRATE
-                .generic(
-                    "slicer",
-                    CreateRegistries.ARM_INTERACTION_POINT_TYPE,
-                ) { SlicerArmInteractionType }
-                .register()
     }
 
     constructor(container: ModContainer, modBus: IEventBus, dist: Dist) {
         REGISTRATE.registerEventListeners(modBus)
+
+        REGISTRATE
+            .generic(
+                "slicer",
+                CreateRegistries.ARM_INTERACTION_POINT_TYPE,
+            ) { SlicerArmInteractionType }
+            .register()
 
         if (dist.isClient) clientInit()
 
@@ -60,8 +58,6 @@ class ForgeEntrypoint {
         SDItems.load()
         SDSprinklerActions.load()
         SDRecipeTypes.load()
-
-        CreateEnchantmentIndustryCompat.ifLoaded { REGISTRATE.registerSprinkleBehaviour() }
 
         modBus.addListener { event: RegisterCapabilitiesEvent ->
             SprinklerBlockEntity.registerCapabilities(event)

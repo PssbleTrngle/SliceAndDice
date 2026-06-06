@@ -11,48 +11,32 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 
-fun Collection<Holder<Sprinkler>>.start(
-    origin: BlockPos,
-    level: Level,
-    fluid: FluidStack,
-    type: SprinklerBlock.Type,
-) {
-    actEach(origin, level, fluid, type) {
-        action.value().start(it)
-    }
+fun <T : SprinkleAction> Sprinkler<T>.start(context: SprinkeContext) {
+    val action = config.type() as SprinklerActionType<T>
+    action.start(context, config)
 }
 
-fun Collection<Holder<Sprinkler>>.stop(
-    origin: BlockPos,
-    level: Level,
-    fluid: FluidStack,
-    type: SprinklerBlock.Type,
-) {
-    actEach(origin, level, fluid, type) {
-        action.value().stop(it)
-    }
+fun <T : SprinkleAction> Sprinkler<T>.stop(context: SprinkeContext) {
+    val action = config.type() as SprinklerActionType<T>
+    action.stop(context, config)
 }
 
-fun Collection<Holder<Sprinkler>>.tick(
-    origin: BlockPos,
-    level: Level,
-    fluid: FluidStack,
-    type: SprinklerBlock.Type,
-    applyTickRate: Boolean = true,
-) {
-    actEach(origin, level, fluid, type) {
-        if (!applyTickRate || tickRate == 0 || level.gameTime % tickRate == 0L) {
-            action.value().tick(it)
-        }
-    }
+fun <T : SprinkleAction> Sprinkler<T>.tick(context: SprinkeContext) {
+    val action = config.type() as SprinklerActionType<T>
+    action.tick(context, config)
 }
 
-private fun Collection<Holder<Sprinkler>>.actEach(
+fun <T : SprinkleAction> Sprinkler<T>.consume(context: SprinkeContext) {
+    val action = config.type() as SprinklerActionType<T>
+    action.consume(context, config)
+}
+
+fun Collection<Holder<Sprinkler<*>>>.actEach(
     origin: BlockPos,
     level: Level,
     fluid: FluidStack,
     type: SprinklerBlock.Type,
-    action: Sprinkler.(SprinkeContext) -> Unit,
+    action: Sprinkler<*>.(SprinkeContext) -> Unit,
 ) {
     if (level !is ServerLevel) return
 

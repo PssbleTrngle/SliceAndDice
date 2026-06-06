@@ -1,0 +1,8 @@
+{
+  "action": {
+    "type": "sliceanddice:fertilizer"
+  },
+  "fluid": {
+    "tag": "sliceanddice:fertilizer"
+  }
+}

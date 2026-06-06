@@ -1,13 +1,13 @@
 name = "Gallery"
-filename = "gallery-1.21.1-2.0.0.jar"
+filename = "gallery-1.21.1-2.0.1.jar"
 side = "both"
 
 [download]
-url = "https://cdn.modrinth.com/data/EOA6vv83/versions/ro6SHsF9/gallery-1.21.1-2.0.0.jar"
+url = "https://cdn.modrinth.com/data/EOA6vv83/versions/HzOpAks9/gallery-1.21.1-2.0.1.jar"
 hash-format = "sha512"
-hash = "8225b190f77e07cdf57b55b87537334600e29f21a55f2fe5ff0cf8f2e4093b4c1a3f460e963f76f44ef20ce6c515d89116cca6502d6e759a0cb5ecb6ad30a57e"
+hash = "a7a4c8943cb936db53bd385a6aade02b9bc023cf405aac1aab8a829f0019680c3a359de35ba9d9e5b28cd2466e7010caea58823b43262a95eb684686e0aa7b92"
 
 [update]
 [update.modrinth]
 mod-id = "EOA6vv83"
-version = "ro6SHsF9"
+version = "HzOpAks9"

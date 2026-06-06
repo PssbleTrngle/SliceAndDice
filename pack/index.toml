@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "mods/blueprint.pw.toml"
-hash = "a5122c5ecc0e36da4f60474cc8ecaff590aaeae8be545ffddfe2c25db89816e7"
+hash = "0ab9d26c800d8bfc998341bf2d34c91238dbcba1f646f2c57705c1760148cc17"
 metafile = true
 
 [[files]]
@@ -12,27 +12,27 @@ metafile = true
 
 [[files]]
 file = "mods/configured.pw.toml"
-hash = "74705ad5043cf5866d0b558e9cded4b78eaf12afc2f78ab12c0863cc2d4c54d0"
+hash = "af4dc4828902eae1784568632a749fe9a442943f1570ac0ba3ea75e79934be41"
 metafile = true
 
 [[files]]
 file = "mods/create-dragons-plus.pw.toml"
-hash = "485c1d97761536a52331e5d50055ecd514086e2f23937f259e33e06cc638ca91"
+hash = "8537630bc53bd3ffaa1539e0ea0c4c1569609e0a1430166c2178b532ba507226"
 metafile = true
 
 [[files]]
 file = "mods/create-enchantment-industry.pw.toml"
-hash = "05995b86a58ee09106d8e34458a4eb7561ad5bf3e25d89f491519c18010afe8e"
+hash = "166d312672116bc62648572337c66018be6e794eb12e25fb2b508f686fdd58e5"
 metafile = true
 
 [[files]]
 file = "mods/farmers-delight.pw.toml"
-hash = "44abae510395f12f9ea97b8296b2f72e25f18b9f3f2cc0ee42c0d9afd73fe0b3"
+hash = "9aab64fbec4cc794817026caf84e7d0dff14ba3892da94aa0e00d23c84560499"
 metafile = true
 
 [[files]]
 file = "mods/gallery.pw.toml"
-hash = "abab6d2386547e55cc5efce1c0e64d1f18bb3ce106e2dd011693f70508da6751"
+hash = "b98c428b3eaca3332047b113673235526418fcc1d2b55e660dc4308d73b85ae5"
 metafile = true
 
 [[files]]
@@ -47,10 +47,10 @@ metafile = true
 
 [[files]]
 file = "mods/recipe-modification.pw.toml"
-hash = "cca32fd0725a5d5b5e1fae4e7fbde652e070febf16192c0a74c2f13aacf97897"
+hash = "fcc5142f8aa8a7c0d9d26dcfd5727f3cf046bd2f1def594ef74e969df48cef9a"
 metafile = true
 
 [[files]]
 file = "mods/vegan-delight.pw.toml"
-hash = "c644f5fb62910aa37d4fdbd8baa7276e442a11f1676862e8ae50e307974fa8d1"
+hash = "2db93afe3bf4cbcfee9025495c50bad07c5984012c57378271ba29a5775b4c05"
 metafile = true

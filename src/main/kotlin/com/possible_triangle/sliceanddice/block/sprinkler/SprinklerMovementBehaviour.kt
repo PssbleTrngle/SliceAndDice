@@ -1,7 +1,8 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
-import com.possible_triangle.sliceanddice.api.sprinkler.tick
+import com.possible_triangle.sliceanddice.api.sprinkler.actEach
+import com.possible_triangle.sliceanddice.api.sprinkler.consume
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity.Companion.ACTIVE_ROTATION_SPEED
 import com.possible_triangle.sliceanddice.config.Configs
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
@@ -30,7 +31,9 @@ object SprinklerMovementBehaviour : MovementBehaviour {
             val type = context.state.getValue(SprinklerBlock.TYPE)
 
             if (context.world is ServerLevel) {
-                matches.tick(pos, context.world, drained, type, false)
+                matches.actEach(pos, context.world, drained, type) {
+                    consume(it)
+                }
             }
         }
     }

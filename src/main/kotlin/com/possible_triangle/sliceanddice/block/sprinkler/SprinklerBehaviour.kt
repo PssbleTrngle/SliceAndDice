@@ -2,6 +2,8 @@ package com.possible_triangle.sliceanddice.block.sprinkler
 
 import com.mojang.serialization.Codec
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
+import com.possible_triangle.sliceanddice.api.sprinkler.actEach
+import com.possible_triangle.sliceanddice.api.sprinkler.consume
 import com.possible_triangle.sliceanddice.api.sprinkler.start
 import com.possible_triangle.sliceanddice.api.sprinkler.stop
 import com.possible_triangle.sliceanddice.api.sprinkler.tick
@@ -29,7 +31,7 @@ class SprinklerBehaviour(
     }
 
     private var startedAfterLoad = false
-    private var running: Collection<Holder<Sprinkler>> = emptyList()
+    private var running: Collection<Holder<Sprinkler<*>>> = emptyList()
 
     private var processingTicks = PROGRESS_DURATION
 
@@ -49,8 +51,8 @@ class SprinklerBehaviour(
                 matches
             }
 
-        stopped.stop(pos, level, fluid, sprinkler.type)
-        started.start(pos, level, fluid, sprinkler.type)
+        stopped.actEach(pos, level, fluid, sprinkler.type) { stop(it) }
+        started.actEach(pos, level, fluid, sprinkler.type) { start(it) }
 
         startedAfterLoad = true
         running = matches
@@ -77,16 +79,25 @@ class SprinklerBehaviour(
             val fluid = tank.capability.drain(used, IFluidHandler.FluidAction.SIMULATE)
             active = fluid.amount >= used
             if (active) {
-                tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
                 processingTicks = PROGRESS_DURATION
+                val drained = tank.capability.drain(used, IFluidHandler.FluidAction.EXECUTE)
+                running.actEach(pos, level, drained, sprinkler.type) { consume(it) }
             }
         }
 
-        if (level.isClientSide && !blockEntity.isVirtual && active) {
-            spawnSprinklerParticles(tank.primaryTank.renderedFluid, level, VecHelper.getCenterOf(pos), sprinkler.type, sprinkler.rotationSpeed)
-        }
+        if (active) {
+            running.actEach(pos, level, tank.primaryTank.renderedFluid, sprinkler.type) { tick(it) }
 
-        running.tick(pos, level, tank.primaryTank.renderedFluid, sprinkler.type)
+            if (level.isClientSide && !blockEntity.isVirtual) {
+                spawnSprinklerParticles(
+                    tank.primaryTank.renderedFluid,
+                    level,
+                    VecHelper.getCenterOf(pos),
+                    sprinkler.type,
+                    sprinkler.rotationSpeed,
+                )
+            }
+        }
     }
 
     override fun write(

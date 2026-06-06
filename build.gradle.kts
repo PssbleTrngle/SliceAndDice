@@ -99,8 +99,9 @@ dependencies {
     modApi(libs.flywheel)
 
     modImplementation(pack.modrinth.farmers.delight)
-    modCompileOnly(pack.modrinth.create.enchantment.industry)
-    modCompileOnly(pack.modrinth.overweight.farming)
+    modImplementation(pack.modrinth.create.dragons.plus)
+    modImplementation(pack.modrinth.create.enchantment.industry)
+    modImplementation(pack.modrinth.overweight.farming)
 
     modIncludeCompileOnly(libs.sable.companion)
     modRuntimeOnly(libs.sable) { isTransitive = false }

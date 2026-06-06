@@ -11,22 +11,20 @@ import net.minecraft.util.ExtraCodecs
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient
 
-data class Sprinkler(
+data class Sprinkler<TConfig : SprinkleAction>(
     val fluid: FluidIngredient,
-    val action: Holder<SprinkleAction>,
     val rangeBonus: Int = 0,
-    val tickRate: Int = 0,
+    val config: TConfig,
 ) {
     companion object {
         @JvmField
-        val CODEC: Codec<Sprinkler> =
+        val CODEC: Codec<Sprinkler<*>> =
             RecordCodecBuilder.create { builder ->
                 builder
                     .group(
                         FluidIngredient.CODEC.fieldOf("fluid").forGetter { it.fluid },
-                        SprinkleAction.CODEC.fieldOf("action").forGetter { it.action },
                         ExtraCodecs.POSITIVE_INT.optionalFieldOf("rangeBonus", 0).forGetter { it.rangeBonus },
-                        ExtraCodecs.POSITIVE_INT.optionalFieldOf("tickRate", 0).forGetter { it.tickRate },
+                        SprinkleAction.CODEC.fieldOf("action").forGetter { it.config },
                     ).apply(builder, ::Sprinkler)
             }
 
@@ -36,7 +34,7 @@ data class Sprinkler(
         fun findMatching(
             registries: RegistryAccess,
             fluid: FluidStack,
-        ): Collection<Holder<Sprinkler>> {
+        ): Collection<Holder<Sprinkler<*>>> {
             val sprinklers = registries.lookup(SDRegistries.SPRINKLERS)
             if (sprinklers.isEmpty) {
                 LOGGER.warn("unable to find sprinklers registry")

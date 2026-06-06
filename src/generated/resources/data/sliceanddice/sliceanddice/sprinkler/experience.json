@@ -1,0 +1,9 @@
+{
+  "action": {
+    "type": "sliceanddice:experience",
+    "amount": 1.0
+  },
+  "fluid": {
+    "fluid": "create_enchantment_industry:experience"
+  }
+}

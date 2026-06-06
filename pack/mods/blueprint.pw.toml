@@ -1,13 +1,13 @@
 name = "Blueprint"
-filename = "blueprint-1.21.1-8.0.8.jar"
+filename = "blueprint-1.21.1-8.1.0.jar"
 side = "both"
 
 [download]
-url = "https://cdn.modrinth.com/data/VsM5EDoI/versions/YSWV62mG/blueprint-1.21.1-8.0.8.jar"
+url = "https://cdn.modrinth.com/data/VsM5EDoI/versions/5JOCYuQM/blueprint-1.21.1-8.1.0.jar"
 hash-format = "sha512"
-hash = "3864af3a4204a60b88627887dd40efdd820376c465ebfa8201de1cdf21300c57881a08bbce7864f7dd81dbeaddfb6045881b52dfdddc03a7e7592bd6783c8d11"
+hash = "8f4d44efb8ad82a99ccb0d3b0ab0ec2cbca0536ae390dc3cf6f1deeb9d1705bd42feb5f2addfd06ff8ddf87029359cf52b4d4f6164f50e537e84c7f76db611e4"
 
 [update]
 [update.modrinth]
 mod-id = "VsM5EDoI"
-version = "YSWV62mG"
+version = "5JOCYuQM"

@@ -1,7 +1,0 @@
-{
-  "action": "sliceanddice:fertilizer",
-  "fluid": {
-    "tag": "sliceanddice:fertilizer"
-  },
-  "tickRate": 20
-}
