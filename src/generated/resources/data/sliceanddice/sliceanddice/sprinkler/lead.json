@@ -2,9 +2,9 @@
   "action": {
     "type": "sliceanddice:damage",
     "amount": 0.5,
-    "damage_type": "minecraft:in_fire"
+    "damage_type": "oreganized:molten_lead"
   },
   "fluid": {
-    "tag": "sliceanddice:burning"
+    "tag": "c:molten_lead"
   }
 }

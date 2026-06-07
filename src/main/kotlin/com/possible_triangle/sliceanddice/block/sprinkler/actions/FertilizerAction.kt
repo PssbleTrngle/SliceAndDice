@@ -21,8 +21,7 @@ object FertilizerAction : SprinkleAction {
 
                 if (block !is BonemealableBlock) return@forEachBlock
                 if (!block.isValidBonemealTarget(context.level, pos, state)) return@forEachBlock
-                // TODO move to Sprinkers
-                // if (context.level.gameTime % 20 != 0L || random.nextInt(30) < 26) return@forEachBlock
+                if (context.random.nextInt(30) < 26) return@forEachBlock
                 if (!block.isBonemealSuccess(context.level, context.random, pos, state)) return@forEachBlock
 
                 block.performBonemeal(context.level, context.random, pos, state)

@@ -74,6 +74,13 @@ repositories {
     nexus {
         content {
             includeGroup("com.possible-triangle")
+            includeGroup("dev.galena")
+        }
+    }
+    maven {
+        url = uri("https://maven.teamabnormals.com/")
+        content {
+            includeGroup("com.teamabnormals")
         }
     }
 }
@@ -108,10 +115,11 @@ dependencies {
     modImplementation(libs.create.simulated) { isTransitive = false }
     modImplementation(libs.create.aeronautics) { isTransitive = false }
 
+    modImplementation(libs.oreganized)
+
     if (!env.isCI) {
         modRuntimeOnly(libs.jei.neoforge)
 
-        modRuntimeOnly(pack.modrinth.blueprint)
         modRuntimeOnly(pack.modrinth.neapolitan)
         modRuntimeOnly(pack.modrinth.gallery)
 

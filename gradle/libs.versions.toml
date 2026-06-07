@@ -20,3 +20,5 @@ atmosphere-api = { group = "com.possible-triangle", name = "atmosphere-1.21.1-ap
 jei-common-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.ref = "jei" }
 jei-neoforge-api = { group = "mezz.jei", name = "jei-1.21.1-neoforge-api", version.ref = "jei" }
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei" }
+
+oreganized = { "group" = "dev.galena", name = "oreganized", version = "5.2.0-SNAPSHOT" }

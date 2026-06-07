@@ -13,6 +13,8 @@ import com.possible_triangle.sliceanddice.index.SDTags
 import com.possible_triangle.sliceanddice.modLoc
 import com.simibubi.create.AllFluids
 import com.tterrag.registrate.AbstractRegistrate
+import galena.oreganized.index.ODamageSources
+import galena.oreganized.index.OTags
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
 import net.minecraft.resources.ResourceKey
@@ -44,6 +46,11 @@ internal fun AbstractRegistrate<*>.registerSprinklers() {
             "experience",
             FluidIngredient.of(CEIFluids.EXPERIENCE.get()),
             ExperienceAction(1F),
+        )
+        it.register(
+            "lead",
+            FluidIngredient.tag(OTags.Fluids.MOLTEN_LEAD),
+            DamageAction(damageTypes.getOrThrow(ODamageSources.MOLTEN_LEAD), 0.5F),
         )
     }
 }

@@ -20,7 +20,7 @@ data class DamageAction(
             RecordCodecBuilder.mapCodec { builder ->
                 builder
                     .group(
-                        DamageType.CODEC.fieldOf("type").forGetter { it.type },
+                        DamageType.CODEC.fieldOf("damage_type").forGetter { it.type },
                         ExtraCodecs.POSITIVE_FLOAT.fieldOf("amount").forGetter { it.amount },
                     ).apply(builder, ::DamageAction)
             }
