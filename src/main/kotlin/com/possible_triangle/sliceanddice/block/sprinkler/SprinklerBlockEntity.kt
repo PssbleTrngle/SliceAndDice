@@ -1,5 +1,6 @@
 package com.possible_triangle.sliceanddice.block.sprinkler
 
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviour.StaticSprinklerBehaviour
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation
@@ -42,7 +43,7 @@ class SprinklerBlockEntity(
     }
 
     internal lateinit var tank: SmartFluidTankBehaviour
-    private lateinit var behaviour: SprinklerBehaviour
+    private lateinit var behaviour: StaticSprinklerBehaviour
 
     val active get() = behaviour.active
     val rotationSpeed get() = if (active) ACTIVE_ROTATION_SPEED else 0F
@@ -55,7 +56,7 @@ class SprinklerBlockEntity(
                 .whenFluidUpdates(::notifyUpdate)
                 .also(behaviours::add)
         behaviour =
-            SprinklerBehaviour(this, tank)
+            StaticSprinklerBehaviour(this, tank)
                 .also(behaviours::add)
     }
 

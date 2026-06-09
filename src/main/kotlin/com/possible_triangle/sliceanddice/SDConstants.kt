@@ -5,6 +5,6 @@ import org.apache.logging.log4j.LogManager
 
 const val MOD_ID = "sliceanddice"
 
-val LOGGER = LogManager.getLogger()
+val LOGGER = LogManager.getLogger("Slice & Dice")
 
 fun modLoc(path: String) = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)

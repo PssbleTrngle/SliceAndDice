@@ -19,4 +19,8 @@ object SDTags {
 
     @JvmField
     val FERTILIZER_FLUIDS = TagKey.create(Registries.FLUID, modLoc("fertilizer"))
+
+    @JvmField
+    // TODO remove if not needed
+    val CONTRAPTIONS = TagKey.create(Registries.ENTITY_TYPE, modLoc("contraption"))
 }

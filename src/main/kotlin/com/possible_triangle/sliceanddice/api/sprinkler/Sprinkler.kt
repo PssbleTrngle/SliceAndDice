@@ -47,4 +47,23 @@ data class Sprinkler<TConfig : SprinkleAction>(
                 .toList()
         }
     }
+
+    @Suppress("UNCHECKED_CAST")
+    val actionType = config.type() as SprinklerActionType<TConfig>
+
+    fun start(context: SprinkeContext) {
+        actionType.start(context, config)
+    }
+
+    fun stop(context: SprinkeContext) {
+        actionType.stop(context, config)
+    }
+
+    fun tick(context: SprinkeContext) {
+        actionType.tick(context, config)
+    }
+
+    fun consume(context: SprinkeContext) {
+        actionType.consume(context, config)
+    }
 }

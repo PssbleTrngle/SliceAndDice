@@ -3,7 +3,7 @@ package com.possible_triangle.sliceanddice.index
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlock
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerMovementBehaviour
+import com.possible_triangle.sliceanddice.block.sprinkler.behaviour.MovingSprinklerBehaviour
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllCreativeModeTabs
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour
@@ -58,7 +58,7 @@ object SDBlocks {
             .initialProperties { SharedProperties.copperMetal() }
             .properties { it.noOcclusion() }
             .transform(TagGen.pickaxeOnly())
-            .onRegister(movementBehaviour(SprinklerMovementBehaviour))
+            .onRegister(movementBehaviour(MovingSprinklerBehaviour))
             .blockstate { c, p ->
                 val base = c.id.withPrefix("block/")
                 val ceiling = p.models().getExistingFile(base.withSuffix("/ceiling"))

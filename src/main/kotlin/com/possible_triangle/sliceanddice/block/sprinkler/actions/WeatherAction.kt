@@ -12,6 +12,9 @@ import com.possible_triangle.sliceanddice.api.sprinkler.SprinkeContext
 import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.api.sprinkler.SprinklerActionType
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
+import com.possible_triangle.sliceanddice.index.SDBlockEntities
+import com.possible_triangle.sliceanddice.index.SDBlocks
+import com.simibubi.create.AllEntityTypes
 import net.minecraft.resources.ResourceKey
 
 data class WeatherAction(
@@ -37,11 +40,19 @@ data class WeatherAction(
             config: WeatherAction,
         ) {
             val weather = WeatherAPI.INSTANCE.getWeather(context.level)
+
+            val heartbeat =
+                context.contraption?.let {
+                    ProviderHeartbeat.hasEntity(it.entity.uuid)
+                } ?: run {
+                    ProviderHeartbeat.hasBlockEntity(SDBlockEntities.SPRINKLER, context.blockPos)
+                }
+
             weather.addLocal(
                 context.id,
                 ConstantWeatherProvider(config.condition),
                 Box.from(context.area),
-                ProviderHeartbeat.hasBlockEntity(SprinklerBlockEntity::class.java, context.origin),
+                heartbeat,
             )
         }
 

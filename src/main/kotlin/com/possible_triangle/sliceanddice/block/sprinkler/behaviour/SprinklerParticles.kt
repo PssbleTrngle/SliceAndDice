@@ -1,7 +1,10 @@
-package com.possible_triangle.sliceanddice.block.sprinkler
+package com.possible_triangle.sliceanddice.block.sprinkler.behaviour
 
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import com.simibubi.create.content.fluids.FluidFX
 import net.minecraft.client.Minecraft
+import net.minecraft.core.Position
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
@@ -9,30 +12,28 @@ import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal fun spawnSprinklerParticles(
+internal fun SprinklerBehaviour.spawnParticles(
     fluid: FluidStack,
     level: Level,
-    pos: Vec3,
-    type: SprinklerBlock.Type,
-    speed: Float,
 ) {
     val renderer = Minecraft.getInstance().levelRenderer
     val timer = Minecraft.getInstance().timer
     val renderTicks = renderer.ticks + timer.getGameTimeDeltaPartialTick(false)
     val renderSeconds = renderTicks / 20
-    val progress = (renderSeconds * speed * Math.PI) / 180
+    val progress = (renderSeconds * SprinklerBlockEntity.ACTIVE_ROTATION_SPEED * Math.PI) / 180
 
     if (fluid.isEmpty) return
 
     val particle = FluidFX.getFluidParticle(fluid)
+    val vec = Vec3(pos.x(), pos.y(), pos.z())
 
     when (type) {
-        SprinklerBlock.Type.CEILING -> sprinkleDown(particle, level, pos)
-        SprinklerBlock.Type.FLOOR -> sprinkleUp(particle, level, pos, progress.toFloat())
+        SprinklerBlock.Type.CEILING -> sprinkleDown(particle, level, vec)
+        SprinklerBlock.Type.FLOOR -> sprinkleUp(particle, level, vec, progress.toFloat())
     }
 }
 
-private fun sprinkleDown(
+internal fun sprinkleDown(
     particle: ParticleOptions,
     level: Level,
     pos: Vec3,
@@ -45,7 +46,7 @@ private fun sprinkleDown(
     level.addParticle(particle, vec.x, vec.y, vec.z, x * 0.2, -0.1, z * 0.2)
 }
 
-private fun sprinkleUp(
+internal fun sprinkleUp(
     particle: ParticleOptions,
     level: Level,
     pos: Vec3,
