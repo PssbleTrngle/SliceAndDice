@@ -18,7 +18,10 @@ interface SprinklerBehaviour {
     val type: SprinklerBlock.Type
     val contraption: Contraption?
     var running: Collection<Holder<Sprinkler<*>>>
-    var active: Boolean
+
+    var remainingTicks: Int
+    val cooldown: Int
+    val active get() = remainingTicks > 0
 
     val pos: Position
 
@@ -45,7 +48,7 @@ interface SprinklerBehaviour {
     ) {
         val used = Configs.SERVER.sprinklerUsage.get()
         val fluid = tank.drain(used, IFluidHandler.FluidAction.SIMULATE)
-        active = fluid.amount >= used
+        val active = fluid.amount >= used
 
         if (active) {
             val drained = tank.drain(used, IFluidHandler.FluidAction.EXECUTE)
@@ -65,6 +68,10 @@ interface SprinklerBehaviour {
             if (stopped.isNotEmpty() || started.isNotEmpty()) {
                 notifyUpdate()
             }
+
+            remainingTicks = cooldown
+        } else {
+            remainingTicks = 0
         }
     }
 

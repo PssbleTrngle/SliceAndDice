@@ -45,8 +45,7 @@ class SprinklerBlockEntity(
     internal lateinit var tank: SmartFluidTankBehaviour
     private lateinit var behaviour: StaticSprinklerBehaviour
 
-    val active get() = behaviour.active
-    val rotationSpeed get() = if (active) ACTIVE_ROTATION_SPEED else 0F
+    val rotationSpeed get() = if (behaviour.active) ACTIVE_ROTATION_SPEED else 0F
 
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         tank =

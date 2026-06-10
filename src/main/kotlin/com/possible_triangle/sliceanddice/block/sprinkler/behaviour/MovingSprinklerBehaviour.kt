@@ -2,8 +2,12 @@ package com.possible_triangle.sliceanddice.block.sprinkler.behaviour
 
 import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
+import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerRenderer
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
 import com.simibubi.create.content.contraptions.behaviour.MovementContext
+import com.simibubi.create.content.contraptions.render.ContraptionMatrices
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
@@ -35,8 +39,6 @@ object MovingSprinklerBehaviour : MovementBehaviour {
         context.behaviour = Instance(context)
 
         context.behaviour!!.check(tank, level)
-
-        // processingTicks = PROGRESS_DURATION
     }
 
     override fun tick(context: MovementContext) {
@@ -57,23 +59,26 @@ object MovingSprinklerBehaviour : MovementBehaviour {
         }
     }
 
+    override fun disableBlockEntityRendering() = true
+
+    override fun renderInContraption(
+        context: MovementContext,
+        level: VirtualRenderWorld,
+        matrices: ContraptionMatrices,
+        buffer: MultiBufferSource,
+    ) {
+        val behaviour = context.behaviour ?: return
+        SprinklerRenderer.renderInContraption(behaviour, level, matrices, buffer)
+    }
+
     private class Instance(
         context: MovementContext,
     ) : SprinklerBehaviour {
-        companion object {
-            private const val COOLDOWN = 80
-        }
-
         override val type = context.state.getValue(SprinklerBlock.TYPE)
         override val contraption = context.contraption
         override var running: Collection<Holder<Sprinkler<*>>> = emptyList()
         override var pos = context.position
-        var remainingTicks = 0
-        override var active
-            get() = remainingTicks > 0
-            set(value) {
-                remainingTicks = if (value) COOLDOWN
-                else 0
-            }
+        override var remainingTicks = 0
+        override val cooldown = 80
     }
 }
