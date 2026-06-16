@@ -1,30 +1,24 @@
 package com.possible_triangle.sliceanddice.block.sprinkler.behaviour
 
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlock
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import com.simibubi.create.content.fluids.FluidFX
 import net.minecraft.client.Minecraft
-import net.minecraft.core.Position
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.fluids.FluidStack
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal fun SprinklerBehaviour.spawnParticles(
-    fluid: FluidStack,
-    level: Level,
-) {
+internal fun SprinklerBehaviour.spawnParticles(level: Level) {
     val renderer = Minecraft.getInstance().levelRenderer
     val timer = Minecraft.getInstance().timer
     val renderTicks = renderer.ticks + timer.getGameTimeDeltaPartialTick(false)
     val renderSeconds = renderTicks / 20
-    val progress = (renderSeconds * SprinklerBlockEntity.ACTIVE_ROTATION_SPEED * Math.PI) / 180
+    val progress = (renderSeconds * rotationSpeed * Math.PI) / 180
 
-    if (fluid.isEmpty) return
+    if (renderedFluid.isEmpty) return
 
-    val particle = FluidFX.getFluidParticle(fluid)
+    val particle = FluidFX.getFluidParticle(renderedFluid)
     val vec = Vec3(pos.x(), pos.y(), pos.z())
 
     when (type) {

@@ -24,15 +24,15 @@ class FloorSprinklerVisual(
 
     init {
         sprinklerHead.setRotationAxis(Direction.Axis.Y)
-        animate(partialTick)
+        animate()
     }
 
     override fun beginFrame(ctx: DynamicVisual.Context) {
-        animate(ctx.partialTick())
+        animate()
     }
 
-    private fun animate(partialTick: Float) {
-        sprinklerHead.rotationalSpeed = blockEntity.rotationSpeed
+    private fun animate() {
+        sprinklerHead.rotationalSpeed = blockEntity.behaviour.rotationSpeed
         sprinklerHead
             .setPosition(visualPosition)
             .setChanged()

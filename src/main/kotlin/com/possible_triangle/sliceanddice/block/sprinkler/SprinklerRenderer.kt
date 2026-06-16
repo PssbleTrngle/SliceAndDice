@@ -17,10 +17,10 @@ import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Position
 import net.minecraft.world.level.Level
-import net.neoforged.neoforge.fluids.FluidStack
+import net.minecraft.world.phys.Vec3
 
 class SprinklerRenderer(
     context: BlockEntityRendererProvider.Context,
@@ -35,31 +35,50 @@ class SprinklerRenderer(
     ) {
         val level = be.level ?: return
         when (be.type) {
-            SprinklerBlock.Type.FLOOR -> floorRender(level, ms, buffer, light)
-            SprinklerBlock.Type.CEILING -> ceilingRender(be.tank.primaryTank.renderedFluid, ms, buffer, light)
+            SprinklerBlock.Type.FLOOR -> be.behaviour.floorRender(level, ms, buffer, light)
+            SprinklerBlock.Type.CEILING -> be.behaviour.ceilingRender(ms, buffer, light)
         }
     }
 
     companion object {
         fun renderInContraption(
             behaviour: SprinklerBehaviour,
+            context: MovementContext,
             level: VirtualRenderWorld,
             matrices: ContraptionMatrices,
             buffer: MultiBufferSource,
         ) {
-            val ms = matrices.viewProjection
-            val light = LevelRenderer.getLightColor(level, BlockPos.containing(behaviour.pos))
+            val light = LevelRenderer.getLightColor(level, context.localPos)
             when (behaviour.type) {
-                SprinklerBlock.Type.FLOOR -> floorRender(level, ms, buffer, light)
-                SprinklerBlock.Type.CEILING -> ceilingRender(level, ms, buffer, light)
+                SprinklerBlock.Type.FLOOR -> {
+                    behaviour.floorRender(
+                        level,
+                        matrices.viewProjection,
+                        buffer,
+                        light,
+                    ) {
+                        transform(matrices.model)
+                        useLevelLight<SuperByteBuffer>(context.world, matrices.world)
+                    }
+                }
+
+                SprinklerBlock.Type.CEILING -> {
+                    behaviour.ceilingRender(
+                        matrices.modelViewProjection,
+                        buffer,
+                        light,
+                        Vec3.atLowerCornerOf(context.localPos),
+                    )
+                }
             }
         }
 
-        private fun floorRender(
+        private fun SprinklerBehaviour.floorRender(
             level: Level,
             ms: PoseStack,
             buffer: MultiBufferSource,
             light: Int,
+            block: SuperByteBuffer.() -> Unit = {},
         ) {
             if (VisualizationManager.supportsVisualization(level)) return
 
@@ -71,26 +90,30 @@ class SprinklerRenderer(
             // needs specific blockState?
             val headRender = CachedBuffers.partial(SDPartials.FLOOR_SPRINKLER_HEAD, SDBlocks.SPRINKLER.defaultState)
             headRender
+                .apply(block)
                 .rotateCentered(angle, Direction.UP)
                 .light<SuperByteBuffer>(light)
                 .renderInto(ms, vb)
         }
 
-        private fun ceilingRender(
-            fluid: FluidStack,
+        private fun SprinklerBehaviour.ceilingRender(
             ms: PoseStack,
             buffer: MultiBufferSource,
             light: Int,
+            offset: Position? = null,
         ) {
-            if (fluid.isEmpty) return
+            if (renderedFluid.isEmpty) return
 
             ms.pushPose()
-            ms.translate(0f, 0F, 0f)
+
+            offset?.let {
+                ms.translate(it.x(), it.y(), it.z())
+            }
 
             val from = 4 / 16F
             val to = 12 / 16F
             NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(
-                fluid,
+                renderedFluid,
                 from,
                 11 / 16F,
                 from,

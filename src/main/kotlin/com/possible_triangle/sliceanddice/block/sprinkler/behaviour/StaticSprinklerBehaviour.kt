@@ -12,29 +12,32 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.resources.RegistryOps
 import net.minecraft.server.level.ServerLevel
+import net.neoforged.neoforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.capability.IFluidHandler
 
 class StaticSprinklerBehaviour(
     private val sprinkler: SprinklerBlockEntity,
-    private val tank: SmartFluidTankBehaviour,
-) : BlockEntityBehaviour(sprinkler) {
+    private val tankBehaviour: SmartFluidTankBehaviour,
+) : BlockEntityBehaviour(sprinkler),
+    SprinklerBehaviour {
     companion object {
         val TYPE = BehaviourType<StaticSprinklerBehaviour>()
     }
 
-    private val instance = object : SprinklerBehaviour {
-        override var running: Collection<Holder<Sprinkler<*>>> = emptyList()
-        override var remainingTicks = 0
-        override val contraption = null
-        override val type = sprinkler.type
-        override val pos get() = this@StaticSprinklerBehaviour.pos.center
-        override val cooldown = 40
+    override var running: Collection<Holder<Sprinkler<*>>> = emptyList()
+    override var remainingTicks = 0
+    override val contraption = null
+    override val type = sprinkler.type
+    override val pos get() = super<BlockEntityBehaviour>.pos.center
+    override val cooldown = 40
+    override val renderedFluid: FluidStack
+        get() = tankBehaviour.primaryTank.renderedFluid
+    override val tank: IFluidHandler
+        get() = tankBehaviour.capability
 
-        override fun notifyUpdate() {
-            blockEntity.notifyUpdate()
-        }
+    override fun notifyUpdate() {
+        blockEntity.notifyUpdate()
     }
-
-    val active get() = instance.active
 
     override fun getType() = TYPE
 
@@ -45,22 +48,18 @@ class StaticSprinklerBehaviour(
         val attached = level.getBlockState(attachedPos)
         if (attached.isFaceSturdy(level, attachedPos, sprinkler.type.input)) return
 
-        if (instance.remainingTicks > 1) {
-            // TODO move to tick?
-            instance.remainingTicks--
+        if (remainingTicks > 1) {
+            remainingTicks--
         } else {
             // TODO do not check every time, still count down somehow
-            instance.check(tank.capability, level)
+            check(level)
         }
 
-        if (instance.active) {
+        if (active) {
             if (level is ServerLevel) {
-                instance.tickSprinklers(level, tank.primaryTank.renderedFluid)
+                tickSprinklers(level)
             } else if (!blockEntity.isVirtual) {
-                instance.spawnParticles(
-                    tank.primaryTank.renderedFluid,
-                    level,
-                )
+                spawnParticles(level)
             }
         }
     }
@@ -71,14 +70,14 @@ class StaticSprinklerBehaviour(
         clientPacket: Boolean,
     ) {
         super.write(nbt, registries, clientPacket)
-        nbt.putInt("ProcessingTicks", instance.remainingTicks)
+        nbt.putInt("ProcessingTicks", remainingTicks)
 
         if (!clientPacket) {
             val ops = RegistryOps.create(NbtOps.INSTANCE, registries)
             val encodedSprinklers =
                 Codec.list(Sprinkler.HOLDER_CODEC).encodeStart(
                     ops,
-                    instance.running.toList(),
+                    running.toList(),
                 )
             encodedSprinklers.ifSuccess {
                 nbt.put("RunningSprinklers", it)
@@ -91,7 +90,7 @@ class StaticSprinklerBehaviour(
         registries: HolderLookup.Provider,
         clientPacket: Boolean,
     ) {
-        instance.remainingTicks = nbt.getInt("ProcessingTicks")
+        remainingTicks = nbt.getInt("ProcessingTicks")
 
         /* disabled because currently these have to start every time the world loads
         if (!clientPacket && nbt.contains("RunningSprinklers")) {

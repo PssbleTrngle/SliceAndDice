@@ -65,7 +65,7 @@ class ForgeEntrypoint {
         }
 
         modBus.addListener { event: DataPackRegistryEvent.NewRegistry ->
-            event.dataPackRegistry(SDRegistries.SPRINKLERS, Sprinkler.CODEC)
+            event.dataPackRegistry(SDRegistries.SPRINKLERS, Sprinkler.CODEC, Sprinkler.CODEC)
         }
 
         modBus.addListener { event: NewRegistryEvent ->

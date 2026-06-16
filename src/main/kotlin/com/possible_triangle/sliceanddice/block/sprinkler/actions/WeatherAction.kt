@@ -11,10 +11,7 @@ import com.possible_triangle.atmosphere.api.v1.area.Box
 import com.possible_triangle.sliceanddice.api.sprinkler.SprinkeContext
 import com.possible_triangle.sliceanddice.api.sprinkler.SprinkleAction
 import com.possible_triangle.sliceanddice.api.sprinkler.SprinklerActionType
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
 import com.possible_triangle.sliceanddice.index.SDBlockEntities
-import com.possible_triangle.sliceanddice.index.SDBlocks
-import com.simibubi.create.AllEntityTypes
 import net.minecraft.resources.ResourceKey
 
 data class WeatherAction(

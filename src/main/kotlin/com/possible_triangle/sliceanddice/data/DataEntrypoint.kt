@@ -3,8 +3,6 @@ package com.possible_triangle.sliceanddice.data
 import com.possible_triangle.sliceanddice.ForgeEntrypoint.Companion.REGISTRATE
 import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.PonderScenes
-import com.possible_triangle.sliceanddice.index.SDTags
-import com.simibubi.create.AllEntityTypes
 import com.tterrag.registrate.providers.ProviderType
 import net.createmod.ponder.foundation.PonderIndex
 import net.neoforged.bus.api.EventPriority
@@ -35,13 +33,5 @@ object DataEntrypoint {
         REGISTRATE.addDataGenerator(ProviderType.RECIPE, CompatRecipes::generate)
 
         REGISTRATE.registerSprinklers()
-
-        REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS) {
-            it.addTag(SDTags.CONTRAPTIONS)
-                .add(AllEntityTypes.CONTROLLED_CONTRAPTION.value())
-                .add(AllEntityTypes.CARRIAGE_CONTRAPTION.value())
-                .add(AllEntityTypes.GANTRY_CONTRAPTION.value())
-                .add(AllEntityTypes.ORIENTED_CONTRAPTION.value())
-        }
     }
 }

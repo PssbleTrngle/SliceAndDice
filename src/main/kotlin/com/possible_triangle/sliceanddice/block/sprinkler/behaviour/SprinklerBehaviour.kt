@@ -14,7 +14,6 @@ import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
 
 interface SprinklerBehaviour {
-
     val type: SprinklerBlock.Type
     val contraption: Contraption?
     var running: Collection<Holder<Sprinkler<*>>>
@@ -24,6 +23,11 @@ interface SprinklerBehaviour {
     val active get() = remainingTicks > 0
 
     val pos: Position
+
+    val tank: IFluidHandler
+    val renderedFluid: FluidStack
+
+    val rotationSpeed get() = if (active) 300F else 0F
 
     fun notifyUpdate() {}
 
@@ -42,23 +46,20 @@ interface SprinklerBehaviour {
         }
     }
 
-    fun check(
-        tank: IFluidHandler,
-        level: Level,
-    ) {
+    fun check(level: Level) {
         val used = Configs.SERVER.sprinklerUsage.get()
-        val fluid = tank.drain(used, IFluidHandler.FluidAction.SIMULATE)
-        val active = fluid.amount >= used
+        val simulated = tank.drain(used, IFluidHandler.FluidAction.SIMULATE)
+        val active = simulated.amount >= used
 
         if (active) {
-            val drained = tank.drain(used, IFluidHandler.FluidAction.EXECUTE)
-            val matches = Sprinkler.findMatching(level.registryAccess(), fluid)
+            val matches = Sprinkler.findMatching(level.registryAccess(), simulated)
             val stopped = running.filterNot { matches.contains(it) }
             val started = matches.filterNot { running.contains(it) }
 
             if (level is ServerLevel) {
+                val drained = tank.drain(used, IFluidHandler.FluidAction.EXECUTE)
                 stopped.actEach(level, FluidStack.EMPTY, Sprinkler<*>::stop)
-                started.actEach(level, fluid, Sprinkler<*>::start)
+                started.actEach(level, drained, Sprinkler<*>::start)
 
                 matches.actEach(level, drained, Sprinkler<*>::consume)
             }
@@ -75,11 +76,8 @@ interface SprinklerBehaviour {
         }
     }
 
-    fun tickSprinklers(
-        level: ServerLevel,
-        fluid: FluidStack,
-    ) {
-        running.actEach(level, fluid, Sprinkler<*>::tick)
+    fun tickSprinklers(level: ServerLevel) {
+        running.actEach(level, renderedFluid, Sprinkler<*>::tick)
     }
 
     fun invalidate(level: Level) {
