@@ -15,7 +15,7 @@
 
 # Create Slice & Dice <img src="src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
 
-[![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
+[![Release](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fregistry.somethingcatchy.net%2Frepository%2Fmaven-releases%2Fcom%2Fpossible-triangle%2Fsliceanddice-api%2Fmaven-metadata.xml&label=latest%20version)][DOWNLOAD]
 [![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
 [![Version](http://cf.way2muchnoise.eu/versions/659674.svg)][DOWNLOAD]
 [![Issues](https://img.shields.io/github/issues/PssbleTrngle/SliceAndDice?label=Issues)][ISSUES]
@@ -64,6 +64,9 @@ Different fluids can have different effects.
 
 The latter is meant to enable growing of _Banana Fonds_ from [Neapolitan][NEAPOLITAN] without being dependent on the weather, but it could possibly have other effects on other mods too.
 
+Sprinklers work on contraptions and apply there effect every time they are moved to a new block.
+The also work in physics contraptions created by [Create Simulated](https://createsimulated.com/).
+
 ![Sprinkler](screenshots/sprinkler.png)
 
 ### Overweight Farming
@@ -77,6 +80,59 @@ as well as showing the axe-stripping of overweight crops in JEI.
 
 ### Custom Recipes
 
-If you want to add custom recipes using a datapack, this can now be done for the newest 1.20 release.
-It works for both single recipes and steps of a sequences assembly recipe.
+If you want to add custom recipes using a datapack, this can also be done and
+works for both single recipes and steps of a sequences assembly recipe.
 Examples for these can be found in the [example datapack](example_datapack.zip).
+
+### Custom Sprinkler Actions
+
+What effect which fluid in the sprinkler has is data-driven an can be modified or extended.
+You can find the build-in actions [here](neoforge/src/generated/resources/data/sliceanddice/sliceanddice/sprinkler).
+
+<details>
+    <summary>shape of a sprinkler JSON file</summary>
+    
+    ```json
+    {
+      "action": {
+         // the action that will be executed. custom actions can be registered to the `sliceanddice:sprinkle_action` registry.
+        "type": "sliceanddice:damage",
+        // some parameters, depending on what action type has been set above
+        "amount": 0.5,
+        "damage_type": "minecraft:in_fire"
+      },
+      "fluid": {
+        "fluid": "minecraft:lava"
+      }
+    }
+    ```
+</details>
+
+### For Developers
+
+When depending on the mod, you can include it from my maven, which will have the benefit of including transient dependencies.
+There is also an `api` package, which should be enought at compile time for some use-cases,
+for example when only adding a custom sprinkler or sprinkle action.
+
+When a new release is already being worked on, there might also be `-SNAPSHOT` versions being published, which you can use to already get a look at upcoming changes.
+
+![Latest Stable Version](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fregistry.somethingcatchy.net%2Frepository%2Fmaven-releases%2Fcom%2Fpossible-triangle%2Fsliceanddice-api%2Fmaven-metadata.xml&label=stable)
+![Latest Snapshot Version](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fregistry.somethingcatchy.net%2Frepository%2Fmaven-snapshots%2Fcom%2Fpossible-triangle%2Fsliceanddice-api%2Fmaven-metadata.xml&label=snapshot)
+
+```kotlin
+repositories {
+    maven {
+        url = uri("https://registry.somethingcatchy.net/repository/maven-public/")
+        content {
+            includeGroup("com.possible-triangle")
+        }
+    }
+}
+
+dependencies {
+    compileOnly("com.possible-triangle:sliceanddice-api:$sd_version")
+    runtimeOnly("com.possible-triangle:sliceanddice-neoforge:$sd_version")
+}
+```
+
+Under the hood, slice & dice uses the library [atmosphere](https://github.com/PssbleTrngle/Atmosphere), which itself is still early in development.
