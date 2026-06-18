@@ -10,15 +10,6 @@ neoforge {
     }
 }
 
-// base {
-//     archivesName = "${mod.id.get()}-forge-${mod.version.get()}"
-// }
-
-// tasks.withType<Jar> {
-//     exclude("screenshots")
-//     exclude("example_datapack.zip")
-// }
-
 dependencies {
     modCompileOnly(libs.jei.common.api)
     modCompileOnly(libs.jei.neoforge.api)
