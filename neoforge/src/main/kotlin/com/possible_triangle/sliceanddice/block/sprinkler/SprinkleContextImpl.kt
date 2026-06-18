@@ -26,6 +26,7 @@ data class SprinkleContextImpl(
     override val fluidStack: FluidStack,
     override val type: SprinklerType,
     override val contraption: UUID?,
+    val suffix: String,
 ) : SprinkleContext {
     private val subLevel = SableCompanion.INSTANCE.getContaining(level, pos)
     override val blockPos = BlockPos.containing(pos)
@@ -48,9 +49,7 @@ data class SprinkleContextImpl(
             )
         }
 
-    override val id
-        get() =
-            modLoc("sprinkler_${blockPos.x}_${blockPos.y}_${blockPos.z}")
+    override val id = modLoc(suffix)
 
     override fun <T : Entity> getEntities(
         clazz: Class<T>,

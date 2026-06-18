@@ -38,7 +38,6 @@ object MovingSprinklerBehaviour : MovementBehaviour {
         val level = context.world
 
         context.behaviour.invalidate(level)
-        context.behaviour = Instance(context)
 
         context.behaviour.check(level)
     }
@@ -91,5 +90,6 @@ object MovingSprinklerBehaviour : MovementBehaviour {
             get() = contraption!!.storage.fluids
         override val renderedFluid: FluidStack
             get() = tank.getFluidInTank(0)
+        override val id: String = "moving_${contraption.entity.uuid}_${context.localPos.encode()}"
     }
 }

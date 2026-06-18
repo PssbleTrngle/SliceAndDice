@@ -64,6 +64,8 @@ class StaticSprinklerBehaviour(
         }
     }
 
+    override val id = "static_${super<BlockEntityBehaviour>.pos.encode()}"
+
     override fun write(
         nbt: CompoundTag,
         registries: HolderLookup.Provider,
