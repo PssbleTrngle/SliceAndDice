@@ -16,7 +16,7 @@ dependencies {
 
     modApi(libs.registrate)
 
-    modIncludeCompileOnly(libs.atmosphere.api)
+    modIncludeCompileOnly(libs.atmosphere)
     modRuntimeOnly(libs.atmosphere)
 
     modApi(
