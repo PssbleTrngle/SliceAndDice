@@ -1,5 +1,8 @@
 plugins {
-    id("com.possible-triangle.neoforge")
+    id("com.possible-triangle.common")
 }
 
-neoForge.runs.removeAll { true }
+dependencies {
+    val neoforge_version: String by project.extra
+    implementation("net.neoforged:neoforge:$neoforge_version")
+}
