@@ -36,7 +36,7 @@ subprojects {
             }
         }
         maven {
-            url = uri("https://maven.jaackson.me")
+            url = uri("https://maven.teamabnormals.com")
             content {
                 includeGroup("com.teamabnormals")
             }
