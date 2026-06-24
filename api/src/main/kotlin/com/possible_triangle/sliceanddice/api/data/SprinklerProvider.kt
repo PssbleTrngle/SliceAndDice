@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 object SprinklerProvider {
+    @JvmStatic
     fun of(
         output: PackOutput,
         lookupProvider: CompletableFuture<HolderLookup.Provider>,
