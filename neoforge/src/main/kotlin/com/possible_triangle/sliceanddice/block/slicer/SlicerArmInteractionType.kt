@@ -1,6 +1,5 @@
 package com.possible_triangle.sliceanddice.block.slicer
 
-import com.possible_triangle.sliceanddice.index.SDBlocks
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType
 import net.minecraft.core.BlockPos
@@ -12,7 +11,7 @@ object SlicerArmInteractionType : ArmInteractionPointType() {
         level: Level,
         pos: BlockPos,
         state: BlockState,
-    ): Boolean = SDBlocks.SLICER.`is`(state)
+    ): Boolean = state.block is SlicerBlock
 
     override fun createPoint(
         level: Level,
