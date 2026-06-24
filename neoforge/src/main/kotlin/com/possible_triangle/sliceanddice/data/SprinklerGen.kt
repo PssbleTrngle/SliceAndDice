@@ -57,6 +57,11 @@ internal fun GatherDataEvent.registerSprinklers() {
                 "lead",
                 FluidIngredient.tag(OTags.Fluids.MOLTEN_LEAD),
                 DamageAction(damageTypes.getOrThrow(ODamageSources.MOLTEN_LEAD), 0.5F),
+                listOf(
+                    ModLoadedCondition(
+                        ModCompat.OREGANIZED,
+                    ),
+                ),
             )
         },
     )
