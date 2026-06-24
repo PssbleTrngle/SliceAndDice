@@ -32,6 +32,6 @@ object DataEntrypoint {
 
         REGISTRATE.addDataGenerator(ProviderType.RECIPE, CompatRecipes::generate)
 
-        REGISTRATE.registerSprinklers()
+        event.registerSprinklers()
     }
 }
