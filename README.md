@@ -122,10 +122,16 @@ When a new release is already being worked on, there might also be `-SNAPSHOT` v
 ```kotlin
 repositories {
     maven {
+        url = uri("https://thedarkcolour.github.io/KotlinForForge/")
+        content { includeGroup("thedarkcolour") }
+    }
+    maven {
+        url = uri("https://maven.ryanhcode.dev/releases")
+        content { includeGroupAndSubgroups("dev.ryanhcode") }
+    }
+    maven {
         url = uri("https://registry.somethingcatchy.net/repository/maven-public/")
-        content {
-            includeGroup("com.possible-triangle")
-        }
+        content { includeGroup("com.possible-triangle") }
     }
 }
 
