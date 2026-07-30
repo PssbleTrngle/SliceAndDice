@@ -8,9 +8,9 @@ fabric {
     dataGen()
 }
 
-val rawVersion = mod.version.get().replace("-fabric", "")
+mod.version = mod.version.get().replace("+fabric", "")
 base {
-    archivesName = "${mod.id.get()}-fabric-$rawVersion"
+    archivesName = "${mod.id.get()}-fabric-${mod.version.get()}"
 }
 
 repositories {
@@ -107,11 +107,11 @@ tasks.withType<Jar> {
 
 upload {
     maven {
+        name = "${mod.id.get()}-fabric"
         nexus()
     }
 
     forEach {
-        versionName = "Fabric $rawVersion"
         dependencies {
             required("create-fabric")
             optional("farmers-delight-refabricated")

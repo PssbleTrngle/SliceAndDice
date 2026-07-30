@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import java.util.function.Supplier
 
-class CuttingProcessingCategory() :
+class CuttingProcessingCategory :
     CreateRecipeCategory<CuttingProcessingRecipe>(
         Info(
             RecipeType(ResourceLocation(SliceAndDice.MOD_ID, "slicer"), CuttingProcessingRecipe::class.java),
@@ -28,10 +28,9 @@ class CuttingProcessingCategory() :
             EmptyBackground(177, 85),
             ItemIcon(SLICER),
             ::loadRecipes,
-            listOf(SLICER)
-        )
+            listOf(SLICER),
+        ),
     ) {
-
     private val slicer = AnimatedSlicer(true)
 
     companion object {
@@ -52,25 +51,27 @@ class CuttingProcessingCategory() :
     override fun setRecipe(
         builder: IRecipeLayoutBuilder,
         recipe: CuttingProcessingRecipe,
-        focus: IFocusGroup
+        focus: IFocusGroup,
     ) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 27, 65)
+        builder
+            .addSlot(RecipeIngredientRole.INPUT, 27, 65)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(recipe.getIngredients()[0])
 
         if (recipe.tool != null) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 45, 5)
+            builder
+                .addSlot(RecipeIngredientRole.INPUT, 45, 5)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredients(recipe.tool)
         }
 
         recipe.rollableResults.forEachIndexed { i, output ->
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 65)
+            builder
+                .addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 65)
                 .setBackground(getRenderedSlot(output), -1, -1)
                 .addItemStack(output.stack)
                 .addRichTooltipCallback(addStochasticTooltip(output))
         }
-
     }
 
     override fun draw(
@@ -78,7 +79,7 @@ class CuttingProcessingCategory() :
         recipeSlotsView: IRecipeSlotsView,
         graphics: GuiGraphics,
         mouseX: Double,
-        mouseY: Double
+        mouseY: Double,
     ) {
         slicer.setRecipe(recipe)
 
@@ -86,5 +87,4 @@ class CuttingProcessingCategory() :
         AllGuiTextures.JEI_LONG_ARROW.render(graphics, 52, 69)
         slicer.draw(graphics, background.width / 2 - 17, 22)
     }
-
 }

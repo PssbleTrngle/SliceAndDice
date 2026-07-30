@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation
 @JeiPlugin
 @Suppress("unused")
 class JEICompat : IModPlugin {
-
     private val cutting = CuttingProcessingCategory()
 
     override fun getPluginUid() = ResourceLocation(SliceAndDice.MOD_ID, "jei")
@@ -32,5 +31,4 @@ class JEICompat : IModPlugin {
     override fun registerRecipes(registration: IRecipeRegistration) {
         cutting.registerRecipes(registration)
     }
-
 }

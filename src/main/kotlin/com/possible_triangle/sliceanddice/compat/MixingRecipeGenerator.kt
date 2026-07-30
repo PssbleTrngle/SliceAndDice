@@ -13,15 +13,16 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import kotlin.jvm.optionals.getOrNull
 
-
-class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingRecipe>) {
-
-    private fun getFromEmptying(stack: ItemStack) = emptyingRecipes
-        .filter { it.ingredients.isNotEmpty() }
-        .find {
-            val required = it.ingredients[0]
-            required.test(stack)
-        }?.resultingFluid
+class MixingRecipeGenerator(
+    private val emptyingRecipes: Collection<EmptyingRecipe>,
+) {
+    private fun getFromEmptying(stack: ItemStack) =
+        emptyingRecipes
+            .filter { it.ingredients.isNotEmpty() }
+            .find {
+                val required = it.ingredients[0]
+                required.test(stack)
+            }?.resultingFluid
 
     private fun resolveIngredient(stack: ItemStack): Either<FluidStack, ItemStack> {
         val fluid = getFromEmptying(stack)
@@ -31,15 +32,16 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
             ?: Either.right(stack)
     }
 
-    private fun findFluids(
-        ingredient: Ingredient,
-    ): Pair<Collection<FluidStack>, Ingredient> {
+    private fun findFluids(ingredient: Ingredient): Pair<Collection<FluidStack>, Ingredient> {
         if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return Pair(listOf(), Ingredient.EMPTY)
 
         val resolved = ingredient.items.map { resolveIngredient(it) }
-        val fluids = resolved.mapNotNull { it.left().getOrNull() }
-            .groupBy { it.fluid.fluidType }
-            .values.map { fluidStacks -> fluidStacks.minBy { it.amount } }
+        val fluids =
+            resolved
+                .mapNotNull { it.left().getOrNull() }
+                .groupBy { it.fluid.fluidType }
+                .values
+                .map { fluidStacks -> fluidStacks.minBy { it.amount } }
 
         val stacks = resolved.mapNotNull { it.right().getOrNull() }
 
@@ -50,23 +52,26 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
         ingredients: List<Ingredient>,
         output: ItemStack,
         cookTime: Int,
-        id: ResourceLocation
+        id: ResourceLocation,
     ): Collection<MixingRecipe> {
         val initial = Ingredients(ingredients, emptyList())
-        val variations = ingredients.fold(listOf(initial)) { previous, ingredient ->
-            val (fluids, nonFluids) = findFluids(ingredient)
-            if (fluids.isEmpty()) return@fold previous
+        val variations =
+            ingredients.fold(listOf(initial)) { previous, ingredient ->
+                val (fluids, nonFluids) = findFluids(ingredient)
+                if (fluids.isEmpty()) return@fold previous
 
-            val fluidVariants = fluids.flatMap { fluid ->
-                previous.map { it.replaceItemsWithFluid(ingredient, fluid) }
+                val fluidVariants =
+                    fluids.flatMap { fluid ->
+                        previous.map { it.replaceItemsWithFluid(ingredient, fluid) }
+                    }
+
+                if (nonFluids.isEmpty) return@fold fluidVariants
+
+                fluidVariants +
+                    previous.map {
+                        it.replaceItems(ingredient, nonFluids)
+                    }
             }
-
-            if (nonFluids.isEmpty) return@fold fluidVariants
-
-            fluidVariants + previous.map {
-                it.replaceItems(ingredient, nonFluids)
-            }
-        }
 
         return try {
             variations.mapIndexed { i, it ->
@@ -81,25 +86,37 @@ class MixingRecipeGenerator(private val emptyingRecipes: Collection<EmptyingReci
     }
 }
 
-data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>) {
-
-    fun replaceItems(original: Ingredient, new: Ingredient) = Ingredients(
+data class Ingredients(
+    val items: List<Ingredient>,
+    val fluids: List<FluidStack>,
+) {
+    fun replaceItems(
+        original: Ingredient,
+        new: Ingredient,
+    ) = Ingredients(
         items = items.filter { it != original } + new,
         fluids = fluids,
     )
 
-    fun replaceItemsWithFluid(original: Ingredient, fluid: FluidStack): Ingredients {
+    fun replaceItemsWithFluid(
+        original: Ingredient,
+        fluid: FluidStack,
+    ): Ingredients {
         val filteredItems = items.filter { it != original }
 
         val fluidMatch = fluids.indexOfFirst { it.isFluidEqual(fluid) }
         val modifiedFluids =
-            if (fluidMatch < 0)
+            if (fluidMatch < 0) {
                 fluids + fluid
-            else
+            } else {
                 fluids.mapIndexed { i, it ->
-                    if (i == fluidMatch) it.copyWithAmount(it.amount + fluid.amount)
-                    else it
+                    if (i == fluidMatch) {
+                        it.copyWithAmount(it.amount + fluid.amount)
+                    } else {
+                        it
+                    }
                 }
+            }
 
         return Ingredients(
             items = filteredItems,
@@ -107,7 +124,11 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
         )
     }
 
-    fun createRecipe(id: ResourceLocation, cookTime: Int, output: ItemStack): MixingRecipe {
+    fun createRecipe(
+        id: ResourceLocation,
+        cookTime: Int,
+        output: ItemStack,
+    ): MixingRecipe {
         val fluidIngredients = fluids.map { FluidIngredient.fromFluidStack(it) }
         return ProcessingRecipeBuilder(::MixingRecipe, id)
             .withItemIngredients(*items.toTypedArray())
@@ -117,7 +138,6 @@ data class Ingredients(val items: List<Ingredient>, val fluids: List<FluidStack>
             .withSingleItemOutput(output)
             .build()
     }
-
 }
 
 fun FluidStack.copyWithAmount(amount: Long) = FluidStack(fluid, amount, tag)

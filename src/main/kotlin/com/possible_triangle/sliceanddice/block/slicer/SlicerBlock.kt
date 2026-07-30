@@ -24,14 +24,21 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<SlicerBlockEntity>, ICogWheel {
-
+class SlicerBlock(
+    properties: Properties,
+) : KineticBlock(properties),
+    IBE<SlicerBlockEntity>,
+    ICogWheel {
     override fun getBlockEntityClass() = SlicerBlockEntity::class.java
 
     override fun getBlockEntityType() = Content.SLICER_TILE.get()
 
     override fun use(
-        state: BlockState, world: Level, pos: BlockPos, player: Player, hand: InteractionHand,
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
         hit: BlockHitResult,
     ): InteractionResult {
         val held = player.getItemInHand(hand).copy()
@@ -39,48 +46,53 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<Slicer
         if (AllItems.WRENCH.isIn(held)) return InteractionResult.PASS
         if (!held.`is`(Content.ALLOWED_TOOLS) && !held.isEmpty) return InteractionResult.PASS
 
-        if (!world.isClientSide) withBlockEntityDo(world, pos) {
-            if (it !is SlicerBlockEntity) return@withBlockEntityDo
-            val heldByDeployer = it.heldItem.copy()
-            if (heldByDeployer.isEmpty && held.isEmpty) return@withBlockEntityDo
-            player.setItemInHand(hand, heldByDeployer)
-            it.heldItem = held
+        if (!world.isClientSide) {
+            withBlockEntityDo(world, pos) {
+                if (it !is SlicerBlockEntity) return@withBlockEntityDo
+                val heldByDeployer = it.heldItem.copy()
+                if (heldByDeployer.isEmpty && held.isEmpty) return@withBlockEntityDo
+                player.setItemInHand(hand, heldByDeployer)
+                it.heldItem = held
+            }
         }
 
         return InteractionResult.SUCCESS
     }
 
-    override fun canSurvive(state: BlockState, worldIn: LevelReader, pos: BlockPos): Boolean {
-        return !AllBlocks.BASIN.has(worldIn.getBlockState(pos.below()))
-    }
+    override fun canSurvive(
+        state: BlockState,
+        worldIn: LevelReader,
+        pos: BlockPos,
+    ): Boolean = !AllBlocks.BASIN.has(worldIn.getBlockState(pos.below()))
 
     override fun getShape(
         state: BlockState,
         worldIn: BlockGetter,
         pos: BlockPos,
         context: CollisionContext,
-    ): VoxelShape {
-        return if (context is EntityCollisionContext
-            && context.entity is Player
-        ) AllShapes.CASING_14PX[Direction.DOWN] else AllShapes.MECHANICAL_PROCESSOR_SHAPE
-    }
-
+    ): VoxelShape =
+        if (context is EntityCollisionContext &&
+            context.entity is Player
+        ) {
+            AllShapes.CASING_14PX[Direction.DOWN]
+        } else {
+            AllShapes.MECHANICAL_PROCESSOR_SHAPE
+        }
 
     override fun getRotationAxis(state: BlockState) = Direction.Axis.Y
 
-    override fun hasShaftTowards(world: LevelReader, pos: BlockPos, state: BlockState, face: Direction) = false
+    override fun hasShaftTowards(
+        world: LevelReader,
+        pos: BlockPos,
+        state: BlockState,
+        face: Direction,
+    ) = false
 
-    override fun getParticleTargetRadius(): Float {
-        return 0.85F
-    }
+    override fun getParticleTargetRadius(): Float = 0.85F
 
-    override fun getParticleInitialRadius(): Float {
-        return 0.75F
-    }
+    override fun getParticleInitialRadius(): Float = 0.75F
 
-    override fun getMinimumRequiredSpeedLevel(): SpeedLevel {
-        return SpeedLevel.MEDIUM
-    }
+    override fun getMinimumRequiredSpeedLevel(): SpeedLevel = SpeedLevel.MEDIUM
 
     override fun isPathfindable(
         state: BlockState,
@@ -89,7 +101,13 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<Slicer
         type: PathComputationType,
     ) = false
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+    override fun onRemove(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        newState: BlockState,
+        isMoving: Boolean,
+    ) {
         if (state.hasBlockEntity() && state.block !== newState.block) {
             withBlockEntityDo(world, pos) { te ->
                 if (isMoving) return@withBlockEntityDo
@@ -101,5 +119,4 @@ class SlicerBlock(properties: Properties) : KineticBlock(properties), IBE<Slicer
 
         super.onRemove(state, world, pos, newState, isMoving)
     }
-
 }

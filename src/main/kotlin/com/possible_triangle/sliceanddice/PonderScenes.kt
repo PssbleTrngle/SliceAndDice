@@ -33,7 +33,6 @@ import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.material.Fluids
 
 object PonderScenes : PonderPlugin {
-
     fun setup() {
         PonderIndex.addPlugin(this)
     }
@@ -54,7 +53,12 @@ object PonderScenes : PonderPlugin {
             val basinSlicer = util.grid().at(1, 4, 3)
 
             val bigCog = util.select().position(3, 0, 5)
-            val belt = util.select().fromTo(1, 1, 2, 4, 1, 2).add(util.select().fromTo(4, 1, 3, 4, 1, 5)).add(bigCog)
+            val belt =
+                util
+                    .select()
+                    .fromTo(1, 1, 2, 4, 1, 2)
+                    .add(util.select().fromTo(4, 1, 3, 4, 1, 5))
+                    .add(bigCog)
 
             scene.world().setKineticSpeed(util.select().position(basinSlicer), -64F)
             scene.world().setKineticSpeed(util.select().position(beltSlicer), -64F)
@@ -82,7 +86,11 @@ object PonderScenes : PonderPlugin {
                 it.heldItem = knife
             }
 
-            scene.overlay().showText(60).text("Right-click it with a valid tool").placeNearTarget()
+            scene
+                .overlay()
+                .showText(60)
+                .text("Right-click it with a valid tool")
+                .placeNearTarget()
                 .pointAt(util.vector().blockSurface(beltSlicer, Direction.WEST))
 
             scene.idle(5)
@@ -99,14 +107,15 @@ object PonderScenes : PonderPlugin {
 
             scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
                 it.cuttingBehaviour.makePressingParticleEffect(
-                    VecHelper.getCenterOf(beltOutputPos).add(0.0, 0.6, 0.0), slices
+                    VecHelper.getCenterOf(beltOutputPos).add(0.0, 0.6, 0.0),
+                    slices,
                 )
             }
 
             scene.idle(5)
             scene.world().stallBeltItem(slicesInWorld, false)
             scene.world().modifyBlockEntity(beltSlicer, SlicerBlockEntity::class.java) {
-                //it.cuttingBehaviour.running = false
+                // it.cuttingBehaviour.running = false
             }
 
             scene.idleSeconds(3)
@@ -116,7 +125,11 @@ object PonderScenes : PonderPlugin {
             scene.idle(5)
             scene.world().hideIndependentSection(beltSlicerSection, Direction.EAST)
 
-            scene.overlay().showText(60).text("The slicer can also operate on a basin").placeNearTarget()
+            scene
+                .overlay()
+                .showText(60)
+                .text("The slicer can also operate on a basin")
+                .placeNearTarget()
                 .pointAt(util.vector().blockSurface(basinSlicer, Direction.WEST))
 
             scene.idle(5)
@@ -135,7 +148,8 @@ object PonderScenes : PonderPlugin {
             }
         }
 
-        helper.forComponents(Content.SPRINKLER_BLOCK, Content.FERTILIZER_BUCKET)
+        helper
+            .forComponents(Content.SPRINKLER_BLOCK, Content.FERTILIZER_BUCKET)
             .addStoryBoard("sprinkler/intro") { builder, util ->
                 val scene = CreateSceneBuilder(builder)
                 scene.intro("sprinkler/intro", "Sprinkles on top", 5)
@@ -155,7 +169,11 @@ object PonderScenes : PonderPlugin {
                 scene.idle(20)
 
                 scene.world().showSection(util.select().position(sprinkler), Direction.UP)
-                scene.overlay().showText(60).text("Place a sprinkler below a pipe").placeNearTarget()
+                scene
+                    .overlay()
+                    .showText(60)
+                    .text("Place a sprinkler below a pipe")
+                    .placeNearTarget()
                     .pointAt(util.vector().blockSurface(sprinkler, Direction.DOWN))
 
                 scene.idle(5)
@@ -185,11 +203,10 @@ object PonderScenes : PonderPlugin {
                     scene.world().replaceBlocks(
                         util.select().position(it),
                         Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7),
-                        false
+                        false,
                     )
                     scene.idle(20)
                 }
-
             }.addStoryBoard("sprinkler/uses") { builder, util ->
                 val scene = CreateSceneBuilder(builder)
                 scene.intro("sprinkler/uses", "Types of sprinkles", 7)
@@ -216,22 +233,25 @@ object PonderScenes : PonderPlugin {
                 scene.idle(10)
 
                 val cowPos = util.vector().topOf(sprinkler.below(3))
-                val cow = scene.world().createEntity {
-                    EntityType.COW.create(it)!!.apply {
-                        setPos(cowPos.x, cowPos.y, cowPos.z)
-                        xo = cowPos.x
-                        yo = cowPos.y
-                        zo = cowPos.z
-                        walkAnimation.update(-walkAnimation.position(), 1f)
-                        walkAnimation.setSpeed(1f)
-                        yRotO = 210f
-                        yRot = 210f
-                        yHeadRotO = 210f
-                        yHeadRot = 210f
+                val cow =
+                    scene.world().createEntity {
+                        EntityType.COW.create(it)!!.apply {
+                            setPos(cowPos.x, cowPos.y, cowPos.z)
+                            xo = cowPos.x
+                            yo = cowPos.y
+                            zo = cowPos.z
+                            walkAnimation.update(-walkAnimation.position(), 1f)
+                            walkAnimation.setSpeed(1f)
+                            yRotO = 210f
+                            yRot = 210f
+                            yHeadRotO = 210f
+                            yHeadRot = 210f
+                        }
                     }
-                }
 
-                scene.overlay().showText(60)
+                scene
+                    .overlay()
+                    .showText(60)
                     .text("Different fluids also affect entities differently")
                     .pointAt(cowPos)
 
@@ -259,9 +279,11 @@ object PonderScenes : PonderPlugin {
 
                 scene.addKeyframe()
 
-                scene.overlay().showControls(tank.center, Pointing.LEFT, 10).withItem(ItemStack(Items.POTION).also {
-                    PotionUtils.setPotion(it, Potions.INVISIBILITY)
-                })
+                scene.overlay().showControls(tank.center, Pointing.LEFT, 10).withItem(
+                    ItemStack(Items.POTION).also {
+                        PotionUtils.setPotion(it, Potions.INVISIBILITY)
+                    },
+                )
 
                 FluidStack(AllFluids.POTION.get(), 100000, CompoundTag()).also { fluid ->
                     PotionFluid.addPotionToFluidStack(fluid, Potions.INVISIBILITY)
@@ -292,35 +314,48 @@ object PonderScenes : PonderPlugin {
                             z + RANDOM.nextDouble(-0.4, 0.4),
                             r,
                             g,
-                            b
+                            b,
                         )
                     },
-                    1F, 240
+                    1F,
+                    240,
                 )
 
                 scene.idleSeconds(2)
             }
     }
 
-    private fun CreateSceneBuilder.intro(key: String, text: String, size: Int) {
+    private fun CreateSceneBuilder.intro(
+        key: String,
+        text: String,
+        size: Int,
+    ) {
         title(key, text)
         configureBasePlate(0, 0, size)
         showBasePlate()
         idle(5)
     }
 
-    private fun CreateSceneBuilder.sprinklerParticles(fluid: FluidStack, at: BlockPos, ticks: Int) {
+    private fun CreateSceneBuilder.sprinklerParticles(
+        fluid: FluidStack,
+        at: BlockPos,
+        ticks: Int,
+    ) {
         val particle = FluidFX.getFluidParticle(fluid)
         effects().emitParticles(
             VecHelper.getCenterOf(at),
             { w, x, y, z ->
                 w.addParticle(particle, x, y, z, RANDOM.nextDouble(-0.1, 0.1), 0.0, RANDOM.nextDouble(-0.1, 0.1))
             },
-            1F, ticks
+            1F,
+            ticks,
         )
     }
 
-    private fun CreateSceneBuilder.fillTank(at: BlockPos, fluid: FluidStack) {
+    private fun CreateSceneBuilder.fillTank(
+        at: BlockPos,
+        fluid: FluidStack,
+    ) {
         world().modifyBlockEntity(at, FluidTankBlockEntity::class.java) { be ->
             be.tankInventory.apply {
                 fluid.amount.takeIf { it > 0 }?.let {
@@ -331,5 +366,4 @@ object PonderScenes : PonderPlugin {
             }
         }
     }
-
 }

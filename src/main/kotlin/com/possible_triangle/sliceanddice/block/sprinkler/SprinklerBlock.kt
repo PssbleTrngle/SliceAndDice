@@ -12,8 +12,11 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, IBE<SprinklerTile> {
-
+class SprinklerBlock(
+    properties: Properties,
+) : Block(properties),
+    IWrenchable,
+    IBE<SprinklerTile> {
     override fun getBlockEntityClass() = SprinklerTile::class.java
 
     override fun getBlockEntityType() = Content.SPRINKLER_TILE.get()
@@ -27,13 +30,14 @@ class SprinklerBlock(properties: Properties) : Block(properties), IWrenchable, I
         state: BlockState,
         level: BlockGetter,
         pos: BlockPos,
-        context: CollisionContext
+        context: CollisionContext,
     ) = SHAPE
 
     override fun hasAnalogOutputSignal(state: BlockState) = true
 
-    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos): Int {
-        return ComparatorUtil.levelOfSmartFluidTank(world, pos)
-    }
-
+    override fun getAnalogOutputSignal(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+    ): Int = ComparatorUtil.levelOfSmartFluidTank(world, pos)
 }

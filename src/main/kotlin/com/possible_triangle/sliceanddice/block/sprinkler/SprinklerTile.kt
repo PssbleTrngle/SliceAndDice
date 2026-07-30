@@ -10,7 +10,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil
 import net.createmod.catnip.math.VecHelper
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity
@@ -22,9 +21,13 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 
-class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) : SmartBlockEntity(type, pos, state),
-    IHaveGoggleInformation, SidedStorageBlockEntity {
-
+class SprinklerTile(
+    type: BlockEntityType<*>,
+    pos: BlockPos,
+    state: BlockState,
+) : SmartBlockEntity(type, pos, state),
+    IHaveGoggleInformation,
+    SidedStorageBlockEntity {
     private lateinit var tank: SmartFluidTankBehaviour
     private var processingTicks = -1
 
@@ -37,7 +40,7 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
                 .single(this, Configs.SERVER.SPRINKLER_CAPACITY.get() * FLUID_MULTIPLIER)
                 .allowInsertion()
                 .whenFluidUpdates(::notifyUpdate)
-                .also { tank = it }
+                .also { tank = it },
         )
     }
 
@@ -53,29 +56,38 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
             processingTicks--
         } else {
             val fluid = FluidVariant.of(tank.primaryHandler.fluid.fluid)
-            if (!fluid.isBlank) TransferUtil.getTransaction().use { ctx ->
-                val used = Configs.SERVER.SPRINKLER_USAGE.get() * FLUID_MULTIPLIER
-                val amountExtracted = tank.capability.simulateExtract(fluid, used, ctx)
-                if (amountExtracted >= used) {
-                    tank.capability.extract(fluid, amountExtracted, ctx)
-                    processingTicks = 20
-                    notifyUpdate()
+            if (!fluid.isBlank) {
+                TransferUtil.getTransaction().use { ctx ->
+                    val used = Configs.SERVER.SPRINKLER_USAGE.get() * FLUID_MULTIPLIER
+                    val amountExtracted = tank.capability.simulateExtract(fluid, used, ctx)
+                    if (amountExtracted >= used) {
+                        tank.capability.extract(fluid, amountExtracted, ctx)
+                        processingTicks = 20
+                        notifyUpdate()
+                    }
                 }
             }
         }
 
         if (processingTicks >= 8) {
             if (world.isClientSide && !isVirtual) spawnProcessingParticles(tank.primaryTank.renderedFluid)
-            if (world is ServerLevel) SprinkleBehaviour.actAt(
-                blockPos, world, tank.primaryHandler.fluid, world.random,
-            )
+            if (world is ServerLevel) {
+                SprinkleBehaviour.actAt(
+                    blockPos,
+                    world,
+                    tank.primaryHandler.fluid,
+                    world.random,
+                )
+            }
         }
     }
 
-    override fun getFluidStorage(face: Direction?): Storage<FluidVariant>? {
-        return if (face != Direction.DOWN) tank.capability
-        else null
-    }
+    override fun getFluidStorage(face: Direction?): Storage<FluidVariant>? =
+        if (face != Direction.DOWN) {
+            tank.capability
+        } else {
+            null
+        }
 
     private fun spawnProcessingParticles(fluid: FluidStack) {
         if (fluid.isEmpty) return
@@ -95,20 +107,29 @@ class SprinklerTile(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) 
         tag.putInt("ProcessingTicks", processingTicks)
     }
 
-    override fun read(tag: CompoundTag, clientPacket: Boolean) {
+    override fun read(
+        tag: CompoundTag,
+        clientPacket: Boolean,
+    ) {
         super.read(tag, clientPacket)
         processingTicks = tag.getInt("ProcessingTicks")
     }
 
-    override fun write(compound: CompoundTag, client: Boolean) {
+    override fun write(
+        compound: CompoundTag,
+        client: Boolean,
+    ) {
         super.write(compound, client)
         compound.putInt("ProcessingTicks", processingTicks)
     }
 
-    override fun addToGoggleTooltip(tooltip: MutableList<Component>, sneaking: Boolean): Boolean {
-        return containedFluidTooltip(
-            tooltip, sneaking, getFluidStorage(Direction.UP)
+    override fun addToGoggleTooltip(
+        tooltip: MutableList<Component>,
+        sneaking: Boolean,
+    ): Boolean =
+        containedFluidTooltip(
+            tooltip,
+            sneaking,
+            getFluidStorage(Direction.UP),
         )
-    }
-
 }

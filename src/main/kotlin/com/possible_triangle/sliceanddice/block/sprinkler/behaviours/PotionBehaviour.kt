@@ -10,14 +10,17 @@ import net.minecraft.world.item.alchemy.PotionUtils
 import kotlin.math.max
 
 object PotionBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
         val effects = PotionUtils.getAllEffects(fluidStack.orCreateTag)
         if (effects.isEmpty()) return
 
         range.getEntities(LivingEntity::class.java).forEach { entity ->
             effects.forEach {
-
                 if (it.effect.isInstantenous) {
                     it.effect.applyInstantenousEffect(null, null, entity, it.amplifier, 0.5)
                 } else {
@@ -28,8 +31,8 @@ object PotionBehaviour : SprinkleBehaviour {
                             it.amplifier,
                             it.isAmbient,
                             it.isVisible,
-                            it.showIcon()
-                        )
+                            it.showIcon(),
+                        ),
                     )
                 }
             }

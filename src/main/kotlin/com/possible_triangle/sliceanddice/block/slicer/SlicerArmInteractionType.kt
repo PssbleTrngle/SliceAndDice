@@ -8,13 +8,15 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
 object SlicerArmInteractionType : ArmInteractionPointType() {
+    override fun canCreatePoint(
+        level: Level,
+        pos: BlockPos,
+        state: BlockState,
+    ): Boolean = state.block == Content.SLICER_BLOCK.get()
 
-    override fun canCreatePoint(level: Level, pos: BlockPos, state: BlockState): Boolean {
-        return state.block == Content.SLICER_BLOCK.get()
-    }
-
-    override fun createPoint(level: Level, pos: BlockPos, state: BlockState): ArmInteractionPoint {
-        return ArmInteractionPoint(this, level, pos, state)
-    }
-
+    override fun createPoint(
+        level: Level,
+        pos: BlockPos,
+        state: BlockState,
+    ): ArmInteractionPoint = ArmInteractionPoint(this, level, pos, state)
 }

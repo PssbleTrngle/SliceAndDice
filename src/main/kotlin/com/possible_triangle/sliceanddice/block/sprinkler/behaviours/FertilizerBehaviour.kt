@@ -8,8 +8,12 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.BonemealableBlock
 
 object FertilizerBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
         range.forEachBlock { pos ->
             val state = world.getBlockState(pos)
             if (state.`is`(Content.FERTILIZER_BLACKLIST)) return@forEachBlock

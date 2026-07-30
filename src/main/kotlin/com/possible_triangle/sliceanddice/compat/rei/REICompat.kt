@@ -8,11 +8,9 @@ import net.fabricmc.api.Environment
 
 @Environment(EnvType.CLIENT)
 class REICompat : REIClientPlugin {
-
     override fun registerCategories(registry: CategoryRegistry) {
         FarmersDelightCompat.ifLoaded {
             addCatalysts(registry)
         }
     }
-
 }

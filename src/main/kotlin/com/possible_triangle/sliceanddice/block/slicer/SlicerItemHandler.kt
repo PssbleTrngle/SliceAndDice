@@ -7,8 +7,9 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
 import net.minecraft.world.item.ItemStack
 
-class SlicerItemHandler(private val tile: SlicerBlockEntity) : SingleVariantStorage<ItemVariant>() {
-
+class SlicerItemHandler(
+    private val tile: SlicerBlockEntity,
+) : SingleVariantStorage<ItemVariant>() {
     init {
         update()
     }
@@ -18,14 +19,16 @@ class SlicerItemHandler(private val tile: SlicerBlockEntity) : SingleVariantStor
         amount = tile.heldItem.count.toLong()
     }
 
-    override fun insert(insertedVariant: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long {
+    override fun insert(
+        insertedVariant: ItemVariant,
+        maxAmount: Long,
+        transaction: TransactionContext,
+    ): Long {
         if (!isItemValid(insertedVariant.toStack())) return 0L
         return super.insert(insertedVariant, maxAmount, transaction)
     }
 
-    private fun isItemValid(stack: ItemStack): Boolean {
-        return !stack.isEmpty && stack.`is`(Content.ALLOWED_TOOLS)
-    }
+    private fun isItemValid(stack: ItemStack): Boolean = !stack.isEmpty && stack.`is`(Content.ALLOWED_TOOLS)
 
     override fun onFinalCommit() {
         tile.heldItem = variant.toStack(ItemHelper.truncateLong(amount))
@@ -34,5 +37,4 @@ class SlicerItemHandler(private val tile: SlicerBlockEntity) : SingleVariantStor
     override fun getCapacity(variant: ItemVariant) = 1L
 
     override fun getBlankVariant() = ItemVariant.blank()
-
 }

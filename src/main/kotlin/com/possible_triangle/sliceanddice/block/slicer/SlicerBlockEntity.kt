@@ -44,9 +44,13 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import kotlin.streams.asSequence
 
-class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockState) :
-    BasinOperatingBlockEntity(type, pos, state), PressingBehaviourSpecifics, SidedStorageBlockEntity {
-
+class SlicerBlockEntity(
+    type: BlockEntityType<*>,
+    pos: BlockPos,
+    state: BlockState,
+) : BasinOperatingBlockEntity(type, pos, state),
+    PressingBehaviourSpecifics,
+    SidedStorageBlockEntity {
     companion object {
         private val inWorldCacheKey = Any()
         private val basinCacheKey = Any()
@@ -73,20 +77,24 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
     private var playSound = false
 
-    override fun updateBasin(): Boolean {
-        return !correctDirection || super.updateBasin()
-    }
+    override fun updateBasin(): Boolean = !correctDirection || super.updateBasin()
 
-    override fun addToTooltip(tooltip: MutableList<Component>, isPlayerSneaking: Boolean): Boolean {
+    override fun addToTooltip(
+        tooltip: MutableList<Component>,
+        isPlayerSneaking: Boolean,
+    ): Boolean {
         if (super.addToTooltip(tooltip, isPlayerSneaking)) return true
         if (!correctDirection && speed != 0F) {
-            Lang.builder(SliceAndDice.MOD_ID)
+            Lang
+                .builder(SliceAndDice.MOD_ID)
                 .translate("tooltip.rotationDirection")
                 .style(ChatFormatting.GOLD)
                 .forGoggles(tooltip)
-            val hint = Lang.builder(SliceAndDice.MOD_ID)
-                .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
-                .component()
+            val hint =
+                Lang
+                    .builder(SliceAndDice.MOD_ID)
+                    .translate("gui.contraptions.wrong_direction", I18n.get(blockState.block.descriptionId))
+                    .component()
             val cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY)
             for (i in cutString.indices) {
                 Lang.builder(SliceAndDice.MOD_ID).add(cutString[i].copy()).forGoggles(tooltip)
@@ -105,9 +113,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     override fun getMatchingRecipes(): MutableList<Recipe<*>> {
         if (!_heldItem.`is`(Content.ALLOWED_TOOLS)) return mutableListOf()
         val recipes = super.getMatchingRecipes()
-        return recipes.mapNotNull {
-            it.takeIf { hasRequiredTool(it) }
-        }.toMutableList()
+        return recipes
+            .mapNotNull {
+                it.takeIf { hasRequiredTool(it) }
+            }.toMutableList()
     }
 
     private fun consumeDurability() {
@@ -127,15 +136,19 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
 
     override fun <C : Container> matchStaticFilters(recipe: Recipe<C>): Boolean {
         if (recipe !is CuttingProcessingRecipe) return false
-        return recipe.tool != null //&& recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
+        return recipe.tool != null // && recipe.tool.items.any { it.`is`(Content.ALLOWED_TOOLS) }
     }
 
-    override fun read(compound: CompoundTag, clientPacket: Boolean) {
+    override fun read(
+        compound: CompoundTag,
+        clientPacket: Boolean,
+    ) {
         super.read(compound, clientPacket)
-        _heldItem = compound.get("HeldItem").let {
-            val decoded = ItemStack.CODEC.parse(NbtOps.INSTANCE, it).result()
-            decoded.orElse(ItemStack.EMPTY)
-        }
+        _heldItem =
+            compound.get("HeldItem").let {
+                val decoded = ItemStack.CODEC.parse(NbtOps.INSTANCE, it).result()
+                decoded.orElse(ItemStack.EMPTY)
+            }
 
         if (clientPacket) {
             compound.handleParticles()
@@ -162,7 +175,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         }
     }
 
-    override fun write(compound: CompoundTag, clientPacket: Boolean) {
+    override fun write(
+        compound: CompoundTag,
+        clientPacket: Boolean,
+    ) {
         super.write(compound, clientPacket)
         if (!_heldItem.isEmpty) {
             val encoded = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, _heldItem).result()
@@ -190,32 +206,39 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
     }
 
     fun getRenderedHeadOffset(partialTicks: Float): Float {
-        val modeOffset = when (behaviour.mode) {
-            Mode.BASIN -> 0.8F
-            Mode.BELT -> 0.4F
-            else -> 1.0F
-        }
+        val modeOffset =
+            when (behaviour.mode) {
+                Mode.BASIN -> 0.8F
+                Mode.BELT -> 0.4F
+                else -> 1.0F
+            }
         val base = behaviour.getRenderedHeadOffset(partialTicks)
         return base * modeOffset + 0.4F
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun recipeFor(stack: ItemStack): CuttingProcessingRecipe? {
-        val assemblyRecipe = SequencedAssemblyRecipe.getRecipes(
-            level,
-            stack,
-            CuttingProcessingRecipe.getType(),
-            CuttingProcessingRecipe::class.java
-        ).asSequence()
-            .filter { it.tool?.test(_heldItem) == true }
-            .firstOrNull()
+        val assemblyRecipe =
+            SequencedAssemblyRecipe
+                .getRecipes(
+                    level,
+                    stack,
+                    CuttingProcessingRecipe.getType(),
+                    CuttingProcessingRecipe::class.java,
+                ).asSequence()
+                .filter { it.tool?.test(_heldItem) == true }
+                .firstOrNull()
 
         if (assemblyRecipe != null) return assemblyRecipe
 
-        val recipes = RecipeFinder.get(inWorldCacheKey, level) {
-            if (it !is CuttingProcessingRecipe) false
-            else it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
-        } as List<CuttingProcessingRecipe>
+        val recipes =
+            RecipeFinder.get(inWorldCacheKey, level) {
+                if (it !is CuttingProcessingRecipe) {
+                    false
+                } else {
+                    it.ingredients.size == 1 && it.fluidIngredients.isEmpty() && it.tool != null
+                }
+            } as List<CuttingProcessingRecipe>
         return recipes.firstOrNull { it.ingredients[0].test(stack) && it.tool!!.test(_heldItem) }
     }
 
@@ -260,9 +283,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         return true
     }
 
-    override fun tryProcessInWorld(itemEntity: ItemEntity, simulate: Boolean): Boolean {
-        return false
-    }
+    override fun tryProcessInWorld(
+        itemEntity: ItemEntity,
+        simulate: Boolean,
+    ): Boolean = false
 
     override fun canProcessInBulk() = false
 
@@ -270,20 +294,17 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         behaviour.start(Mode.BASIN)
     }
 
-    private fun hasRequiredTool(recipe: Recipe<*>): Boolean {
-        return recipe !is CuttingProcessingRecipe || recipe.tool?.test(_heldItem) == true
-    }
+    private fun hasRequiredTool(recipe: Recipe<*>): Boolean = recipe !is CuttingProcessingRecipe || recipe.tool?.test(_heldItem) == true
 
-    private fun tryContinueWithPreviousRecipe(): Boolean {
-        return if (behaviour.onBasin()
-            && matchBasinRecipe(currentRecipe)
-            && basin.filter { it.canContinueProcessing() }.isPresent
+    private fun tryContinueWithPreviousRecipe(): Boolean =
+        if (behaviour.onBasin() &&
+            matchBasinRecipe(currentRecipe) &&
+            basin.filter { it.canContinueProcessing() }.isPresent
         ) {
             continueWithPreviousRecipe()
         } else {
             false
         }
-    }
 
     override fun continueWithPreviousRecipe(): Boolean {
         val canContinue = hasRequiredTool(currentRecipe)
@@ -297,10 +318,12 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         basinChecker.scheduleUpdate()
     }
 
-    override fun getParticleAmount(): Int {
-        return if (Configs.CLIENT.spawnBloodParticles) 20
-        else 10
-    }
+    override fun getParticleAmount(): Int =
+        if (Configs.CLIENT.spawnBloodParticles) {
+            20
+        } else {
+            10
+        }
 
     override fun getKineticSpeed() = getSpeed()
 
@@ -311,24 +334,22 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
         sendData()
     }
 
-    override fun isRunning(): Boolean {
-        return behaviour.running
-    }
+    override fun isRunning(): Boolean = behaviour.running
 
     fun getRenderedHeadRotationSpeed(): Float {
         val speed = getSpeed()
         return if (isRunning) {
             if (behaviour.runningTicks <= 20) {
                 speed * 2
-            } else speed
+            } else {
+                speed
+            }
         } else {
             speed / 2
         }
     }
 
-    override fun getItemStorage(side: Direction?): Storage<ItemVariant> {
-        return itemHandler
-    }
+    override fun getItemStorage(side: Direction?): Storage<ItemVariant> = itemHandler
 
     fun playSound() {
         val world = this.level ?: return
@@ -344,11 +365,10 @@ class SlicerBlockEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockSta
                 ModCompat.cuttingSound,
                 SoundSource.BLOCKS,
                 1F,
-                world.random.nextFloat() * 0.2F + 0.9F
+                world.random.nextFloat() * 0.2F + 0.9F,
             )
         } else {
             playSound = true
         }
     }
-
 }

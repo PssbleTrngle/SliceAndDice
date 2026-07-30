@@ -24,10 +24,9 @@ import java.util.function.Supplier
 data class CuttingProcessingRecipe(
     val params: ProcessingRecipeParams,
     val tool: Ingredient? = null,
-    val converted: Boolean = false
-) :
-    BasinRecipe(CuttingProcessingRecipe, params), IAssemblyRecipe {
-
+    val converted: Boolean = false,
+) : BasinRecipe(CuttingProcessingRecipe, params),
+    IAssemblyRecipe {
     companion object : IRecipeTypeInfo {
         override fun getId() = ResourceLocation(SliceAndDice.MOD_ID, "cutting")
 
@@ -36,11 +35,12 @@ data class CuttingProcessingRecipe(
         override fun <T : RecipeType<*>?> getType() = Content.CUTTING_RECIPE_TYPE.get() as T
     }
 
-    override fun matches(inv: Container, world: Level) = true
+    override fun matches(
+        inv: Container,
+        world: Level,
+    ) = true
 
-    override fun getDescriptionForAssembly(): Component {
-        return Component.translatable("${SliceAndDice.MOD_ID}.recipe.assembly.slicer")
-    }
+    override fun getDescriptionForAssembly(): Component = Component.translatable("${SliceAndDice.MOD_ID}.recipe.assembly.slicer")
 
     override fun addRequiredMachines(machines: MutableSet<ItemLike>) {
         machines.add(Content.SLICER_BLOCK)
@@ -50,24 +50,22 @@ data class CuttingProcessingRecipe(
         // Nothing to do here
     }
 
-    override fun getJEISubCategory(): SequencedAssemblySubCategoryType {
-        return SequencedAssemblySubCategoryType(
+    override fun getJEISubCategory(): SequencedAssemblySubCategoryType =
+        SequencedAssemblySubCategoryType(
             { Supplier(::CuttingProcessingSubCategory) },
             // TODO fabric-port
             null,
             null,
         )
-    }
 
     override fun getMaxInputCount() = 1
 
     object Serializer : RecipeSerializer<CuttingProcessingRecipe> {
-
         private val processing = ProcessingRecipeSerializer<CuttingProcessingRecipe>(::CuttingProcessingRecipe)
 
         override fun fromJson(
             id: ResourceLocation,
-            json: JsonObject
+            json: JsonObject,
         ): CuttingProcessingRecipe {
             val tool = Ingredient.fromJson(json.getAsJsonObject("tool"))
             return processing.fromJson(id, json).copy(tool = tool)
@@ -75,22 +73,19 @@ data class CuttingProcessingRecipe(
 
         override fun fromNetwork(
             id: ResourceLocation,
-            buffer: FriendlyByteBuf
-        ): CuttingProcessingRecipe? {
-            return processing.fromNetwork(id, buffer)?.let {
+            buffer: FriendlyByteBuf,
+        ): CuttingProcessingRecipe? =
+            processing.fromNetwork(id, buffer)?.let {
                 val tool = Ingredient.fromNetwork(buffer)
                 it.copy(tool = tool)
             }
-        }
 
         override fun toNetwork(
             buffer: FriendlyByteBuf,
-            recipe: CuttingProcessingRecipe
+            recipe: CuttingProcessingRecipe,
         ) {
             processing.toNetwork(buffer, recipe)
             recipe.tool?.toNetwork(buffer)
         }
-
     }
-
 }

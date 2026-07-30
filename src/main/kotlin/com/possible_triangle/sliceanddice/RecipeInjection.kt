@@ -9,7 +9,6 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 
 object RecipeInjection {
-
     fun injectRecipes(manager: RecipeManagerAccessor) {
         val byNameBuilder = ImmutableMap.builder<ResourceLocation, Recipe<*>>()
         byNameBuilder.putAll(manager.byName)
@@ -31,6 +30,5 @@ object RecipeInjection {
 
         manager.byName = newByName
         manager.setRecipes(recipesBuilder.mapValues { it.value.build() })
-
     }
 }

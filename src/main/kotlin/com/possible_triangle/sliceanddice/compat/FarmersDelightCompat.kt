@@ -27,7 +27,6 @@ private fun CuttingBoardRecipe.toBasin(id: ResourceLocation): CuttingProcessingR
 }
 
 class FarmersDelightCompat private constructor() : IRecipeInjector {
-
     companion object {
         private val INSTANCE = FarmersDelightCompat()
 
@@ -48,24 +47,23 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
 
     override fun injectRecipes(
         existing: Map<ResourceLocation, Recipe<*>>,
-        add: BiConsumer<ResourceLocation, Recipe<*>>
+        add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
         basinCookingRecipes(existing, add)
         processingCutting(existing, add)
     }
 
-    private fun shouldConvert(key: ResourceLocation): Boolean {
-        return !key.path.endsWith("_manual_only")
-    }
+    private fun shouldConvert(key: ResourceLocation): Boolean = !key.path.endsWith("_manual_only")
 
     private fun processingCutting(
         recipes: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
-        val cuttingRecipes = recipes
-            .filterKeys { shouldConvert(it) }
-            .filterValues { it is CuttingBoardRecipe }
-            .mapValues { it.value as CuttingBoardRecipe }
+        val cuttingRecipes =
+            recipes
+                .filterKeys { shouldConvert(it) }
+                .filterValues { it is CuttingBoardRecipe }
+                .mapValues { it.value as CuttingBoardRecipe }
 
         SliceAndDice.LOGGER.debug("Found {} cutting recipes", cuttingRecipes.size)
 
@@ -82,10 +80,11 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         if (!Configs.SERVER.BASIN_COOKING.get()) return
 
         val emptyingRecipes = recipes.values.filterIsInstance<EmptyingRecipe>()
-        val cookingRecipes = recipes
-            .filterKeys { shouldConvert(it) }
-            .filterValues { it is CookingPotRecipe }
-            .mapValues { it.value as CookingPotRecipe }
+        val cookingRecipes =
+            recipes
+                .filterKeys { shouldConvert(it) }
+                .filterValues { it is CookingPotRecipe }
+                .mapValues { it.value as CookingPotRecipe }
 
         SliceAndDice.LOGGER.debug("Found {} cooking recipes", cookingRecipes.size)
         val generator = MixingRecipeGenerator(emptyingRecipes)
@@ -93,8 +92,8 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         return cookingRecipes.forEach { (originalID, recipe) ->
             val id = Content.modLoc("cooking/${originalID.namespace}/${originalID.path}")
 
-            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             // Cooking recipes do not use the registryAccess
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             val result = recipe.getResultItem(null)
 
             val initialIngredients = recipe.ingredients.toMutableList()
@@ -109,5 +108,4 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
             }
         }
     }
-
 }

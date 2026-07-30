@@ -3,7 +3,7 @@
   "id": "${mod_id}",
   "version": "${mod_version}",
   "name": "${mod_name}",
-  "description": "Making automation for Farmers Delight more sensible",
+  "description": "${mod_description}",
   "authors": [
     "${mod_author}"
   ],
@@ -11,7 +11,7 @@
     "sources": "https://github.com/${repository}",
     "issues": "https://github.com/${repository}/issues"
   },
-  "license": "CC0-1.0",
+  "license": "https://github.com/PssbleTrngle/SliceAndDice/blob/main/fabric/1.20.x/LICENSE.md",
   "environment": "*",
   "entrypoints": {
     "main": [

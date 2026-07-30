@@ -7,12 +7,17 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.LivingEntity
 
 object BurningBehaviour : SprinkleBehaviour {
-
-    override fun act(range: SprinkleBehaviour.Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource) {
-        range.getEntities(LivingEntity::class.java) {
-            !it.fireImmune()
-        }.forEach {
-            it.hurt(world.damageSources().inFire(), 0.5F)
-        }
+    override fun act(
+        range: SprinkleBehaviour.Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    ) {
+        range
+            .getEntities(LivingEntity::class.java) {
+                !it.fireImmune()
+            }.forEach {
+                it.hurt(world.damageSources().inFire(), 0.5F)
+            }
     }
 }

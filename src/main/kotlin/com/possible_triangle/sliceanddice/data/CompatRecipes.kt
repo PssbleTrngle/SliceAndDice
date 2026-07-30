@@ -1,9 +1,7 @@
 package com.possible_triangle.sliceanddice.data
 
 import com.possible_triangle.sliceanddice.Content
-import com.possible_triangle.sliceanddice.FabricConstants
 import com.possible_triangle.sliceanddice.FabricConstants.FLUID_MULTIPLIER
-import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerTile
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.simibubi.create.AllFluids
 import com.simibubi.create.AllItems
@@ -25,7 +23,6 @@ import vectorwing.farmersdelight.common.registry.ModBlocks
 import vectorwing.farmersdelight.common.registry.ModItems
 
 object CompatRecipes {
-
     fun generate(output: RegistrateRecipeProvider) {
         ProcessingRecipeBuilder(::FillingRecipe, Content.modLoc("hot_cocoa_from_fluid"))
             .require(Items.GLASS_BOTTLE)
@@ -56,17 +53,19 @@ object CompatRecipes {
             .build(output)
 
         val doughTag = TagKey.create(Registries.ITEM, ResourceLocation("c", "foods/doughs"))
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
+        ShapelessRecipeBuilder
+            .shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
             .requires(doughTag)
             .requires(DyeColor.LIME.tag)
             .unlockedBy("has_item", RegistrateRecipeProvider.has(doughTag))
             .save(output, ResourceLocation("create", "crafting/appliances/slime_ball"))
     }
 
-    private fun fertilizerMixing(amount: Int, id: String): ProcessingRecipeBuilder<MixingRecipe> {
-        return ProcessingRecipeBuilder(::MixingRecipe, Content.modLoc("fertilizer/from_$id"))
+    private fun fertilizerMixing(
+        amount: Int,
+        id: String,
+    ): ProcessingRecipeBuilder<MixingRecipe> =
+        ProcessingRecipeBuilder(::MixingRecipe, Content.modLoc("fertilizer/from_$id"))
             .require(Fluids.WATER, amount * FLUID_MULTIPLIER)
             .output(Content.FERTILIZER.get(), amount * FLUID_MULTIPLIER)
-    }
-
 }
