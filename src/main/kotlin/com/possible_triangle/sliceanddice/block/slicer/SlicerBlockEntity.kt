@@ -58,7 +58,7 @@ class SlicerBlockEntity(
 
     override fun getRecipeCacheKey() = basinCacheKey
 
-    val correctDirection get() = Configs.SERVER.IGNORE_ROTATION.get() || getSpeed() < 0
+    val correctDirection get() = Configs.SERVER.ignoreRotation.get() || getSpeed() < 0
     val canProcess get() = correctDirection && isSpeedRequirementFulfilled
 
     private lateinit var behaviour: PressingBehaviour
@@ -121,7 +121,7 @@ class SlicerBlockEntity(
 
     private fun consumeDurability() {
         val world = level ?: return
-        if (world is ServerLevel && Configs.SERVER.CONSUME_DURABILTY.get()) {
+        if (world is ServerLevel && Configs.SERVER.consumeDurability.get()) {
             if (_heldItem.hurt(1, level!!.random, null)) {
                 _heldItem = ItemStack.EMPTY
                 sendData()

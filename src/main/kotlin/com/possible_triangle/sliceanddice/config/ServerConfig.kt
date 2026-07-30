@@ -3,20 +3,20 @@ package com.possible_triangle.sliceanddice.config
 import com.simibubi.create.content.processing.recipe.HeatCondition
 import net.minecraftforge.common.ForgeConfigSpec
 
-class ServerConfig(builder: ForgeConfigSpec.Builder) {
+class ServerConfig(
+    builder: ForgeConfigSpec.Builder,
+) {
+    val harvesterUsesKnife = builder.define("harvester.uses_knife", true)
 
-    val HARVESTER_USES_KNIFE = builder.define("harvester.uses_knife", true)
+    val consumeDurability = builder.define("slicer.consume_tool_durability", true)
+    val ignoreRotation = builder.define("slicer.ignore_rotation", false)
+    val showConvertedRecipes = builder.define("slicer.jei_show_converted_recipes", false)
 
-    val CONSUME_DURABILTY = builder.define("slicer.consume_tool_durability", true)
-    val IGNORE_ROTATION = builder.define("slicer.ignore_rotation", false)
-    val SHOW_CONVERTED_RECIPES = builder.define("slicer.jei_show_converted_recipes", false)
+    val basinCooking = builder.define("basin_cooking.enabled", true)
+    val replaceFluidContainers = builder.define("basin_cooking.replace_fluid_containers", true)
+    val cookingHeatCondition = builder.defineEnum("basin_cooking.heat_condition", HeatCondition.HEATED)
 
-    val BASIN_COOKING = builder.define("basin_cooking.enabled", true)
-    val REPLACE_FLUID_CONTAINERS = builder.define("basin_cooking.replace_fluid_containers", true)
-    val COOKING_HEAT_CONDITION = builder.defineEnum("basin_cooking.heat_condition", HeatCondition.HEATED)
-
-    val SPRINKLER_CAPACITY = builder.defineInRange("sprinkler.fluid_capacity", 300, 10, 2048)
-    val SPRINKLER_USAGE = builder.defineInRange("sprinkler.fluid_per_use", 100, 0, 2048)
-    val SPRINKLER_RANGE = builder.defineInRange("sprinkler.horizontal_range", 5, 1, 32)
-
+    val sprinklerCapacity = builder.defineInRange("sprinkler.fluid_capacity", 300, 10, 2048)
+    val sprinklerUsage = builder.defineInRange("sprinkler.fluid_per_use", 100, 0, 2048)
+    val sprinklerRange = builder.defineInRange("sprinkler.horizontal_range", 5, 1, 32)
 }

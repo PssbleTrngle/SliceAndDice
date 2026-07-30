@@ -22,28 +22,37 @@ private data class RegisteredBehaviour(
     val rangeBonus: Int,
 )
 
-
 fun interface SprinkleBehaviour {
+    class Range(
+        size: Vec3i,
+        origin: BlockPos,
+        private val world: ServerLevel,
+    ) {
+        val aabb =
+            AABB(
+                origin.x - size.x / 2.0,
+                origin.y - size.y.toDouble(),
+                origin.z - size.z / 2.0,
+                origin.x + size.x / 2.0,
+                origin.y - 1.0,
+                origin.z + size.z / 2.0,
+            )
 
-    class Range(size: Vec3i, origin: BlockPos, private val world: ServerLevel) {
-
-        val aabb = AABB(
-            origin.x - size.x / 2.0,
-            origin.y - size.y.toDouble(),
-            origin.z - size.z / 2.0,
-            origin.x + size.x / 2.0,
-            origin.y - 1.0,
-            origin.z + size.z / 2.0
-        )
-
-        fun <T : Entity> getEntities(clazz: Class<T>, predicate: (T) -> Boolean = { true }): List<T> {
-            return world.getEntities(EntityTypeTest.forClass(clazz), aabb, predicate)
-        }
+        fun <T : Entity> getEntities(
+            clazz: Class<T>,
+            predicate: (T) -> Boolean = {
+                true
+            },
+        ): List<T> = world.getEntities(EntityTypeTest.forClass(clazz), aabb, predicate)
 
         fun forEachBlock(consumer: (BlockPos) -> Unit) {
             for (block in BlockPos.betweenClosed(
-                ceil(aabb.minX).toInt(), ceil(aabb.minY).toInt(), ceil(aabb.minZ).toInt(),
-                floor(aabb.maxX).toInt(), floor(aabb.maxY).toInt(), floor(aabb.maxZ).toInt(),
+                ceil(aabb.minX).toInt(),
+                ceil(aabb.minY).toInt(),
+                ceil(aabb.minZ).toInt(),
+                floor(aabb.maxX).toInt(),
+                floor(aabb.maxY).toInt(),
+                floor(aabb.maxZ).toInt(),
             )) {
                 consumer(block)
             }
@@ -68,37 +77,59 @@ fun interface SprinkleBehaviour {
                         val state = world.getBlockState(pos)
                         val shape = state.getCollisionShape(world, pos, CollisionContext.empty())
 
-                        if (y == minY) { consumer(pos); continue@horiz }
-                        if (state.isAir || shape.isEmpty) { continue@vert }
-                        if (shape.equals(Shapes.block())) { consumer(pos); continue@horiz }
+                        if (y == minY) {
+                            consumer(pos)
+                            continue@horiz
+                        }
+                        if (state.isAir || shape.isEmpty) continue@vert
+                        if (shape.equals(Shapes.block())) {
+                            consumer(pos)
+                            continue@horiz
+                        }
                     }
                 }
             }
         }
-
     }
 
-    fun act(range: Range, world: ServerLevel, fluidStack: FluidStack, random: RandomSource)
+    fun act(
+        range: Range,
+        world: ServerLevel,
+        fluidStack: FluidStack,
+        random: RandomSource,
+    )
 
     companion object {
         private val BEHAVIOURS = arrayListOf<RegisteredBehaviour>()
 
-        fun register(tag: TagKey<Fluid>, behaviour: SprinkleBehaviour, rangeBonus: Int = 0) {
+        fun register(
+            tag: TagKey<Fluid>,
+            behaviour: SprinkleBehaviour,
+            rangeBonus: Int = 0,
+        ) {
             register({ it.fluid.`is`(tag) }, behaviour, rangeBonus)
         }
 
-        fun register(predicate: (FluidStack) -> Boolean, behaviour: SprinkleBehaviour, rangeBonus: Int = 0) {
+        fun register(
+            predicate: (FluidStack) -> Boolean,
+            behaviour: SprinkleBehaviour,
+            rangeBonus: Int = 0,
+        ) {
             BEHAVIOURS.add(RegisteredBehaviour(predicate, behaviour, rangeBonus))
         }
 
-        fun actAt(pos: BlockPos, world: ServerLevel, fluid: FluidStack, random: RandomSource) {
+        fun actAt(
+            pos: BlockPos,
+            world: ServerLevel,
+            fluid: FluidStack,
+            random: RandomSource,
+        ) {
             BEHAVIOURS.filter { it.predicate(fluid) }.forEach {
-                val radius = Configs.SERVER.SPRINKLER_RANGE.get()
+                val radius = Configs.SERVER.sprinklerRange.get()
                 val area = Vec3i(radius + it.rangeBonus, 7, radius + it.rangeBonus)
                 val range = Range(area, pos, world)
                 it.behaviour.act(range, world, fluid, random)
             }
         }
-
     }
 }

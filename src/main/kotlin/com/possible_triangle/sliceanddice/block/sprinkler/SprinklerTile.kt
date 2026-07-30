@@ -37,7 +37,7 @@ class SprinklerTile(
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {
         behaviours.add(
             SmartFluidTankBehaviour
-                .single(this, Configs.SERVER.SPRINKLER_CAPACITY.get() * FLUID_MULTIPLIER)
+                .single(this, Configs.SERVER.sprinklerCapacity.get() * FLUID_MULTIPLIER)
                 .allowInsertion()
                 .whenFluidUpdates(::notifyUpdate)
                 .also { tank = it },
@@ -58,7 +58,7 @@ class SprinklerTile(
             val fluid = FluidVariant.of(tank.primaryHandler.fluid.fluid)
             if (!fluid.isBlank) {
                 TransferUtil.getTransaction().use { ctx ->
-                    val used = Configs.SERVER.SPRINKLER_USAGE.get() * FLUID_MULTIPLIER
+                    val used = Configs.SERVER.sprinklerUsage.get() * FLUID_MULTIPLIER
                     val amountExtracted = tank.capability.simulateExtract(fluid, used, ctx)
                     if (amountExtracted >= used) {
                         tank.capability.extract(fluid, amountExtracted, ctx)

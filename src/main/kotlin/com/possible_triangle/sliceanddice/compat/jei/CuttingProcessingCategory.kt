@@ -40,7 +40,7 @@ class CuttingProcessingCategory :
             val manager = Minecraft.getInstance().connection?.recipeManager ?: return emptyList()
             val recipes = manager.getAllRecipesFor(Content.CUTTING_RECIPE_TYPE.get())
 
-            if (Configs.SERVER.SHOW_CONVERTED_RECIPES.get()) {
+            if (Configs.SERVER.showConvertedRecipes.get()) {
                 return recipes
             }
 

@@ -33,7 +33,7 @@ class MixingRecipeGenerator(
     }
 
     private fun findFluids(ingredient: Ingredient): Pair<Collection<FluidStack>, Ingredient> {
-        if (!Configs.SERVER.REPLACE_FLUID_CONTAINERS.get()) return Pair(listOf(), Ingredient.EMPTY)
+        if (!Configs.SERVER.replaceFluidContainers.get()) return Pair(listOf(), Ingredient.EMPTY)
 
         val resolved = ingredient.items.map { resolveIngredient(it) }
         val fluids =
@@ -133,7 +133,7 @@ data class Ingredients(
         return ProcessingRecipeBuilder(::MixingRecipe, id)
             .withItemIngredients(*items.toTypedArray())
             .withFluidIngredients(*fluidIngredients.toTypedArray())
-            .requiresHeat(Configs.SERVER.COOKING_HEAT_CONDITION.get())
+            .requiresHeat(Configs.SERVER.cookingHeatCondition.get())
             .duration(cookTime)
             .withSingleItemOutput(output)
             .build()

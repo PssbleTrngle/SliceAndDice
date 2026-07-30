@@ -3,14 +3,19 @@ package com.possible_triangle.sliceanddice.config
 import net.minecraftforge.common.ForgeConfigSpec
 
 object Configs {
-
+    @Suppress("ktlint:standard:property-naming")
     var SERVER_SPEC: ForgeConfigSpec
         private set
+
+    @Suppress("ktlint:standard:property-naming")
     var SERVER: ServerConfig
         private set
 
+    @Suppress("ktlint:standard:property-naming")
     var CLIENT_SPEC: ForgeConfigSpec
         private set
+
+    @Suppress("ktlint:standard:property-naming")
     var CLIENT: ClientConfig
         private set
 
@@ -25,5 +30,4 @@ object Configs {
             CLIENT_SPEC = right
         }
     }
-
 }

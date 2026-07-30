@@ -77,7 +77,7 @@ class FarmersDelightCompat private constructor() : IRecipeInjector {
         recipes: Map<ResourceLocation, Recipe<*>>,
         add: BiConsumer<ResourceLocation, Recipe<*>>,
     ) {
-        if (!Configs.SERVER.BASIN_COOKING.get()) return
+        if (!Configs.SERVER.basinCooking.get()) return
 
         val emptyingRecipes = recipes.values.filterIsInstance<EmptyingRecipe>()
         val cookingRecipes =
