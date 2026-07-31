@@ -3,6 +3,6 @@
     "type": "sliceanddice:potion"
   },
   "fluid": {
-    "fluid": "create:flowing_potion"
+    "fluid": "create:potion"
   }
 }

@@ -11,10 +11,10 @@ import kotlin.math.max
 object PotionAction : SprinkleAction {
     override fun type() = Type
 
-    object Type : SimpleSprinkleActionType<FertilizerAction>(FertilizerAction) {
+    object Type : SimpleSprinkleActionType<PotionAction>(PotionAction) {
         override fun tick(
             context: SprinkleContext,
-            config: FertilizerAction,
+            config: PotionAction,
         ) {
             val effects = context.fluidStack.get(DataComponents.POTION_CONTENTS)?.allEffects ?: return
             context.getEntities(LivingEntity::class.java).forEach { entity ->

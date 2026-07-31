@@ -43,7 +43,7 @@ internal fun GatherDataEvent.registerSprinklers() {
             )
             it.register(
                 "potion",
-                FluidIngredient.of(AllFluids.POTION.get()),
+                FluidIngredient.of(AllFluids.POTION.get().source),
                 PotionAction,
             )
             it.register(
