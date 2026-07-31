@@ -2,5 +2,5 @@ hash-format = "sha256"
 
 [[files]]
 file = "mods/farmers-delight-refabricated.pw.toml"
-hash = "e09385ac1a1c0900b8fa619290eb0f0539949ebbc59f7604a7699485784ccc85"
+hash = "02a18ea7d68423e376410fb46c7a7d644f1d394f3d40f7af6a0bf16cc72a75be"
 metafile = true

@@ -87,8 +87,7 @@ dependencies {
     modCompileOnly(libs.jei.fabric.api)
     modCompileOnly(libs.rei.fabric.api)
 
-    modImplementation(libs.registrate)
-    modImplementation(libs.create)
+    modApi(libs.create)
 
     modImplementation(libs.farmers.delight) {
         exclude(group = "net.fabricmc")
@@ -98,11 +97,6 @@ dependencies {
         modRuntimeOnly(libs.jei.fabric)
         modRuntimeOnly(libs.rei.fabric)
     }
-}
-
-tasks.withType<Jar> {
-    exclude("screenshots")
-    exclude("example_datapack.zip")
 }
 
 upload {

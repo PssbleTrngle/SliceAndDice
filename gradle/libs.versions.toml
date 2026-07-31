@@ -1,10 +1,9 @@
 [versions]
-jei = "15.20.0.129"
+jei = "15.21.0.148"
 rei = "12.1.785"
 
 [libraries]
 create = { group = "com.simibubi.create", name = "create-fabric", version = "6.0.8.1+build.1744-mc1.20.1" }
-registrate = { group = "com.tterrag.registrate_fabric", name = "Registrate", version = "1.3.79-MC1.20.1" }
 
 jei-common-api = { group = "mezz.jei", name = "jei-1.20.1-common-api", version.ref = "jei" }
 jei-fabric-api = { group = "mezz.jei", name = "jei-1.20.1-fabric-api", version.ref = "jei" }
@@ -13,4 +12,4 @@ jei-fabric = { group = "mezz.jei", name = "jei-1.20.1-fabric", version.ref = "je
 rei-fabric-api = { group = "me.shedaniel", name = "RoughlyEnoughItems-api-fabric", version.ref = "rei" }
 rei-fabric = { group = "me.shedaniel", name = "RoughlyEnoughItems-fabric", version.ref = "rei" }
 
-farmers-delight = { group = "vectorwing", name = "FarmersDelight-Refabricated", version = "1.20.1-2.0.12" }
+farmers-delight = { group = "vectorwing", name = "FarmersDelight", version = "1.20.1-2.5.1+refabricated" }

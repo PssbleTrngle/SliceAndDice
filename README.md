@@ -13,7 +13,7 @@
 
 <!-- modrinth_exclude.start -->
 
-# Create Slice & Dice <img src="https://raw.githubusercontent.com/PssbleTrngle/SliceAndDice/1.19.x/src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
+# Create Slice & Dice <img src="src/main/resources/assets/sliceanddice/icon.png" align="right" height="128" />
 
 [![Release](https://img.shields.io/github/v/release/PssbleTrngle/SliceAndDice?label=Version&sort=semver)][DOWNLOAD]
 [![Downloads](http://cf.way2muchnoise.eu/full_659674_downloads.svg)][CURSEFORGE]
