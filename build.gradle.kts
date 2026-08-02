@@ -61,7 +61,7 @@ repositories {
     }
 
     maven {
-        url = uri("https://maven.greenhouse.lgbt/releases/")
+        url = uri("https://maven.cassian.cc/")
         content {
             includeGroup("vectorwing")
         }
