@@ -33,6 +33,7 @@ dependencies {
     modImplementation(pack.modrinth.farmers.delight)
     modImplementation(pack.modrinth.create.dragons.plus)
     modImplementation(pack.modrinth.create.enchantment.industry)
+    modImplementation(pack.modrinth.create.enchantable.machinery)
     modImplementation(pack.modrinth.overweight.farming)
 
     modIncludeCompileOnly(libs.sable.companion)
