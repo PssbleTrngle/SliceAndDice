@@ -83,7 +83,7 @@ interface SprinklerBehaviour {
     }
 
     fun tickSprinklers(level: ServerLevel) {
-        running.actEach(level, renderedFluid, Sprinkler<*>::tick)
+        running.actEach(level, tank.getFluidInTank(0), Sprinkler<*>::tick)
     }
 
     fun invalidate(level: Level) {
