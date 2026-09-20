@@ -49,10 +49,10 @@ object MovingSprinklerBehaviour : MovementBehaviour {
         context.behaviour.pos = context.position
         context.behaviour.remainingTicks--
 
-        context.behaviour.spawnParticles(context.world)
-
         if (level is ServerLevel) {
             context.behaviour.tickSprinklers(level)
+        } else {
+            context.behaviour.spawnParticles(context.world)
         }
     }
 
