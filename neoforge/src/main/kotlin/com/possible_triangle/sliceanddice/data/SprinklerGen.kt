@@ -3,16 +3,12 @@ package com.possible_triangle.sliceanddice.data
 import com.possible_triangle.atmosphere.api.v1.WeatherCondition
 import com.possible_triangle.sliceanddice.MOD_ID
 import com.possible_triangle.sliceanddice.api.data.SprinklerProvider
-import com.possible_triangle.sliceanddice.block.sprinkler.actions.DamageAction
-import com.possible_triangle.sliceanddice.block.sprinkler.actions.ExperienceAction
-import com.possible_triangle.sliceanddice.block.sprinkler.actions.FertilizerAction
-import com.possible_triangle.sliceanddice.block.sprinkler.actions.PotionAction
-import com.possible_triangle.sliceanddice.block.sprinkler.actions.WeatherAction
+import com.possible_triangle.sliceanddice.block.sprinkler.actions.*
 import com.possible_triangle.sliceanddice.compat.ModCompat
 import com.possible_triangle.sliceanddice.index.SDTags
 import com.simibubi.create.AllFluids
-import galena.oreganized.index.ODamageSources
-import galena.oreganized.index.OTags
+import galena.oreganized.plumbum.index.PlumbumDamageTypes
+import galena.oreganized.plumbum.index.PlumbumTags
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.damagesource.DamageTypes
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition
@@ -55,8 +51,8 @@ internal fun GatherDataEvent.registerSprinklers() {
 
             it.register(
                 "lead",
-                FluidIngredient.tag(OTags.Fluids.MOLTEN_LEAD),
-                DamageAction(damageTypes.getOrThrow(ODamageSources.MOLTEN_LEAD), 0.5F),
+                FluidIngredient.tag(PlumbumTags.Fluids.MOLTEN_LEAD),
+                DamageAction(damageTypes.getOrThrow(PlumbumDamageTypes.MOLTEN_LEAD), 0.5F),
                 listOf(
                     ModLoadedCondition(
                         ModCompat.OREGANIZED,

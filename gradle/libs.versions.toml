@@ -21,4 +21,4 @@ jei-common-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.r
 jei-neoforge-api = { group = "mezz.jei", name = "jei-1.21.1-neoforge-api", version.ref = "jei" }
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei" }
 
-oreganized = { "group" = "dev.galena", name = "oreganized", version = "5.2.0-SNAPSHOT" }
+oreganized = { "group" = "dev.galena", name = "oreganized-1.21.1", version = "5.3.0" }
