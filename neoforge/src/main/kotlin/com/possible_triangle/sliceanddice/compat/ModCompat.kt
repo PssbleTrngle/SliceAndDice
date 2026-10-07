@@ -25,6 +25,7 @@ object ModCompat : IRecipeInjector {
     const val CREATE_ENCHANTMENT_INDUSTRY = "create_enchantment_industry"
     const val OVERWEIGHT_FARMING = "overweight_farming"
     const val OREGANIZED = "oreganized"
+    const val BITS_N_BOBS = "bits_n_bobs"
 
     fun <T> ifLoaded(
         mod: String,

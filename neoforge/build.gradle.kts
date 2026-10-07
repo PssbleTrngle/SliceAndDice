@@ -43,17 +43,19 @@ dependencies {
 
     modImplementation(libs.oreganized)
 
-    if (!env.isCI) {
-        modRuntimeOnly(libs.jei.neoforge)
+    modImplementation(pack.modrinth.create.bits.n.bobs)
+    modRuntimeOnly(pack.modrinth.azimuth.api)
+    modRuntimeOnly(pack.modrinth.strut.your.stuff)
 
-        modRuntimeOnly(pack.modrinth.neapolitan)
-        modRuntimeOnly(pack.modrinth.gallery)
+    modRuntimeOnly(libs.jei.neoforge)
 
-        modRuntimeOnly(pack.modrinth.recipe.modification)
-        modRuntimeOnly(pack.modrinth.vegan.delight)
-        modRuntimeOnly(pack.curseforge.catalogue)
-        modRuntimeOnly(pack.curseforge.configured)
-    }
+    modRuntimeOnly(pack.modrinth.neapolitan)
+    modRuntimeOnly(pack.modrinth.gallery)
+
+    modRuntimeOnly(pack.modrinth.recipe.modification)
+    modRuntimeOnly(pack.modrinth.vegan.delight)
+    modRuntimeOnly(pack.curseforge.catalogue)
+    modRuntimeOnly(pack.curseforge.configured)
 }
 
 upload {

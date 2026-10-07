@@ -1,6 +1,6 @@
 [versions]
 jei = "19.27.0.340"
-create-simulated = "1.2.1"
+create-simulated = "1.3.1"
 atmosphere = "1.0.18"
 
 [libraries]
@@ -9,7 +9,7 @@ create = { group = "com.simibubi.create", name = "create-1.21.1", version = "6.0
 ponder = { group = "net.createmod.ponder", name = "ponder-neoforge", version = "1.0.82+mc1.21.1" }
 flywheel = { group = "dev.engine-room.flywheel", name = "flywheel-neoforge-1.21.1", version = "1.0.6" }
 
-sable = { group = "dev.ryanhcode.sable", name = "sable-neoforge-1.21.1", version = "1.2.2" }
+sable = { group = "dev.ryanhcode.sable", name = "sable-neoforge-1.21.1", version = "2.0.5" }
 sable-companion = { group = "dev.ryanhcode.sable-companion", name = "sable-companion-common-1.21.1", version = "1.6.0" }
 create-simulated = { group = "dev.simulated_team.simulated", name = "simulated-neoforge-1.21.1", version.ref = "create-simulated" }
 create-aeronautics = { group = "dev.eriksonn.aeronautics", name = "aeronautics-neoforge-1.21.1", version.ref = "create-simulated" }
@@ -21,4 +21,4 @@ jei-common-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.r
 jei-neoforge-api = { group = "mezz.jei", name = "jei-1.21.1-neoforge-api", version.ref = "jei" }
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei" }
 
-oreganized = { "group" = "dev.galena", name = "oreganized-1.21.1", version = "5.3.0" }
+oreganized = { "group" = "dev.galena", name = "oreganized-1.21.1", version = "5.4.0-SNAPSHOT" }

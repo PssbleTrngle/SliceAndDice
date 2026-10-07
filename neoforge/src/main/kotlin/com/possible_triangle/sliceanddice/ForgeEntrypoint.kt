@@ -5,6 +5,9 @@ import com.possible_triangle.sliceanddice.api.sprinkler.Sprinkler
 import com.possible_triangle.sliceanddice.block.slicer.SlicerArmInteractionType
 import com.possible_triangle.sliceanddice.block.slicer.SlicerBlockEntity
 import com.possible_triangle.sliceanddice.block.sprinkler.SprinklerBlockEntity
+import com.possible_triangle.sliceanddice.compat.BitsAndBobsCompat
+import com.possible_triangle.sliceanddice.compat.ModCompat
+import com.possible_triangle.sliceanddice.compat.ModCompat.ifLoaded
 import com.possible_triangle.sliceanddice.config.Configs
 import com.possible_triangle.sliceanddice.index.SDBlockEntities
 import com.possible_triangle.sliceanddice.index.SDBlocks
@@ -70,6 +73,12 @@ class ForgeEntrypoint {
 
         modBus.addListener { event: NewRegistryEvent ->
             SDRegistries.SPRINKLER_ACTIONS_REGISTRY = event.create(RegistryBuilder(SDRegistries.SPRINKLER_ACTIONS))
+        }
+
+        ifLoaded(ModCompat.FARMERS_DELIGHT) {
+            ifLoaded(ModCompat.BITS_N_BOBS) {
+                BitsAndBobsCompat.register(modBus)
+            }
         }
     }
 

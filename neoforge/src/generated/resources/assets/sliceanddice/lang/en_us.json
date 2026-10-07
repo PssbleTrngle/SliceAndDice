@@ -4,6 +4,7 @@
   "block.sliceanddice.sprinkler": "Sprinkler",
   "fluid.sliceanddice.fertilizer": "Liquid Fertilizer",
   "item.sliceanddice.fertilizer_bucket": "Bucket of Liquid Fertilizer",
+  "message.bits_n_bobs.cogwheel_chain.chain_addition_aborted.invalid_cogwheel_type.cogwheel_chain_type.sliceanddice.pasta": "Pasta must be placed on a flanged cogwheel!",
   "sliceanddice.gui.contraptions.wrong_direction": "It appears that this %s is rotating in the _wrong direction_.",
   "sliceanddice.ponder.slicer.header": "Cutting with the slicer",
   "sliceanddice.ponder.slicer.text_1": "Right-click it with a valid tool",

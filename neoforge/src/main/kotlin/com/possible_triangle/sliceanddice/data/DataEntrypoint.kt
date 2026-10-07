@@ -25,6 +25,11 @@ object DataEntrypoint {
         REGISTRATE.addRawLang("$MOD_ID.recipe.assembly.slicer", "Cut with Slicer")
         REGISTRATE.addRawLang("$MOD_ID.recipe.slicer", "Slicer")
 
+        REGISTRATE.addRawLang(
+            "message.bits_n_bobs.cogwheel_chain.chain_addition_aborted.invalid_cogwheel_type.cogwheel_chain_type.$MOD_ID.pasta",
+            "Pasta must be placed on a flanged cogwheel!",
+        )
+
         REGISTRATE.addDataGenerator(ProviderType.LANG) { provider ->
             PonderScenes.setup()
             PonderIndex.getLangAccess().provideLang(MOD_ID, provider::add)
